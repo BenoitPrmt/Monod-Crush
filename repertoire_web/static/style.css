@@ -5,3 +5,8 @@ body {
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     background-color: #f3c1db;
 }
+
+.f1{
+    display: flex;
+
+}
