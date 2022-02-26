@@ -26,7 +26,7 @@ def populate_db(quantity: int = 10) -> None:
     VALUES(?,?,?)"""
 
     
-    cur.execute(sql, (fake.name(), fake.name(), , 1))
+    cur.execute(sql, (fake.name(), fake.name(), 1))
     cur.execute(sql, (fake.name(), fake.name(), '2006-01-05', 1))
 
 
