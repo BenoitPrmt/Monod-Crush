@@ -62,9 +62,14 @@ def register():
         error = None
 
         if not username:
-            error = "Username is required."
+            error = "Remplissez le champ nom d'utilisateur."
+        elif len(username) < 3:
+            error = "Le nom d'utilisateur doit contenir au moins 3 caractères."
+
         elif not password:
-            error = "Password is required."
+            error = "Remplissez le champ mot de passe."
+        elif len(password) < 6:
+            error = "Le mot de passe doit contenir au moins 6 caractères."
 
         if error is None:
             try:
@@ -76,7 +81,7 @@ def register():
             except db.IntegrityError:
                 # The username was already taken, which caused the
                 # commit to fail. Show a validation error.
-                error = f"User {username} is already registered."
+                error = f"Le nom d'utilisateur {username} est deja pris."
             else:
                 # Success, go to the login page.
                 return redirect(url_for("auth.login"))
