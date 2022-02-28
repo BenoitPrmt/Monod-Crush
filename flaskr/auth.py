@@ -34,7 +34,7 @@ def admin(view):
 
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.user['isAdmin'] is None:
+        if g.user is None or g.user["isAdmin"] == 0:
             return redirect(url_for("blog.index"))
 
         return view(**kwargs)
