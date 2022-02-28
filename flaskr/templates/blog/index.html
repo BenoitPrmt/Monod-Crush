@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+{% endblock %}
+
+
 {% block title %}Posts{% endblock %}
 
 {% block content %}
@@ -13,16 +18,16 @@
 
     {% for post in posts %}
     <article class="post">
-        <header>
-            <div>
-                <h1>{{ post['title'] }}</h1>
-                <p class="about">posté par {{ post['username'] }} le {{ post['created'].strftime('%Y-%m-%d') }}</p>
-            </div>
-            {% if g.user['id'] == post['author_id'] or g.user['admin'] %}
-            <a class="action" href="{{ url_for('blog.edit', post_id=post['id']) }}">Modifier</a>
-            {% endif %}
-        </header>
         <p class="body">{{ post['body'] }}</p>
+        <p class="about">posté par {{ post['username'] }} le {{ post['created'].strftime('%Y-%m-%d') }}</p>
+        {% if g.user['id'] == post['author_id'] or g.user['admin'] %}
+        <div class="action">
+            <a class="btn btn-edit" href="{{ url_for('blog.edit', post_id=post['id']) }}">Modifier</a>
+            <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
+                <input class="btn btn-delete" type="submit" value="Supprimer" onclick="return confirm('Etes vous sûr ?');">
+            </form>
+        </div>
+        {% endif %}
     </article>
     {% if not loop.last %}
     <hr>

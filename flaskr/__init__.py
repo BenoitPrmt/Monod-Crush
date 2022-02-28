@@ -3,7 +3,7 @@ import os
 from flask import Flask
 
 
-def create_app(test_config=None):
+def create_app(test_config=None) -> Flask:
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -25,10 +25,6 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    @app.route("/hello")
-    def hello():
-        return "Hello, World!"
 
     # register the database commands
     from flaskr import db
