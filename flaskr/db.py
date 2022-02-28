@@ -3,6 +3,7 @@ import sqlite3
 import click
 from flask import current_app, g, Flask
 from flask.cli import with_appcontext
+from werkzeug.security import generate_password_hash
 
 
 def get_db() -> sqlite3.Connection:
@@ -52,17 +53,21 @@ def populate_db() -> None:
     db = get_db()
 
     fake = Faker('fr_FR')
+
+    db.execute("INSERT INTO user (username, password, admin) VALUES (?, ?, ?)",
+               ("admin", generate_password_hash("admin"), 1))
+
+    db.execute("INSERT INTO user (username, password, admin) VALUES (?, ?, ?)",
+               ("user", generate_password_hash("user"), 1))
+
     for _ in range(10):
-        a = db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
-                       (fake.name(), fake.password()))
+        db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
+                   (fake.name(), fake.password()))
+    db.commit()
 
-    #
-    # for _ in range(10):
-    #     a = db.execute("INSERT INTO post (title, content, user_id) VALUES (?, ?, ?)",
-    # db.commit()
-
-    # with current_app.open_resource("data.sql") as f:
-    #     db.executescript(f.read().decode("utf8"))
+    for id in range(2, 13):
+        db.execute("INSERT INTO post (body, author_id) VALUES (?, ?)", (fake.text(), id))
+    db.commit()
 
 
 @click.command("populate-db")
