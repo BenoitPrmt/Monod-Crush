@@ -4,7 +4,7 @@
 
 {% block content %}
 <section>
-    <h1>Edit "{{ post['title'] }}"</h1>
+    <h1>Editer le message </h1>
     <form method="post">
         <label for="title">Title</label>
         <input name="title" id="title" value="{{ request.form['title'] or post['title'] }}" required>
@@ -13,8 +13,8 @@
         <input type="submit" value="Save">
     </form>
     <hr>
-    <form action="{{ url_for('blog.delete', id=post['id']) }}" method="post">
-        <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+    <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
+        <input class="danger" type="submit" value="Delete" onclick="return confirm('Etes vous sûr ?');">
     </form>
 </section>
 {% endblock %}

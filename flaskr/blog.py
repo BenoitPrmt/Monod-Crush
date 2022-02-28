@@ -43,13 +43,13 @@ def get_post(post_id, check_author=True):
     if post is None:
         abort(404, f"Post id {post_id} doesn't exist.")
 
-    if check_author and post["author_id"] != g.user["id"]:
+    if check_author and post["author_id"] != g.user["id"] and not g.user["admin"]:
         abort(403)
 
     return post
 
 
-@bp.route("/create", methods=("GET", "POST"))
+@bp.route("/post/new", methods=("GET", "POST"))
 @login_required  # TODO autoriser l'utilisateur à créer un post sans être connecté
 def create():
     """Create a new post for the current user."""
@@ -74,7 +74,7 @@ def create():
     return render_template("blog/create.html")
 
 
-@bp.route("/<int:id>/edit", methods=("GET", "POST"))
+@bp.route("/post/<int:post_id>/edit", methods=("GET", "POST"))
 @login_required
 def edit(post_id: int):
     """Update a post if the current user is the author."""
@@ -100,7 +100,7 @@ def edit(post_id: int):
     return render_template("blog/edit.html", post=post)
 
 
-@bp.route("/<int:id>/delete", methods=("POST",))
+@bp.route("/post/<int:post_id>/delete", methods=("POST",))
 @login_required
 def delete(post_id: int):
     """Delete a post.

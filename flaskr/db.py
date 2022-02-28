@@ -57,12 +57,12 @@ def populate_db() -> None:
     db.execute("INSERT INTO user (username, password, admin) VALUES (?, ?, ?)",
                ("admin", generate_password_hash("admin"), 1))
 
-    db.execute("INSERT INTO user (username, password, admin) VALUES (?, ?, ?)",
-               ("user", generate_password_hash("user"), 1))
+    db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
+               ("user", generate_password_hash("user")))
 
     for _ in range(10):
         db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
-                   (fake.name(), fake.password()))
+                   (fake.unique.name(), fake.password()))
     db.commit()
 
     for id in range(2, 13):
