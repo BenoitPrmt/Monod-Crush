@@ -1,12 +1,11 @@
 import sqlite3
 
 import click
-from flask import current_app
-from flask import g
+from flask import current_app, g, Flask
 from flask.cli import with_appcontext
 
 
-def get_db():
+def get_db() -> sqlite3.Connection:
     """Connect to the application's configured database. The connection
     is unique for each request and will be reused if this is called
     again.
@@ -20,7 +19,7 @@ def get_db():
     return g.db
 
 
-def close_db(e=None):
+def close_db(e = None) -> None:
     """If this request connected to the database, close the
     connection.
     """
@@ -30,7 +29,7 @@ def close_db(e=None):
         db.close()
 
 
-def init_db():
+def init_db() -> None:
     """Clear existing data and create new tables."""
     db = get_db()
 
@@ -40,15 +39,45 @@ def init_db():
 
 @click.command("init-db")
 @with_appcontext
-def init_db_command():
+def init_db_command() -> None:
     """Clear existing data and create new tables."""
     init_db()
     click.echo("Initialized the database.")
 
 
-def init_app(app):
+def populate_db() -> None:
+    """Push fake data to the database."""
+    from faker import Faker
+
+    db = get_db()
+
+    fake = Faker('fr_FR')
+    for _ in range(10):
+        a = db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
+                       (fake.name(), fake.password()))
+
+    #
+    # for _ in range(10):
+    #     a = db.execute("INSERT INTO post (title, content, user_id) VALUES (?, ?, ?)",
+    # db.commit()
+
+    # with current_app.open_resource("data.sql") as f:
+    #     db.executescript(f.read().decode("utf8"))
+
+
+@click.command("populate-db")
+@with_appcontext
+def populate_db_command() -> None:
+    """Push fake data to the database."""
+    # from flaskr.models import User, Post, Comment
+    populate_db()
+    click.echo("populated the database.")
+
+
+def init_app(app: Flask) -> None:
     """Register database functions with the Flask app. This is called by
     the application factory.
     """
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(populate_db_command)
