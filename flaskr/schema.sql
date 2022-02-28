@@ -9,7 +9,7 @@ CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  isAdmin INTEGER NOT NULL DEFAULT 0,
+  admin INTEGER NOT NULL DEFAULT 0,
 
   -- optional fields for account info
   profilePic TEXT,

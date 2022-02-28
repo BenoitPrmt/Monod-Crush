@@ -33,7 +33,7 @@ def get_post(post_id, check_author=True):
     """
     post = (
         get_db().execute(
-            "SELECT p.id, title, body, created, author_id, username"
+            "SELECT p.id, body, created, author_id, username"
             " FROM post p JOIN user u ON p.author_id = u.id"
             " WHERE p.id = ?",
             (post_id,),
@@ -50,24 +50,23 @@ def get_post(post_id, check_author=True):
 
 
 @bp.route("/create", methods=("GET", "POST"))
-@login_required
+@login_required  # TODO autoriser l'utilisateur à créer un post sans être connecté
 def create():
     """Create a new post for the current user."""
     if request.method == "POST":
-        title = request.form["title"]
         body = request.form["body"]
         error = None
 
-        if not title:
-            error = "Title is required."
+        if not body:
+            error = "Le message ne peut pas être vide."
 
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                "INSERT INTO post (title, body, author_id) VALUES (?, ?, ?)",
-                (title, body, g.user["id"]),
+                "INSERT INTO post (body, author_id) VALUES (?, ?)",
+                (body, g.user["id"]),
             )
             db.commit()
             return redirect(url_for("blog.index"))
@@ -82,19 +81,18 @@ def edit(post_id: int):
     post = get_post(post_id)
 
     if request.method == "POST":
-        title = request.form["title"]
         body = request.form["body"]
         error = None
 
-        if not title:
-            error = "Title is required."
+        if not body:
+            error = "Le message ne peut pas être vide."
 
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                "UPDATE post SET title = ?, body = ? WHERE id = ?", (title, body, id)
+                "UPDATE post SET , body = ? WHERE id = ?", (body, post_id)
             )
             db.commit()
             return redirect(url_for("blog.index"))
@@ -112,6 +110,6 @@ def delete(post_id: int):
     """
     get_post(post_id)
     db = get_db()
-    db.execute("DELETE FROM post WHERE id = ?", (id,))
+    db.execute("DELETE FROM post WHERE id = ?", (post_id,))
     db.commit()
     return redirect(url_for("blog.index"))
