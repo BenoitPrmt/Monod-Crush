@@ -49,16 +49,20 @@ def get_post(post_id, check_author=True):
     return post
 
 
-@bp.route("/create_post", methods=("GET", "POST"))
+@bp.route("/create", methods=("GET", "POST"))
 @login_required
 def create():
     """Create a new post for the current user."""
     if request.method == "POST":
         title = request.form["title"]
         body = request.form["body"]
+        error = None
 
         if not title:
-            flash("Title is required.")
+            error = "Title is required."
+
+        if error is not None:
+            flash(error)
         else:
             db = get_db()
             db.execute(
@@ -80,10 +84,13 @@ def edit(post_id: int):
     if request.method == "POST":
         title = request.form["title"]
         body = request.form["body"]
+        error = None
 
         if not title:
-            flash("Title is required.")
+            error = "Title is required."
 
+        if error is not None:
+            flash(error)
         else:
             db = get_db()
             db.execute(

@@ -67,25 +67,29 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         db = get_db()
+        error = None
 
         if not username:
-            flash("Username is required.")
+            error = "Username is required."
         elif not password:
-            flash("Password is required.")
+            error = "Password is required."
 
-        try:
-            db.execute(
-                "INSERT INTO user (username, password) VALUES (?, ?)",
-                (username, generate_password_hash(password)),
-            )
-            db.commit()
-        except db.IntegrityError:
-            # The username was already taken, which caused the
-            # commit to fail. Show a validation error.
-            flash(f"User {username} is already registered.")
-        else:
-            # Success, go to the login page.
-            return redirect(url_for("auth.login"))
+        if error is None:
+            try:
+                db.execute(
+                    "INSERT INTO user (username, password) VALUES (?, ?)",
+                    (username, generate_password_hash(password)),
+                )
+                db.commit()
+            except db.IntegrityError:
+                # The username was already taken, which caused the
+                # commit to fail. Show a validation error.
+                error = f"User {username} is already registered."
+            else:
+                # Success, go to the login page.
+                return redirect(url_for("auth.login"))
+
+        flash(error)
 
     return render_template("auth/register.html")
 
@@ -96,21 +100,24 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-
         db = get_db()
+        error = None
         user = db.execute(
             "SELECT * FROM user WHERE username = ?", (username,)
         ).fetchone()
 
         if user is None:
-            flash("Incorrect username.")
+            error = "Incorrect username."
         elif not check_password_hash(user["password"], password):
-            flash("Incorrect password.")
+            error = "Incorrect password."
 
-        # store the user id in a new session and return to the index
-        session.clear()
-        session["user_id"] = user["id"]
-        return redirect(url_for("index"))
+        if error is None:
+            # store the user id in a new session and return to the index
+            session.clear()
+            session["user_id"] = user["id"]
+            return redirect(url_for("index"))
+
+        flash(error)
 
     return render_template("auth/login.html")
 
