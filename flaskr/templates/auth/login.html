@@ -6,11 +6,12 @@
 <h1>Log In</h1>
 <section>
     <form method="post">
-        <label for="username">Username</label>
-        <input name="username" id="username" required>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-        <input type="submit" value="Log In">
+        <label>Nom d'utilisateur:</label>
+        <input type="text" id="username" name="username"><br><br>
+        <label>Mot de passe:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Se connecter">
+        <input type="reset">
     </form>
 </section>
 {% endblock %}
