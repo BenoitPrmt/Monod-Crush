@@ -92,7 +92,7 @@ def edit(post_id: int):
         else:
             db = get_db()
             db.execute(
-                "UPDATE post SET , body = ? WHERE id = ?", (body, post_id)
+                "UPDATE post SET body = ? WHERE id = ?", (body, post_id)
             )
             db.commit()
             return redirect(url_for("blog.index"))

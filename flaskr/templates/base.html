@@ -21,11 +21,14 @@
 
 <body>
     <header>
+        <img class ="img_title" src="{{ url_for('static', filename='styles/logo_top.png')}}">
         <h1><a href="{{ url_for('index') }}">Monod Crush</a></h1>
+        
         <nav>
             <ul>
                 {% if g.user %}
-                <li>{{ g.user['username'] }}</li>
+                <li><a href="{{ url_for('user.profile', username=g.user['username']) }}">{{ g.user['username'] }}</a></li>
+                
 
                 {% if g.user['admin'] %}
                 <li><a href="{{ url_for('admin.panel') }}">Modération</a></li>
