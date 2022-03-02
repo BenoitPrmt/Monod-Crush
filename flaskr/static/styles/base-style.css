@@ -1,7 +1,7 @@
 body {
     max-width: 960px;
     margin: 0 auto;
-    background: white;
+    background: #f3c1db;
 }
 
 a {
@@ -46,6 +46,15 @@ header h1 {
     flex: auto;
     margin: 0;
     padding: 0.25rem 0.5rem;
+    
+}
+
+img{
+    width : 35px;
+    height : 35px;
+    margin-top: 7px;
+    margin-left: 5px;
+
 }
 
 nav ul {
