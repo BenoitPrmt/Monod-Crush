@@ -27,7 +27,8 @@
         <nav>
             <ul>
                 {% if g.user %}
-                <li>{{ g.user['username'] }}</li>
+                <li><a href="{{ url_for('user.profile', username=g.user['username']) }}">{{ g.user['username'] }}</a></li>
+                
 
                 {% if g.user['admin'] %}
                 <li><a class="button" href="{{ url_for('admin.panel') }}">Modération</a></li>
