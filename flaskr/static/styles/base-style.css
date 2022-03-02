@@ -69,6 +69,25 @@ nav ul li {
 }
 
 
+.button:link, a:visited, a:focus {
+  background: #fd7c84;
+  border: none;
+  padding: 20px 34px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #d57276;
+}
+
+.button:active {
+  background:#d73d6c;
+
 /* html {
   font-family: sans-serif;
   background: #eee;

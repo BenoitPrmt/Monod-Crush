@@ -30,14 +30,14 @@
                 <li>{{ g.user['username'] }}</li>
 
                 {% if g.user['admin'] %}
-                <li><a href="{{ url_for('admin.panel') }}">Modération</a></li>
+                <li><a class="button" href="{{ url_for('admin.panel') }}">Modération</a></li>
                 {% endif %}
 
-                <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                <li><a class="button" href="{{ url_for('auth.logout') }}">Log Out</a></li>
 
                 {% else %}
-                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                <li><a class="button" href="{{ url_for('auth.register') }}">Register</a></li>
+                <li><a class="button" href="{{ url_for('auth.login') }}">Log In</a></li>
                 {% endif %}
             </ul>
         </nav>
