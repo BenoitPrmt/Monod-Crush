@@ -21,7 +21,9 @@
 
 <body>
     <header>
+        <img class ="img_title" src="{{ url_for('static', filename='styles/logo_top.png')}}">
         <h1><a href="{{ url_for('index') }}">Monod Crush</a></h1>
+        
         <nav>
             <ul>
                 {% if g.user %}
