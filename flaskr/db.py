@@ -62,7 +62,7 @@ def populate_db() -> None:
 
     for _ in range(10):
         db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
-                   (fake.unique.name(), fake.password()))
+                   (fake.unique.name().replace(' ', ''), fake.password()))
     db.commit()
 
     for id in range(2, 13):
