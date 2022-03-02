@@ -51,6 +51,13 @@ Or on Windows cmd::
     > flask init-db
     > flask run
 
+Or on PowerShell::
+
+    > $env:FLASK_APP="flaskr"
+    > $env:FLASK_ENV="development"
+    > flask init-db
+    > flask run
+
 Open http://127.0.0.1:5000 in a browser.
 
 

@@ -30,7 +30,7 @@
                 <li>{{ g.user['username'] }}</li>
 
                 {% if g.user['admin'] %}
-                <li><a href="{{ url_for('index') }}">Modération</a></li>
+                <li><a href="{{ url_for('admin.panel') }}">Modération</a></li>
                 {% endif %}
 
                 <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
