@@ -1,7 +1,7 @@
 body {
     max-width: 960px;
     margin: 0 auto;
-    background: #f3c1db;
+    background: white;
 }
 
 a {
@@ -69,7 +69,7 @@ nav ul li {
 }
 
 
-.button:link, a:visited, a:focus {
+.button:link, .button:visited, .button:focus {
   background: #fd7c84;
   border: none;
   padding: 20px 34px;
