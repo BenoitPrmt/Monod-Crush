@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Editez votre profil{% endblock %}
+
+{% block content %}
+<h1>Edition de profil</h1>
+<section>
+    <form method="post">
+
+        <label>Nom d'utilisateur:</label>
+        <input type="text" id="username" name="username"><br><br>
+        <label>Mot de passe:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="S'inscrire">
+        <input type="reset">
+    </form>
+</section>
+{% endblock %}

@@ -57,6 +57,7 @@ def register():
     """
     if request.method == "POST":
         username = request.form["username"]
+        # datOfBirth = request.form["birthday"]
         password = request.form["password"]
         db = get_db()
         error = None
