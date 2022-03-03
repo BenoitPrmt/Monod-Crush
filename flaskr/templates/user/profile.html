@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}Profil {{username}}{% endblock %}
+{% block title %}Profil de {{username}}{% endblock %}
 
 {% block content %}
 <h1>Profil</h1>
+<a class="button" href="{{ url_for('user.edit', username=username) }}">Editer mon profil</a>
+
 {% endblock %}

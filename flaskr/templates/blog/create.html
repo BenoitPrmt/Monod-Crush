@@ -7,11 +7,11 @@
     <h1>Nouveau Post</h1>
 
     <form method="post">
-        <label for="body">Message</label>
-        <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
+        <label for="body">Message</label><br><br>
+        <textarea name="body" id="body">{{ request.form['body'] }}</textarea><br><br>
 
         <input type="checkbox" id="scales" name="scales" checked>
-        <label for="scales">Envoyer le message anonymement</label>
+        <label for="scales">Envoyer le message anonymement</label><br><br>
 
         <input type="submit" value="Save">
     </form>
