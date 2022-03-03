@@ -13,6 +13,7 @@ CREATE TABLE user (
 
   -- optional fields for account info
   profilePic TEXT,
+  email TEXT,
   firstName TEXT,
   description TEXT,
   dateOfBirth TIMESTAMP,
