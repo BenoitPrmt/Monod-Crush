@@ -57,15 +57,20 @@ def register():
     """
     if request.method == "POST":
         username = request.form["username"]
-        # datOfBirth = request.form["birthday"]
+        dateOfBirth = request.form["birthday"]
         password = request.form["password"]
         db = get_db()
         error = None
 
         if not username:
-            error = "Remplissez le champ nom d'utilisateur."
+            error = "Choisissez un nom d'utilisateur !"
         elif len(username) < 3:
             error = "Le nom d'utilisateur doit contenir au moins 3 caractères."
+        elif any(char.isalnum() for char in username):
+            error = "Le nom d'utilisateur ne peut pas contenir de chiffres ni de symboles !"
+
+        if not dateOfBirth:
+            error = "Indiquez votre date de naissance !."
 
         elif not password:
             error = "Remplissez le champ mot de passe."
@@ -75,8 +80,8 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
+                    "INSERT INTO user (username, dateOfBirth, password) VALUES (?, ?, ?)",
+                    (username, dateOfBirth, generate_password_hash(password)),
                 )
                 db.commit()
             except db.IntegrityError:
