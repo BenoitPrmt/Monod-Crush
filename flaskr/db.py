@@ -52,7 +52,6 @@ def populate_db() -> None:
 
     db = get_db()
 
-    fake = Faker('fr_FR')
 
     db.execute("INSERT INTO user (username, password, admin) VALUES (?, ?, ?)",
                ("admin", generate_password_hash("admin"), 1))
@@ -60,13 +59,16 @@ def populate_db() -> None:
     db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
                ("user", generate_password_hash("user")))
 
-    for _ in range(10):
-        db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
-                   (fake.unique.name().replace(' ', ''), fake.password()))
-    db.commit()
+    faker = Faker('fr_FR')
 
-    for id in range(2, 13):
-        db.execute("INSERT INTO post (body, author_id) VALUES (?, ?)", (fake.text(), id))
+    for user_id in range(2, 13):
+        profile = faker.simple_profile()
+
+        db.execute("INSERT INTO user (username, password, dateOfBirth, email) VALUES (?, ?, ?, ?)",
+                   (profile["username"], faker.password(), profile["birthdate"], profile["mail"]))
+
+        db.execute("INSERT INTO post (body, author_id) VALUES (?, ?)", (faker.sentence(), user_id))
+
     db.commit()
 
 
