@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <!-- Required meta tags and config for phone -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base-style.css') }}">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!-- title -->
+    <title>{% block title %}{% endblock %} - Flaskr</title>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <header>
+        <img class ="img_title" src="{{ url_for('static', filename='styles/logo_top.png')}}">
+        <h1><a href="{{ url_for('index') }}">Monod Crush</a></h1>
+        
+        <nav>
+            <ul>
+                {% if g.user %}
+                <li><a href="{{ url_for('user.profile', username=g.user['username']) }}">{{ g.user['username'] }}</a></li>
+                
+
+                {% if g.user['admin'] %}
+                <li><a class="button" href="{{ url_for('admin.panel') }}">Modération</a></li>
+                {% endif %}
+
+                <li><a class="button" href="{{ url_for('auth.logout') }}">Log Out</a></li>
+
+                {% else %}
+                <li><a class="button" href="{{ url_for('auth.register') }}">Register</a></li>
+                <li><a class="button" href="{{ url_for('auth.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <a href="{{ url_for('templates.base') }}">home page </a>
+    <footer>
+        <p>Footer Page</p>
+    </footer>
+
+</body>
+
+</html>
