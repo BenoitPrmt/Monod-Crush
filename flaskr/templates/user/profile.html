@@ -4,6 +4,9 @@
 
 {% block content %}
 <h1>Profil</h1>
+<p>{{username}}</p><br>
 <a class="button" href="{{ url_for('user.edit', username=username) }}">Editer mon profil</a><br><br>
+
+<h1>Réseaux sociaux</h1>
 
 {% endblock %}
