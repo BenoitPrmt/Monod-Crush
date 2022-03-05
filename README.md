@@ -1,70 +1,95 @@
-Monod Crush
-======
+# Monod Crush
 
-NSI project realized by killian benoit and jules
+NSI project realized by killian, benoit and jules
 
-Install
--------
+
+## Install
+
+### Windows and Linux
+
 clone the repository
+```bash
+git clone https://github.com/BenoitObelia/Monod-Crush
+cd Monod-Crush
+```
 
+Create a virtualenv and activate it (optional)
+```bash
+virtualenv venv
+venv/Scripts/activate # for Windows
+source venv/bin/activate # for Linux
+```
 
-    $ git clone https://github.com/BenoitObelia/Monod-Crush
-    $ cd Projet-Web
+Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
-Create a virtualenv and activate it::
+or for development
+```bash
+pip install -r requirements-dev.txt
+```
 
-    $ python3 -m venv venv
-    $ . venv/bin/activate
+## Usage
 
-Or on Windows cmd::
+## For development
+*don't forget to activate the virtual environment if you have it installed*
 
-    $ py -3 -m venv venv
-    $ venv\Scripts\activate.bat
+### 1) setup environment variables
 
-Install Flaskr::
+Linux :
+```bash
+export FLASK_APP=flaskr
+export FLASK_ENV=development
+```
 
-    $ pip install -e .
+Windows (CMD) :
+```bash
+set FLASK_APP=flaskr
+set FLASK_ENV=development
+```
 
-Or if you are using the main branch, install Flask from source before
-installing Flaskr::
+Windows (PowerShell) :
+```bash
+$env:FLASK_APP="flaskr"
+$env:FLASK_ENV="development"
+```
 
-Run
----
+### 2) setup database
 
-::
+```bash
+flask init-db
+```
 
-    $ export FLASK_APP=flaskr
-    $ export FLASK_ENV=development
-    $ flask init-db
-    $ flask run
+you can populate the database with some data with the following command
+```bash
+flask populate-db
+```
 
-Or on Windows cmd::
+### 3) run the server
 
-    > set FLASK_APP=flaskr
-    > set FLASK_ENV=development
-    > flask init-db
-    > flask run
+local :
+```bash
+flask run
+```
 
-Or on PowerShell::
+on LAN :
+*/!\ Do not use it in a production deployment /!\*
+```bash
+flask run --host=0.0.0.0
+```
 
-    > $env:FLASK_APP="flaskr"
-    > $env:FLASK_ENV="development"
-    > flask init-db
-    > flask run
+then open http://localhost:5000/
 
-Open http://127.0.0.1:5000 in a browser.
+## For production
 
+need a wsgi server (like gunicorn)
 
-Test
-----
+# Test
 
-::
-
-    $ pip install '.[test]'
-    $ pytest
-
-Run with coverage report::
-
-    $ coverage run -m pytest
-    $ coverage report
-    $ coverage html  # open htmlcov/index.html in a browser
+Run with coverage report
+```bash
+coverage run -m pytest
+coverage report
+coverage html  # open htmlcov/index.html in a browser
+```
