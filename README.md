@@ -1,6 +1,6 @@
 # Monod Crush
 
-NSI project realized by killian, benoit and jules
+NSI project realized by @KillianTib, @BenoitObelia and @JulesGrd
 
 
 ## Install
@@ -44,13 +44,13 @@ export FLASK_ENV=development
 ```
 
 Windows (CMD) :
-```bash
+```cmd
 set FLASK_APP=flaskr
 set FLASK_ENV=development
 ```
 
 Windows (PowerShell) :
-```bash
+```powershell
 $env:FLASK_APP="flaskr"
 $env:FLASK_ENV="development"
 ```
