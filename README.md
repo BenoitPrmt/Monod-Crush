@@ -1,6 +1,6 @@
 # Monod Crush
 
-NSI project realized by @KillianTib, @BenoitObelia and @JulesGr
+NSI project realized by @KillianTib, @BenoitObelia and @JulesGrd
 
 
 ## Install
