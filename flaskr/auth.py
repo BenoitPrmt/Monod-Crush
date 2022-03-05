@@ -66,7 +66,7 @@ def register():
             error = "Choisissez un nom d'utilisateur !"
         elif len(username) < 3:
             error = "Le nom d'utilisateur doit contenir au moins 3 caractères."
-        elif any(char.isalnum() for char in username):
+        elif any(char.isnumeric() for char in username):
             error = "Le nom d'utilisateur ne peut pas contenir de chiffres ni de symboles !"
 
         if not dateOfBirth:
