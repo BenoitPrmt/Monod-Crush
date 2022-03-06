@@ -2,6 +2,8 @@ import os
 
 from flask import Flask
 
+from flaskr.error import not_found
+
 
 def create_app(test_config: dict = None) -> Flask:
     """Create and configure an instance of the Flask application."""
@@ -38,6 +40,8 @@ def create_app(test_config: dict = None) -> Flask:
     app.register_blueprint(blog.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(user.bp)
+    app.register_error_handler(Exception, not_found)
+    
 
     # make url_for('index') == url_for('blog.index')
     # in another app, you might define a separate main index here with
