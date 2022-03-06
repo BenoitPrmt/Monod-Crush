@@ -1,4 +1,5 @@
 import functools
+from typing import Union
 
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug import Response
@@ -50,7 +51,7 @@ def load_logged_in_user():
 
 
 @bp.route("/register", methods=("GET", "POST"))
-def register() -> Response | str:
+def register() -> Union[Response, str]:
     """Register a new user.
 
     Validates that the username is not already taken. Hashes the
@@ -101,7 +102,7 @@ def register() -> Response | str:
 
 
 @bp.route("/login", methods=("GET", "POST"))
-def login() -> Response | str:
+def login() -> Union[Response, str]:
     """Log in a registered user by adding the user id to the session."""
     if request.method == "POST":
         username = request.form["username"]
