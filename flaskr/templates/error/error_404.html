@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}Error 404{% endblock %}
+{% block title %}Page Not Found{% endblock %}
 
 {% block content %}
 <h1>Error 404</h1>
-<a href="{{ url_for('templates.base') }}">Home page</a>
+<h2>Oops! Looks like the page doesn't exist anymore</h2>
+<a href="{{ url_for('index') }}"><p>Click Here</a>To go to the Home Page</p>
 {% endblock %}
