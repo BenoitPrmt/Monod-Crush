@@ -6,7 +6,6 @@ from flaskr.db import get_db
 from tests.conftest import AuthActions
 
 
-@pytest.mark.skip
 def test_index(client: FlaskClient, auth: AuthActions):
     response = client.get("/")
     assert b"Log In" in response.data
@@ -14,16 +13,20 @@ def test_index(client: FlaskClient, auth: AuthActions):
 
     auth.login()
     response = client.get("/")
-    assert b"test title" in response.data
-    assert b"by test on 2018-01-01" in response.data
-    assert b"test\nbody" in response.data
-    assert b'href="/1/update"' in response.data
+    assert b"Log In" not in response.data
+    assert b"Register" not in response.data
+    assert b"Log Out" in response.data
+    assert b"user" in response.data
 
+    # assert b"test title" in response.data
+    # assert b"by test on 2018-01-01" in response.data
+    # assert b"test\nbody" in response.data
+    # assert b'href="/1/update"' in response.data
 
 @pytest.mark.skip
-@pytest.mark.parametrize("path", ("/create", "/1/update", "/1/delete"))
+@pytest.mark.parametrize("path", ("post/create", "post/1/edit", "post/1/delete"))
 def test_login_required(client: FlaskClient, path: str):
-    response = client.post(path)
+    response = client.get(path)
     assert response.history[0].status_code == 302
     assert response.headers["Location"] == "http://localhost/auth/login"
 

@@ -1,3 +1,5 @@
+[![Python package](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml/badge.svg)](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml)
+
 # Monod Crush
 
 NSI project realized by @KillianTib, @BenoitObelia and @JulesGrd

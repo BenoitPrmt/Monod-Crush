@@ -1,6 +1,7 @@
 import functools
 
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
+from werkzeug import Response
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
@@ -49,7 +50,7 @@ def load_logged_in_user():
 
 
 @bp.route("/register", methods=("GET", "POST"))
-def register():
+def register() -> Response | str:
     """Register a new user.
 
     Validates that the username is not already taken. Hashes the
@@ -57,32 +58,34 @@ def register():
     """
     if request.method == "POST":
         username = request.form["username"]
-        dateOfBirth = request.form["birthday"]
+        dateOfBirth = request.form["dateOfBirth"]
         password = request.form["password"]
         db = get_db()
         error = None
 
+        # check if username is valid
         if not username:
             error = "Choisissez un nom d'utilisateur !"
-        elif len(username) < 3:
-            error = "Le nom d'utilisateur doit contenir au moins 3 caractères."
-        elif any(char.isnumeric() for char in username):
+        elif not 3 < len(username) < 26:
+            error = "Le nom d'utilisateur doit contenir entre 4 et 25 caractères."
+        elif not username.isalpha():
             error = "Le nom d'utilisateur ne peut pas contenir de chiffres ni de symboles !"
 
-        if not dateOfBirth:
+        # check date of birth
+        elif not dateOfBirth:
+            # TODO : check if date is valid regex
             error = "Indiquez votre date de naissance !."
 
+        # check password
         elif not password:
             error = "Remplissez le champ mot de passe."
-        elif len(password) < 6:
-            error = "Le mot de passe doit contenir au moins 6 caractères."
+        elif not 5 < len(password) < 26:
+            error = "Le mot de passe doit contenir entre 6 et 25 caractères."
 
         if error is None:
             try:
-                db.execute(
-                    "INSERT INTO user (username, dateOfBirth, password) VALUES (?, ?, ?)",
-                    (username, dateOfBirth, generate_password_hash(password)),
-                )
+                db.execute("INSERT INTO user (username, dateOfBirth, password) VALUES (?, ?, ?)",
+                           (username, dateOfBirth, generate_password_hash(password)))
                 db.commit()
             except db.IntegrityError:
                 # The username was already taken, which caused the
@@ -98,7 +101,7 @@ def register():
 
 
 @bp.route("/login", methods=("GET", "POST"))
-def login():
+def login() -> Response | str:
     """Log in a registered user by adding the user id to the session."""
     if request.method == "POST":
         username = request.form["username"]
@@ -126,7 +129,7 @@ def login():
 
 
 @bp.route("/logout")
-def logout():
+def logout() -> Response:
     """Clear the current session, including the stored user id."""
     session.clear()
     return redirect(url_for("index"))

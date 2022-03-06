@@ -1,16 +1,16 @@
+import html
 import os
+import re
 import tempfile
-from typing import Iterator
-
-from werkzeug.test import TestResponse
+from typing import Iterator, List
 
 import pytest
 from flask import Flask
 from flask.testing import FlaskClient, FlaskCliRunner
+from werkzeug.test import TestResponse
 
 from flaskr import create_app
-from flaskr.db import get_db
-from flaskr.db import init_db
+from flaskr.db import init_db, populate_db
 
 # read in SQL for populating test data
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
@@ -28,7 +28,8 @@ def app() -> Iterator[Flask]:
     # create the database and load test data
     with app.app_context():
         init_db()
-        get_db().executescript(_data_sql)
+        populate_db()
+        # get_db().executescript(_data_sql)
 
     yield app
 
@@ -55,10 +56,27 @@ class AuthActions:
     def __init__(self, client: FlaskClient) -> None:
         self._client = client
 
-    def login(self, username: str = "test", password: str = "test") -> TestResponse:
+    def register(self, *, username: str = "username",
+                 date_of_birth: str = "2000-01-01",
+                 password: str = "password") -> TestResponse:
+        """Register helper function for testing"""
+
+        return self._client.post(
+            "/auth/register",
+            data={"username": username, "dateOfBirth": date_of_birth, "password": password},
+        )
+
+    def login(self, *, username: str = "user", password: str = "user") -> TestResponse:
         """Login helper function for testing"""
+
         return self._client.post(
             "/auth/login", data={"username": username, "password": password}
+        )
+
+    def admin_login(self) -> TestResponse:
+        """Login with admin account """
+        return self._client.post(
+            "/auth/login", data={"username": "admin", "password": "admin"}
         )
 
     def logout(self) -> TestResponse:
@@ -70,3 +88,11 @@ class AuthActions:
 def auth(client: FlaskClient) -> AuthActions:
     """Create a AuthActions object for testing"""
     return AuthActions(client)
+
+
+def get_flashed_messages(response: TestResponse) -> List[str]:
+    """Get flashed messages from a html response"""
+    regex = re.compile(r'<li class="alert alert-\w*">(.*?)</li>')
+    # replace escaped html characters
+    data = html.unescape(response.data.decode("utf8"))
+    return re.findall(regex, data)
