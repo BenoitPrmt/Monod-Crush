@@ -72,9 +72,7 @@ local :
 ```bash
 flask run
 ```
-
-on LAN :
-*/!\ Do not use it in a production deployment /!\*
+on LAN (/!\ Do not use it in a production deployment) :
 ```bash
 flask run --host=0.0.0.0
 ```
