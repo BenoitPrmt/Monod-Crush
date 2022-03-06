@@ -1,11 +1,16 @@
 import sqlite3
 
 import pytest
+from flask import Flask
+from flask.testing import FlaskCliRunner
 
 from flaskr.db import get_db
 
 
-def test_get_close_db(app):
+def test_get_close_db(app: Flask):
+    """ Within an application context, get_db should return the same connection each time it’s called.
+     After the context, the connection should be closed."""
+
     with app.app_context():
         db = get_db()
         assert db is get_db()
@@ -16,7 +21,7 @@ def test_get_close_db(app):
     assert "closed" in str(e.value)
 
 
-def test_init_db_command(runner, monkeypatch):
+def test_init_db_command(runner: FlaskCliRunner, monkeypatch: pytest.MonkeyPatch):
     class Recorder:
         called = False
 

@@ -3,7 +3,7 @@ import os
 from flask import Flask
 
 
-def create_app(test_config=None) -> Flask:
+def create_app(test_config: dict = None) -> Flask:
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
