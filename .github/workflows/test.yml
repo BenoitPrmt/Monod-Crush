@@ -36,4 +36,3 @@ jobs:
       run: |
         pwd
         coverage run --source='.' -m pytest
-        pytest
