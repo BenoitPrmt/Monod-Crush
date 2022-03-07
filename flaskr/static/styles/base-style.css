@@ -89,7 +89,16 @@ nav ul li {
 
 .button:active {
   background:#d73d6c;
+}
 
+.error_tittle{
+  font-family: serif;
+  color: #377ba8;
+  text-align: center;
+  text-shadow: #377ba8;
+  font-size: 125px;
+  
+}
 /* html {
   font-family: sans-serif;
   background: #eee;
