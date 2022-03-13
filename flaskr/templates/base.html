@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- css -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/reset.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base-style.css') }}">
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='styles/reset.css') }}">-->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base-style.css') }}">-->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <!-- favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
@@ -23,7 +24,6 @@
     <header>
         <img class ="img_title" src="{{ url_for('static', filename='styles/logo_top.png')}}">
         <h1><a href="{{ url_for('index') }}">Monod Crush</a></h1>
-        
         <nav>
             <ul>
                 {% if g.user %}

@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 
+from flaskr import auth_helper
 from flaskr.error import not_found
 
 
@@ -28,7 +29,7 @@ def create_app(test_config: dict = None) -> Flask:
     except OSError:
         pass
 
-    # register the database commands
+    # register.py the database commands
     from flaskr import db
 
     db.init_app(app)
@@ -37,11 +38,13 @@ def create_app(test_config: dict = None) -> Flask:
     from flaskr import auth, blog, admin, user
 
     app.register_blueprint(auth.bp)
+    app.register_blueprint(auth_helper.bp)
     app.register_blueprint(blog.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(user.bp)
-    app.register_error_handler(Exception, not_found)
-    
+
+    # register the error handlers
+    # app.register_error_handler(Exception, not_found)
 
     # make url_for('index') == url_for('blog.index')
     # in another app, you might define a separate main index here with

@@ -7,13 +7,13 @@ from flaskr.db import get_db
 
 
 def test_auth(client: FlaskClient, auth: AuthActions):
-    assert client.get("/auth/register").status_code == 200
+    assert client.get("/auth/register.py").status_code == 200
     assert client.get("/auth/login").status_code == 200
     assert client.get("/auth/logout").status_code == 302
 
 
 def test_register(client: FlaskClient, app: Flask):
-    response = client.post("/auth/register",
+    response = client.post("/auth/register.py",
                            data={"username": "username", "dateOfBirth": "2020-04-14", "password": "password"})
 
     # test that successful registration redirects to the login page
