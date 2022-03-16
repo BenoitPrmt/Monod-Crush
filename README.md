@@ -2,14 +2,14 @@
 
 # Monod Crush
 
-NSI project realized by @KillianTib, @BenoitObelia and @JulesGrd
+NSI project realized by [@BenoitObelia](https://github.com/BenoitObelia), [@JulesGrd](https://github.com/JulesGrd) and [@KillianTib](https://github.com/KillianTib)
 
 
 ## Install
 
 ### Windows and Linux
 
-clone the repository
+Clone the repository
 ```bash
 git clone https://github.com/BenoitObelia/Monod-Crush
 cd Monod-Crush
@@ -57,33 +57,33 @@ $env:FLASK_APP="flaskr"
 $env:FLASK_ENV="development"
 ```
 
-### 2) setup database
+### 2) Setup database
 
 ```bash
 flask init-db
 ```
 
-you can populate the database with some data with the following command
+You can populate the database with some data with the following command
 ```bash
 flask populate-db
 ```
 
-### 3) run the server
+### 3) Run the server
 
-local :
+Local :
 ```bash
 flask run
 ```
-on LAN (/!\ Do not use it in a production deployment) :
+LAN (/!\ Do not use it in a production deployment) :
 ```bash
 flask run --host=0.0.0.0
 ```
 
-then open http://localhost:5000/
+Then open http://localhost:5000/
 
 ## For production
 
-need a wsgi server (like gunicorn)
+Need a wsgi server (like gunicorn)
 
 # Test
 
