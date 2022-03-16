@@ -1,9 +1,10 @@
 import os
 
 from flask import Flask
+from werkzeug.exceptions import HTTPException
 
 from flaskr import auth_helper
-from flaskr.error import not_found
+from flaskr.error import error_handler
 
 
 def create_app(test_config: dict = None) -> Flask:
@@ -44,7 +45,7 @@ def create_app(test_config: dict = None) -> Flask:
     app.register_blueprint(user.bp)
 
     # register the error handlers
-    # app.register_error_handler(Exception, not_found)
+    app.register_error_handler(HTTPException, error_handler)
 
     # make url_for('index') == url_for('blog.index')
     # in another app, you might define a separate main index here with

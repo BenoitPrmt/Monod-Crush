@@ -17,13 +17,13 @@ def load_logged_in_user() -> None:
     the database into ``g.user``."""
 
     g.t = time.time()
-    if len(session) == 0:
+    user_id = session.get("user_id")
+
+    if user_id is None:
         g.user = None
     else:
-        # if "soft_user_id" in session:
-        g.user = get_db().execute("SELECT * FROM user WHERE id = ?", (session["user_id"],)).fetchone()
-
-
+        # get information for header
+        g.user = (get_db().execute("SELECT username,admin FROM user WHERE id = ?", (user_id,)).fetchone())
     # current_app.logger.info(f"g.user : {g.user}, time : {time.time() - g.t}")
 
 
