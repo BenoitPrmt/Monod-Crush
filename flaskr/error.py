@@ -1,11 +1,6 @@
-from flask import render_template 
+from flask import render_template
+from werkzeug.exceptions import HTTPException
 
-def not_found(e): 
-  '''retourner le numéro de l'erreur et afficher la page all_error.html'''
-
-  number = []
-  e = str(e).split(" ") #split e pour isoler le numéro
-  number.append(e)
-
-  return render_template("error/all_error.html", error_code = e[0]) #revoi la page d'erreur et e[0] = numéro erreur
-
+def error_handler(error: HTTPException):
+    """ Error handler for HTTP exceptions. """
+    return render_template("error/all_error.html", error_code=error.code), error.code

@@ -62,7 +62,7 @@ class AuthActions:
         """Register helper function for testing"""
 
         return self._client.post(
-            "/auth/register",
+            "/auth/register.py",
             data={"username": username, "dateOfBirth": date_of_birth, "password": password},
         )
 
