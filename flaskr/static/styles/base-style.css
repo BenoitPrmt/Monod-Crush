@@ -95,6 +95,7 @@ nav ul li {
 }
 
 .error_tittle{
+  flex: content;
   font-family: serif;
   color: #377ba8;
   text-align: center;
@@ -102,6 +103,7 @@ nav ul li {
   font-size: 125px;
   
 }
+
 /* html {
   font-family: sans-serif;
   background: #eee;
