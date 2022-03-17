@@ -1,11 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}Profil de {{username}}{% endblock %}
+{% block title %}Profil de {{user.username}}{% endblock %}
 
 {% block content %}
-<h1>Profil</h1>
-<p>{{username}}</p><br>
-<a class="button" href="{{ url_for('user.edit', username=username) }}">Editer mon profil</a><br><br>
+{% if user.firstName %}
+<h1>{{user.firstName}}</h1>
+{% endif %}
+
+<h2>{{user.username}}</h2><br>
+
+<h3>Bio</h3>
+{% if user.description %}
+<p>{{user.description}}</p>
+{% else %}
+<p>Cet utilisateur n'a pas de bio !</p>
+{% endif %}
+
+<h3>Anniversaire</h3>
+{% if user.description %}
+<p>{{user.description}}</p>
+{% else %}
+<p>Cet utilisateur n'a pas de bio !</p>
+{% endif %}
+
+<a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
 
 <h1>Réseaux sociaux</h1>
 

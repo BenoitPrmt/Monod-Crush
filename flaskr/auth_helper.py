@@ -23,7 +23,7 @@ def load_logged_in_user() -> None:
         g.user = None
     else:
         # get information for header
-        g.user = (get_db().execute("SELECT username,admin FROM user WHERE id = ?", (user_id,)).fetchone())
+        g.user = get_db().execute("SELECT id, username, admin FROM user WHERE id = ?", (user_id,)).fetchone()
     # current_app.logger.info(f"g.user : {g.user}, time : {time.time() - g.t}")
 
 
@@ -92,7 +92,7 @@ def login_required(view: callable) -> callable:
     @functools.wraps(view)
     def wrapped_view(**kwargs: dict):
         if g.user is None:
-            return redirect(url_for("auth.auth.login"))
+            return redirect(url_for("auth.login"))
 
         return view(**kwargs)
 

@@ -20,7 +20,6 @@ CREATE TABLE user (
 
   class TEXT,
   speciality TEXT,
-  bio TEXT,
 
   -- optional fields for social media
   -- store only the username/id not the full url
@@ -38,6 +37,7 @@ CREATE TABLE post (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   body TEXT NOT NULL,
   author_id INTEGER,
+  reported INTEGER DEFAULT 0, -- add 1 for every report
   anonymous INTEGER NOT NULL DEFAULT 1,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
