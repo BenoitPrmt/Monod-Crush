@@ -16,11 +16,13 @@
 <p>Cet utilisateur n'a pas de bio !</p>
 {% endif %}
 
+<p>{{date}}</p>
+
 <h3>Anniversaire</h3>
-{% if user.description %}
-<p>{{user.description}}</p>
+{% if date == user.birthday %}
+<p>🎂 {{user.birthday}}</p>
 {% else %}
-<p>Cet utilisateur n'a pas de bio !</p>
+<p>{{user.birthday}}</p>
 {% endif %}
 
 <a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
