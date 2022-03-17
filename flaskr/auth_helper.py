@@ -92,7 +92,7 @@ def login_required(view: callable) -> callable:
     @functools.wraps(view)
     def wrapped_view(**kwargs: dict):
         if g.user is None:
-            return redirect(url_for("auth.auth.login"))
+            return redirect(url_for("auth.login"))
 
         return view(**kwargs)
 
