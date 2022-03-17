@@ -37,7 +37,7 @@ CREATE TABLE post (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   body TEXT NOT NULL,
   author_id INTEGER,
-  reported INTEGER DEFAULT 0, -- add 1 for every report
+  reported TEXT, -- add id of reporter for every report
   anonymous INTEGER NOT NULL DEFAULT 1,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

@@ -24,4 +24,4 @@ def profile(username: str):
 def edit(username: str):
     """Edit profile"""
 
-    return render_template("/user/edit.html", username=username)
+    return render_template("/user/edit.html", username=username)    
