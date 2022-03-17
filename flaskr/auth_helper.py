@@ -23,7 +23,7 @@ def load_logged_in_user() -> None:
         g.user = None
     else:
         # get information for header
-        g.user = (get_db().execute("SELECT username,admin FROM user WHERE id = ?", (user_id,)).fetchone())
+        g.user = get_db().execute("SELECT id, username, admin FROM user WHERE id = ?", (user_id,)).fetchone()
     # current_app.logger.info(f"g.user : {g.user}, time : {time.time() - g.t}")
 
 
