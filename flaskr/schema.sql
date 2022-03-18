@@ -10,6 +10,7 @@ CREATE TABLE user (
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
   admin INTEGER NOT NULL DEFAULT 0,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   -- optional fields for account info
   profilePic TEXT,
