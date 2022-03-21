@@ -17,12 +17,11 @@
 {% endif %}
 
 <p>{{date}}</p>
+<p>🎂 {{user.birthday}}</p>
 
 <h3>Anniversaire</h3>
 {% if date == user.birthday %}
 <p>🎂 {{user.birthday}}</p>
-{% else %}
-<p>{{user.birthday}}</p>
 {% endif %}
 
 <a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
