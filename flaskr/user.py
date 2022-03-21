@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app
 from datetime import date
 
 from werkzeug.security import generate_password_hash
@@ -11,7 +11,7 @@ today = date.today()
 
 
 @bp.route('/<username>')
-@login_required
+@login_required  # TODO required ?
 def profile(username: str):
     """Show profile of a user"""
 
@@ -23,7 +23,7 @@ def profile(username: str):
     return render_template("/user/profile.html", user=user, date=today)
 
 
-@bp.route('/<username>/edit', methods=("GET", "POST"))
+@bp.route('/<username>/edit', methods=["GET"])
 @login_required
 def edit(username: str):
     """Edit profile"""
@@ -35,11 +35,12 @@ def edit(username: str):
 
     return render_template("/user/edit.html", user=user)
 
-# @bp.route("/<username>/edit", methods=("GET", "POST"))
-def update_user(username:str):
+
+@bp.route("/<username>/edit", methods=("GET", "POST"))
+def update_user(username: str):
     """Update user"""
 
-    print("update_user")
+    current_app.logger.info(f"update user: {username}, request.form: {request.form}")
 
     db = get_db()
 
@@ -60,12 +61,12 @@ def update_user(username:str):
     website = request.form["website"]
     password = request.form["password"]
 
-    db.execute(
-        """UPDATE user
-        SET username = ?, firstName = ?, email = ?, class_level = ?, class_number = ?, instagram = ?, facebook = ?, linkedin = ?, twitter = ?, github = ?, website = ?, password = ?
-        WHERE id = ?""",
-        (username, firstName, email, class_level, class_number, instagram, facebook, linkedin, twitter, github, website, generate_password_hash(password), user.id),
-    )
-    db.commit()
-    db.close()
+    # db.execute(
+    #     """UPDATE user
+    #     SET username = ?, firstName = ?, email = ?, class_level = ?, class_number = ?, instagram = ?, facebook = ?, linkedin = ?, twitter = ?, github = ?, website = ?, password = ?
+    #     WHERE id = ?""",
+    #     (username, firstName, email, class_level, class_number, instagram, facebook, linkedin, twitter, github, website,
+    #      generate_password_hash(password), user.id),
+    # )
+    # db.commit()
     return render_template("/user/profile.html", user=user, date=today)
