@@ -53,7 +53,6 @@ logging_config_prod = {
             "level": "INFO",
         },
         "werkzeug": {
-            'formatter': 'short',
             "handlers": ["console", "file"],
             "level": "INFO",
         }
@@ -75,12 +74,18 @@ logging_config_dev = {
             # 'stream': 'ext://flask.logging.wsgi_errors_stream',
 
             'formatter': 'short',
-            'level': 'INFO',
         }
     },
 
-    "root": {
-        "handlers": ["console"],
+    "loggers": {
+        "flaskr": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        },
+        "werkzeug": {
+            "handlers": ["console"],
+            "level": "INFO",
+        }
     }
 }
 
