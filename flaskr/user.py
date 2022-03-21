@@ -40,7 +40,8 @@ def edit(username: str):
 def update_user(username: str):
     """Update user"""
 
-    current_app.logger.info(f"update user: {username}, request.form: {request.form}")
+    current_app.logger.info(f"update user: {username}")
+    current_app.logger.debug(f"request.form: {request.form}")
 
     db = get_db()
 
