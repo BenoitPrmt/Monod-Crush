@@ -1,53 +1,78 @@
 {% extends 'base.html' %}
 
-{% block title %}Editez votre profil{% endblock %}
+{% block title %}Editez votre profil {{user.username}}{% endblock %}
 
 {% block content %}
 <h1>Edition de profil</h1>
 <section>
-    <form method="post">
+    <form action="{{ url_for('user.update_user', username=user.username) }}" method="post">
 
         <h1>Profil</h1>
-        <label>Nom d'utilisateur</label> : <input type="text" name="username" /><br>
-        <label>Prénom</label> : <input type="text" name="firstName" /><br>
-        <label>Email</label> : <input type="text" name="email" /><br>
-        <label>En recherche de</label> : <select name="inSearchFor" id="inSearchFor">
-            <option value="2">Amitié</option>
-            <option value="1">Amour</option>
-        </select><br>
+        <label>Nom d'utilisateur</label> : <input type="text" name="username" id="username"/><br>
+        <label>Prénom</label> : <input type="text" name="firstName" id="firstName"/><br>
+        <label>Email</label> : <input type="text" name="email" id="email"/><br>
         <label>Niveau</label> : <select name="class_level" id="class_level">
-            <option value="2">Seconde</option>
-            <option value="1">Première</option>
-            <option value="0">Terminale</option>
-        </select><br>
-        <label>Classe</label> : <input type="number" name="class_number"/><br>
+        <option value="2">Seconde</option>
+        <option value="1">Première</option>
+        <option value="0">Terminale</option>
+    </select><br>
+        <label>Classe</label> : <input type="number" name="class_number" id="class_number"/><br>
         <p>Exemple : Si vous êtes en 1ère 06, indiquez "Première" pour le niveau et "6" pour la classe.</p>
 
+        {% if user.class_level == "0" or user.class_level == "1" %}
         <h1>Spécialités</h1>
-        <input type="checkbox" name="MATHS"><label>Mathématiques</label><br>
-        <input type="checkbox" name="PC"><label>Physique-Chimie</label><br>
-        <input type="checkbox" name="SVT"><label>Sciences de la vie et de la Terre</label><br>
-        <input type="checkbox" name="SES"><label>Sciences économiques et sociales</label><br>
-        <input type="checkbox" name="HGGSP"><label>Histoire-géographie géopolitique et sciences politiques</label><br>
-        <input type="checkbox" name="LLCER "><label>LLCER - Anglais</label><br>
-        <input type="checkbox" name="HLP"><label>Humanités, littérature et philosophie</label><br>
-        <input type="checkbox" name="NSI"><label>Numérique et sciences informatiques</label><br>
-        <input type="checkbox" name="SI"><label>Sciences de l'ingénieur</label><br>
-        <input type="checkbox" name="AP"><label>Arts plastiques</label><br>
-    
+        <div id="speciality_group">
+            <input type="checkbox" name="MATHS"><label>Mathématiques</label><br>
+            <input type="checkbox" name="PC"><label>Physique-Chimie</label><br>
+            <input type="checkbox" name="SVT"><label>Sciences de la vie et de la Terre</label><br>
+            <input type="checkbox" name="SES"><label>Sciences économiques et sociales</label><br>
+            <input type="checkbox" name="HGGSP"><label>Histoire-géographie géopolitique et sciences
+            politiques</label><br>
+            <input type="checkbox" name="LLCER "><label>LLCER - Anglais</label><br>
+            <input type="checkbox" name="HLP"><label>Humanités, littérature et philosophie</label><br>
+            <input type="checkbox" name="NSI"><label>Numérique et sciences informatiques</label><br>
+            <input type="checkbox" name="SI"><label>Sciences de l'ingénieur</label><br>
+            <input type="checkbox" name="AP"><label>Arts plastiques</label><br>
+        </div>
+        <script type="text/javascript">
+            function speChecker(userClassLevel) {
+                var spe_group = document.getElementById('speciality_group').getElementsByTagName("input");
+                if(userClassLevel == "1") {
+                    var limit = 3;
+                } else {
+                    var limit = 2;
+                }
+                for (var i = 0; i < spe_group.length; i++) {
+                    spe_group[i].onclick = function() {
+                        var checkedcount = 0;
+                            for (var i = 0; i < spe_group.length; i++) {
+                            checkedcount += (spe_group[i].checked) ? 1 : 0;
+                        }
+                        if (checkedcount > limit) {
+                            alert("Vous ne pouvez séléctionner que " + limit + " spécialités maximum.");
+                            this.checked = false;
+                        }
+                    }
+                }
+            }
+            speChecker("{{user.class_level}}");
+
+
+        </script>
+        {% endif %}
 
         <h1>Social</h1>
         <p>Indiquez votre nom d'utilisateur.</p><br>
-        <label>Instagram</label> : <input type="text" name="instagram" /><br>
-        <label>Twitter</label> : <input type="text" name="twitter" /><br>
-        <label>Facebook</label> : <input type="text" name="facebook" /><br>
-        <label>GitHub</label> : <input type="text" name="github" /><br>
-        <label>Linkedin</label> : <input type="text" name="linkedin" /><br>
-        <label>Site web</label> : <input type="text" name="website" /><br>
+        <label>Instagram</label> : <input type="text" name="instagram" id="instagram"/><br>
+        <label>Twitter</label> : <input type="text" name="twitter" id="twitter"/><br>
+        <label>Facebook</label> : <input type="text" name="facebook" id="facebook"/><br>
+        <label>GitHub</label> : <input type="text" name="github" id="github"/><br>
+        <label>Linkedin</label> : <input type="text" name="linkedin" id="linkedin"/><br>
+        <label>Site web</label> : <input type="text" name="website" id="website"/><br>
 
         <h1>Sécurité</h1>
-        <label>Mot de passe</label> : <input type="password" name="password" /><br>
-        <input type="submit" value="Enregistrer">
+        <label>Mot de passe</label> : <input type="password" name="password" id="password"/><br>
+        <input class="btn btn-save" type="submit" value="Enregistrer">
     </form>
 </section>
 {% endblock %}

@@ -20,7 +20,8 @@ CREATE TABLE user (
   description TEXT,
   dateOfBirth TIMESTAMP,
 
-  class TEXT,
+  class_number TEXT,
+  class_level TEXT,
   speciality TEXT,
 
   -- optional fields for social media
