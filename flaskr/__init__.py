@@ -12,12 +12,6 @@ from flaskr.error import error_handler
 def create_app(test_config: dict = None) -> Flask:
     """Create and configure an instance of the Flask application."""
 
-    # setup logging
-    if os.environ.get("FLASK_ENV") == "development":
-        dictConfig(logging_config_dev)
-    else:
-        dictConfig(logging_config_prod)
-
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         # a default secret that should be overridden by instance config
@@ -25,6 +19,12 @@ def create_app(test_config: dict = None) -> Flask:
         # store the database in the instance folder
         DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
     )
+
+    # setup logging
+    if app.debug:
+        dictConfig(logging_config_dev)
+    else:
+        dictConfig(logging_config_prod)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -39,7 +39,7 @@ def create_app(test_config: dict = None) -> Flask:
     except OSError:
         pass
 
-    # register.py the database commands
+    # register the database commands
     from flaskr import db
 
     db.init_app(app)
@@ -47,6 +47,7 @@ def create_app(test_config: dict = None) -> Flask:
     # apply the blueprints to the app
     from flaskr import auth, blog, admin, user
 
+    # register the blueprints
     app.register_blueprint(auth.bp)
     app.register_blueprint(auth_helper.bp)
     app.register_blueprint(blog.bp)
