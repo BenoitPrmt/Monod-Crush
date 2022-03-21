@@ -24,13 +24,13 @@ def load_logged_in_user() -> None:
     else:
         # get information for header
         g.user = get_db().execute("SELECT id, username, admin FROM user WHERE id = ?", (user_id,)).fetchone()
-    # current_app.logger.info(f"g.user : {g.user}, time : {time.time() - g.t}")
+    # current_app.logger.debug(f"g.user : {g.user}, time : {time.time() - g.t}")
 
 
 # @bp.after_app_request
 # def after_request(response: Response) -> Response:
 #     """ Profile the response time of the request. If in debug mode"""
-#     current_app.logger.info(f"request response time: {time.time() - g.t}, response : {request.path}")
+#     current_app.logger.debug(f"request response time: {time.time() - g.t}, response : {request.path}")
 #     # TODO : add the response time to the log and store it in db for analysis
 #     return response
 
