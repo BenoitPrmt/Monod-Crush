@@ -16,7 +16,7 @@ def load_logged_in_user() -> None:
     """If a user id is stored in the session, load the user object from
     the database into ``g.user``."""
 
-    g.t = time.time()
+    # g.t = time.time()
     user_id = session.get("user_id")
 
     if user_id is None:
@@ -27,12 +27,12 @@ def load_logged_in_user() -> None:
     # current_app.logger.info(f"g.user : {g.user}, time : {time.time() - g.t}")
 
 
-@bp.after_app_request
-def after_request(response: Response) -> Response:
-    """ Profile the response time of the request. If in debug mode"""
-    current_app.logger.info(f"request response time: {time.time() - g.t}, response : {request.path}")
-    # TODO : add the response time to the log and store it in db for analysis
-    return response
+# @bp.after_app_request
+# def after_request(response: Response) -> Response:
+#     """ Profile the response time of the request. If in debug mode"""
+#     current_app.logger.info(f"request response time: {time.time() - g.t}, response : {request.path}")
+#     # TODO : add the response time to the log and store it in db for analysis
+#     return response
 
 
 def check_password_strength(password: str) -> Tuple[bool, str]:
