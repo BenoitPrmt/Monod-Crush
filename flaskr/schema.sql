@@ -18,7 +18,7 @@ CREATE TABLE user (
   email TEXT,
   firstName TEXT,
   description TEXT,
-  dateOfBirth TIMESTAMP,
+  dateOfBirth TEXT,
 
   class_number TEXT,
   class_level TEXT,

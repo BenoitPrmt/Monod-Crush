@@ -36,7 +36,7 @@ def edit(username: str):
     return render_template("/user/edit.html", user=user)
 
 
-@bp.route("/<username>/edit", methods=("GET", "POST"))
+@bp.route("/<username>", methods=("GET", "POST"))
 def update_user(username: str):
     """Update user"""
 
@@ -44,10 +44,13 @@ def update_user(username: str):
     current_app.logger.debug(f"request.form: {request.form}")
 
     db = get_db()
-
-    user = db.execute(
+    cur = db.cursor()
+    user = cur.execute(
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
+
+    userID = tuple(user)[0]
+    print(userID)
 
     username = request.form["username"]
     firstName = request.form["firstName"]
@@ -60,14 +63,26 @@ def update_user(username: str):
     twitter = request.form["twitter"]
     github = request.form["github"]
     website = request.form["website"]
-    password = request.form["password"]
+    password = generate_password_hash(request.form["password"])
 
-    # db.execute(
-    #     """UPDATE user
-    #     SET username = ?, firstName = ?, email = ?, class_level = ?, class_number = ?, instagram = ?, facebook = ?, linkedin = ?, twitter = ?, github = ?, website = ?, password = ?
-    #     WHERE id = ?""",
-    #     (username, firstName, email, class_level, class_number, instagram, facebook, linkedin, twitter, github, website,
-    #      generate_password_hash(password), user.id),
-    # )
-    # db.commit()
+    forms = [username, firstName, email, class_level, class_number, instagram, facebook, linkedin, twitter, github, website, password]
+    formsName = ["username", "firstName", "email", "class_level", "class_number", "instagram", "facebook", "linkedin", "twitter", "github", "website", "password"]
+
+    new_request = "UPDATE user SET "
+    c = 0
+    args = []
+    for form in forms:
+        if form != "":
+            new_request += f", {formsName[c]} = ?"
+            args.append(form)
+        c += 1
+        
+    new_request += f" WHERE id = {userID}"
+    new_request = new_request.replace(',', '', 1)
+
+    print(tuple(args))
+    print(new_request)
+
+    db.execute(new_request, tuple(args))
+    db.commit()
     return render_template("/user/profile.html", user=user, date=today)

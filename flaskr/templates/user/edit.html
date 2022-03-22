@@ -19,7 +19,8 @@
         <label>Classe</label> : <input type="number" name="class_number" id="class_number"/><br>
         <p>Exemple : Si vous êtes en 1ère 06, indiquez "Première" pour le niveau et "6" pour la classe.</p>
 
-        {% if user.class_level == "0" or user.class_level == "1" %}
+        <!-- BENOÎT : TOUT MARCHE SAUF L'AJOUT DANS LA BDD, JE M'EN CHARGERAIS PLUS TARD -->
+        <!-- {% if user.class_level == "0" or user.class_level == "1" %}
         <h1>Spécialités</h1>
         <div id="speciality_group">
             <input type="checkbox" name="MATHS"><label>Mathématiques</label><br>
@@ -59,7 +60,7 @@
 
 
         </script>
-        {% endif %}
+        {% endif %} -->
 
         <h1>Social</h1>
         <p>Indiquez votre nom d'utilisateur.</p><br>
