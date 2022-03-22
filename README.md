@@ -83,7 +83,33 @@ Then open http://localhost:5000/
 
 ## For production
 
-Need a wsgi server (like gunicorn)
+```bash
+sudo apt-get update
+sudo apt-get full-upgrade
+
+cd ~/.ssh
+ssh-keygen -o -t rsa -C "email@example.com"
+cat id_rsa.pub # paste this in GitHub
+
+cd
+git clone git@github.com:BenoitObelia/Monod-Crush.git
+cd Monod-Crush/
+
+sudo apt install python3-pip
+sudo pip install virtualenv # need sudo for add virtualenv to PATH
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install gunicorn
+
+export FLASK_APP=flaskr
+flask init-db
+flask populate-db
+
+# run gunicorn
+
+
+```
 
 # Test
 
