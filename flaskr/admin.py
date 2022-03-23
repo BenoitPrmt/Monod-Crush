@@ -1,11 +1,20 @@
 from flask import Blueprint, render_template
 
+from flaskr.db import get_db
+
+
 bp = Blueprint("admin", __name__, url_prefix="/admin")
+
 
 @bp.route('/')
 def panel():
     """Show admin panel"""
-    return render_template("/admin/panel.html")
+
+    db = get_db()
+    users = db.execute("SELECT COUNT(id) FROM user").fetchone()
+    posts = db.execute("SELECT COUNT(id) FROM post").fetchone()
+
+    return render_template("/admin/panel.html", posts=tuple(posts)[0], users=tuple(users)[0])
 
 #@bp.route("/post/<int:post_id>/-", methods=("POST",))
 #@login_required
