@@ -3,8 +3,13 @@
 {% block title %}Panel administrateur{% endblock %}
 
 {% block content %}
-<h1>Panel</h1>
-<p>Total posts : {{posts}}</p>
-<p>Total users : {{users}}</p>
+<h1>Statistiques du site</h1>
+<p>📮 Nombre de posts : {{posts}}</p>
+<p>👤 Nombre d'utilisateurs : {{users}}</p>
+<p>👑 Nombre d'administrateurs : {{admins}}</p>
+<p>💬 Nombre de commentaires : {{comments}}</p>
+
+<h1>Modération</h1>
+<p>🚫 Nombre de posts signalés : À IMPLEMENTER</p>
 
 {% endblock %}

@@ -12,9 +12,11 @@ def panel():
 
     db = get_db()
     users = db.execute("SELECT COUNT(id) FROM user").fetchone()
+    admins = db.execute("SELECT COUNT(id) FROM user WHERE admin = 1").fetchone()
     posts = db.execute("SELECT COUNT(id) FROM post").fetchone()
+    comments = db.execute("SELECT COUNT(id) FROM comment").fetchone()
 
-    return render_template("/admin/panel.html", posts=tuple(posts)[0], users=tuple(users)[0])
+    return render_template("/admin/panel.html", posts=tuple(posts)[0], users=tuple(users)[0], admins=tuple(admins)[0], comments=tuple(comments)[0])
 
 #@bp.route("/post/<int:post_id>/-", methods=("POST",))
 #@login_required
