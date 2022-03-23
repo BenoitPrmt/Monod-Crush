@@ -20,7 +20,7 @@ def profile(username: str):
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
 
-    return render_template("/user/profile.html", user=user, date=today)
+    return render_template("/user/profile.html", user=user, date=str(today))
 
 
 @bp.route('/<username>/edit', methods=["GET"])
@@ -77,6 +77,8 @@ def update_user(username: str):
     args = []
     for form in forms:
         if form != "":
+            if form == " " and formsName[c] != "password" and formsName[c] != "username":
+                form = None
             new_request += f", {formsName[c]} = ?"
             args.append(form)
         c += 1
@@ -92,7 +94,6 @@ def update_user(username: str):
     return render_template("/user/profile.html", user=user, date=today)
 
 @bp.route("/<username>", methods=("GET", "POST"))
-@login_required
 def delete(username:str):
     """Delete account
 

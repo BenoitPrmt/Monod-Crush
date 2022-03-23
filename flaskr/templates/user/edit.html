@@ -9,16 +9,16 @@
     <form action="{{ url_for('user.update_user', username=user.username) }}" method="post">
 
         <h1>Profil</h1>
-        <label>Nom d'utilisateur</label> : <input type="text" name="username" id="username"/><br>
-        <label>Bio</label> : <input type="text" name="bio" id="bio"/><br>
-        <label>Prénom</label> : <input type="text" name="firstName" id="firstName"/><br>
-        <label>Email</label> : <input type="text" name="email" id="email"/><br>
+        <label>Nom d'utilisateur</label> : <input type="text" name="username" id="username" value="{{user.username}}" onFocus="this.value='';"/><br>
+        <label>Bio</label> : <input type="text" name="bio" id="bio" value="{{ user.bio if user.bio }} " onFocus="this.value='';"/><br>
+        <label>Prénom</label> : <input type="text" name="firstName" id="firstName"  value="{{ user.firstName if user.firstName }} " onFocus="this.value='';"/><br>
+        <label>Email</label> : <input type="text" name="email" id="email"  value="{{ user.email if user.email }} " onFocus="this.value='';"/><br>
         <label>Niveau</label> : <select name="class_level" id="class_level">
         <option value="2">Seconde</option>
         <option value="1">Première</option>
         <option value="0">Terminale</option>
     </select><br>
-        <label>Classe</label> : <input type="number" name="class_number" id="class_number"/><br>
+        <label>Classe</label> : <input type="number" name="class_number" id="class_number" value="{{ user.class_number if user.class_number }} " onFocus="this.value='';"/><br>
         <p>Exemple : Si vous êtes en 1ère 06, indiquez "Première" pour le niveau et "6" pour la classe.</p>
 
         <!-- BENOÎT : TOUT MARCHE SAUF L'AJOUT DANS LA BDD, JE M'EN CHARGERAIS PLUS TARD -->
@@ -66,12 +66,12 @@
 
         <h1>Social</h1>
         <p>Indiquez votre nom d'utilisateur.</p><br>
-        <label>Instagram</label> : <input type="text" name="instagram" id="instagram"/><br>
-        <label>Twitter</label> : <input type="text" name="twitter" id="twitter"/><br>
-        <label>Facebook</label> : <input type="text" name="facebook" id="facebook"/><br>
-        <label>GitHub</label> : <input type="text" name="github" id="github"/><br>
-        <label>Linkedin</label> : <input type="text" name="linkedin" id="linkedin"/><br>
-        <label>Site web</label> : <input type="text" name="website" id="website"/><br>
+        <label>Instagram</label> : <input type="text" name="instagram" id="instagram" value="{{ user.instagram if user.instagram }} " onFocus="this.value='';"/><br>
+        <label>Twitter</label> : <input type="text" name="twitter" id="twitter" value="{{ user.twitter if user.twitter }} " onFocus="this.value='';"/><br>
+        <label>Facebook</label> : <input type="text" name="facebook" id="facebook" value="{{ user.facebook if user.facebook }} " onFocus="this.value='';"/><br>
+        <label>GitHub</label> : <input type="text" name="github" id="github" value="{{ user.github if user.github }} " onFocus="this.value='';"/><br>
+        <label>Linkedin</label> : <input type="text" name="linkedin" id="linkedin" value="{{ user.linkedin if user.linkedin }} " onFocus="this.value='';"/><br>
+        <label>Site web</label> : <input type="text" name="website" id="website" value="{{ user.website if user.website }} " onFocus="this.value='';"/><br>
 
         <h1>Sécurité</h1>
         <label>Mot de passe</label> : <input type="password" name="password" id="password"/><br>
