@@ -18,7 +18,7 @@ CREATE TABLE user (
   email TEXT,
   firstName TEXT,
   bio TEXT,
-  dateOfBirth TEXT,
+  dateOfBirth TEXT, -- YYYY-MM-DD
 
   class_number TEXT,
   class_level TEXT,
@@ -44,7 +44,7 @@ CREATE TABLE post (
   anonymous INTEGER NOT NULL DEFAULT 1,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-  FOREIGN KEY (author_id) REFERENCES user (id)
+  FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE -- # TODO test delete cascade
 );
 
 CREATE TABLE comment (
@@ -55,6 +55,6 @@ CREATE TABLE comment (
   anonymous INTEGER NOT NULL DEFAULT 1,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-  FOREIGN KEY (author_id) REFERENCES user (id)
-  FOREIGN KEY (post_id) REFERENCES post (id)
+  FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE,
+  FOREIGN KEY (post_id) REFERENCES post (id) ON DELETE CASCADE
 );
