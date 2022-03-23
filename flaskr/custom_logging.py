@@ -7,7 +7,7 @@ logging_config_prod = {
     'version': 1,
     'formatters': {
         'full': {
-            'format': '{asctime} - {levelname:^8} - {name:^20} - {message}',
+            'format': '{asctime} - {levelname:^8} - {name:^12} - {message}',
             'datefmt': '%Y-%m-%d %H:%M:%S',
             'style': '{',
         },
