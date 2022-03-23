@@ -21,14 +21,14 @@
     <article class="post">
         <p class="body">{{ post['body'] }}</p>
         <p class="about">posté par {{ post['username'] }} le {{ post['created'].strftime('%Y-%m-%d') }}</p>
-        <form action="{{ url_for('admin.panel', post_id=post['id']) }}" method="post"></form>
-            <input class="btn btn-report" type="submit" value="Signaler ⚠" onclick="return confirm('Etes vous sûr ?');">
+        <form action="{{ url_for('admin.panel', post_id=post['id']) }}" method="post">
+            <input class="btn btn-report" type="submit" value="Signaler ⚠" onclick="confirm('Etes vous sûr ?');">
         </form>
             {% if g.user['id'] == post['author_id'] or g.user['admin'] %}
         <div class="action">
             <a class="btn btn-edit" href="{{ url_for('blog.edit', post_id=post['id']) }}">Modifier</a>
             <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
-                <input class="btn btn-delete" type="submit" value="Supprimer" onclick="return confirm('Etes vous sûr ?');">
+                <input class="btn btn-delete" type="submit" value="Supprimer" onclick="confirm('Etes vous sûr ?');">
             </form>
         </div>
         {% endif %}

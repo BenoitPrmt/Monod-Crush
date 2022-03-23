@@ -54,6 +54,7 @@ def update_user(username: str):
 
     username = request.form["username"]
     firstName = request.form["firstName"]
+    bio = request.form["bio"]
     email = request.form["email"]
     class_level = request.form["class_level"]
     class_number = request.form["class_number"]
@@ -63,10 +64,13 @@ def update_user(username: str):
     twitter = request.form["twitter"]
     github = request.form["github"]
     website = request.form["website"]
-    password = generate_password_hash(request.form["password"])
+    password = request.form["password"]
 
-    forms = [username, firstName, email, class_level, class_number, instagram, facebook, linkedin, twitter, github, website, password]
-    formsName = ["username", "firstName", "email", "class_level", "class_number", "instagram", "facebook", "linkedin", "twitter", "github", "website", "password"]
+    if password != "":
+        password = generate_password_hash(password)
+
+    forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter, github, website, password]
+    formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram", "facebook", "linkedin", "twitter", "github", "website", "password"]
 
     new_request = "UPDATE user SET "
     c = 0
@@ -86,3 +90,28 @@ def update_user(username: str):
     db.execute(new_request, tuple(args))
     db.commit()
     return render_template("/user/profile.html", user=user, date=today)
+
+@bp.route("/<username>", methods=("GET", "POST"))
+@login_required
+def delete(username:str):
+    """Delete account
+
+    Args:
+        username (str): _description_
+    """
+
+    print('aaa')
+
+    db = get_db()
+    cur = db.cursor()
+    user = cur.execute(
+        "SELECT * FROM user WHERE username = ?", (username,)
+    ).fetchone()
+
+    userID = tuple(user)[0]
+    print(userID)
+
+    db.execute(f"DELETE FROM user WHERE id = ?", (userID,))
+    db.commit()
+    session.clear()
+    return redirect(url_for("blog.index"))

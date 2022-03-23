@@ -10,22 +10,29 @@
 <h2>{{user.username}}</h2><br>
 
 <h3>Bio</h3>
-{% if user.description %}
-<p>{{user.description}}</p>
+{% if user.bio %}
+<p>{{user.bio}}</p>
 {% else %}
 <p>Cet utilisateur n'a pas de bio !</p>
 {% endif %}
 
-<p>{{date}}</p>
-<p>🎂 {{user.birthday}}</p>
-
-<h3>Anniversaire</h3>
-{% if date == user.birthday %}
-<p>🎂 {{user.birthday}}</p>
-{% endif %}
-
-<a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
+<!-- <h3>Anniversaire</h3>
+{% if date == user.dateOfBirth %}
+<p>🎂 {{user.dateOfBirth}}</p>
+{% else %}
+<p>{{user.dateOfBirth}}</p>
+{% endif %} -->
 
 <h1>Réseaux sociaux</h1>
+
+{% if user.id == g.user.id %}
+<a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
+<a class="button" href="{{ url_for('user.delete', username=user.username) }}" onclick="confirm('Etes vous sûr ?');">Supprimer mon compte</a><br><br>
+
+<form action="{{ url_for('user.edit', username=user.username) }}">
+    <input class="btn btn-edit" type="submit" value="Editer mon profil">
+</form>
+
+{% endif %}
 
 {% endblock %}

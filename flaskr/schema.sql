@@ -17,7 +17,7 @@ CREATE TABLE user (
   profilePic TEXT,
   email TEXT,
   firstName TEXT,
-  description TEXT,
+  bio TEXT,
   dateOfBirth TEXT,
 
   class_number TEXT,

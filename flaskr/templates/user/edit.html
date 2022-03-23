@@ -3,12 +3,14 @@
 {% block title %}Editez votre profil {{user.username}}{% endblock %}
 
 {% block content %}
+{% if user.id == g.user.id %}
 <h1>Edition de profil</h1>
 <section>
     <form action="{{ url_for('user.update_user', username=user.username) }}" method="post">
 
         <h1>Profil</h1>
         <label>Nom d'utilisateur</label> : <input type="text" name="username" id="username"/><br>
+        <label>Bio</label> : <input type="text" name="bio" id="bio"/><br>
         <label>Prénom</label> : <input type="text" name="firstName" id="firstName"/><br>
         <label>Email</label> : <input type="text" name="email" id="email"/><br>
         <label>Niveau</label> : <select name="class_level" id="class_level">
@@ -76,4 +78,7 @@
         <input class="btn btn-save" type="submit" value="Enregistrer">
     </form>
 </section>
+{% else %}
+<h1>Vous n'avez pas accès à cette page</h1>
+{% endif %}
 {% endblock %}
