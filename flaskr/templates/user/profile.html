@@ -4,51 +4,53 @@
 
 {% block content %}
 <section>
-    {% if user.firstName %}
-    <h1>{{user.firstName}}</h1>
-    {% endif %}
+    <div class="profile-top">
+        {% if user.firstName %}
+        <h1>{{user.firstName}}</h1>
+        {% endif %}
+    
+        {% if user.admin == 1 %}
+        <h2>👑 {{user.username}}</h2><br>
+        {% else %}
+        <h2>{{user.username}}</h2><br>
+        {% endif %}
+    </div>
 
-    {% if user.admin == 1 %}
-    <h2>👑 {{user.username}}</h2><br>
-    {% else %}
-    <h2>{{user.username}}</h2><br>
-    {% endif %}
+    <div class="profile-bio">
+        <h3>Bio</h3>
+        {% if user.bio %}
+        <p>{{user.bio}}</p>
+        {% else %}
+        <p>Cet utilisateur n'a pas de bio !</p>
+        {% endif %}
+    </div>
 
-    <h3>Bio</h3>
-    {% if user.bio %}
-    <p>{{user.bio}}</p>
-    {% else %}
-    <p>Cet utilisateur n'a pas de bio !</p>
-    {% endif %}
+    <div class="profile-birthday">
+        <h3>Anniversaire</h3>
+        {% if date == user.dateOfBirth %}
+        <p>🎂 {{user.dateOfBirth}}</p>
+        {% else %}
+        <p>{{user.dateOfBirth}}</p>
+        {% endif %}
+    </div>
 
-    <h3>Anniversaire</h3>
-    {% if date == user.dateOfBirth %}
-    <p>🎂 {{user.dateOfBirth}}</p>
-    {% else %}
-    <p>{{user.dateOfBirth}}</p>
-    {% endif %}
+    <div class="profile-socials">
+        <h1>Réseaux sociaux</h1>
+        {% if user.instagram %}
+        <a href="https://instagram.com/{{user.instagram}}">{{user.instagram}}</a><br>
+        {% endif %}
+        {% if user.twitter %}
+        <a href="https://twitter.com/{{user.twitter}}">Twitter</a><br>
+        {% endif %}
+        {% if user.github %}
+        <a href="https://github.com/{{user.github}}">GitHub</a><br>
+        {% endif %}
+        {% if user.website %}
+        <a href="{{user.website}}">Site internet</a><br>
+        {% endif %}
+    </div>
 
-    <h1>Réseaux sociaux</h1>
-    {% if user.instagram %}
-    <a href="https://instagram.com/{{user.instagram}}">Instagram</a><br>
-    {% else %}
-    <p>Compte Instagram non ajouté !</p>
-    {% endif %}
-    {% if user.twitter %}
-    <a href="https://twitter.com/{{user.twitter}}">Twitter</a><br>
-    {% else %}
-    <p>Compte Twitter non ajouté !</p>
-    {% endif %}
-    {% if user.github %}
-    <a href="https://github.com/{{user.github}}">GitHub</a><br>
-    {% else %}
-    <p>Compte GitHub non ajouté !</p>
-    {% endif %}
-    {% if user.website %}
-    <a href="{{user.website}}">Site internet</a><br>
-    {% else %}
-    <p>Site web non ajouté !</p>
-    {% endif %}
+    <br>
 
     {% if user.id == g.user.id %}
     <a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>

@@ -65,37 +65,49 @@ def update_user(username: str):
     github = request.form["github"]
     website = request.form["website"]
     password = request.form["password"]
+    
+    error = False
+
+    is_valid, msg = check_username(username)
+    if not is_valid:
+        flash(msg)
+        error = True
 
     if password != "":
+        is_valid, msg = check_password_strength(password)
+        if not is_valid:
+            flash(msg)
+            error = True
         password = generate_password_hash(password)
 
-    forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter, github,
+    if not error:
+        forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter, github,
              website, password]
-    formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram", "facebook",
-                 "linkedin", "twitter", "github", "website", "password"]
+        formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram", "facebook",
+                    "linkedin", "twitter", "github", "website", "password"]
 
-    # TODO check fields constraints with dict {form: [sqlFormsName, functionToCheck]}
+        # TODO check fields constraints with dict {form: [sqlFormsName, functionToCheck]}
 
-    new_request = "UPDATE user SET "
-    c = 0
-    args = []
-    for form in forms:
-        if form != "":
-            if form == " " and formsName[c] != "password" and formsName[c] != "username":
-                form = None
-            new_request += f", {formsName[c]} = ?"
-            args.append(form)
-        c += 1
+        new_request = "UPDATE user SET "
+        c = 0
+        args = []
+        for form in forms:
+            if form != "":
+                if form == " " and formsName[c] != "password" and formsName[c] != "username":
+                    form = None
+                new_request += f", {formsName[c]} = ?"
+                args.append(form)
+            c += 1
 
-    new_request += f" WHERE id = {userID}"
-    new_request = new_request.replace(',', '', 1)
+        new_request += f" WHERE id = {userID}"
+        new_request = new_request.replace(',', '', 1)
 
-    print(tuple(args))
-    print(new_request)
+        db.execute(new_request, tuple(args))
+        db.commit()
+        return render_template("/user/profile.html", user=user, date=str(date.today()))
 
-    db.execute(new_request, tuple(args))
-    db.commit()
-    return render_template("/user/profile.html", user=user, date=str(date.today()))
+
+    return render_template("/user/edit.html", user=user)
 
 
 @bp.route("/<username>/delete", methods=["POST"])
