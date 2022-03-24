@@ -1,10 +1,9 @@
 import functools
 import re
-import time
 from datetime import datetime
 from typing import Tuple
 
-from flask import url_for, redirect, g, Blueprint, abort, session, current_app, Response, request
+from flask import url_for, redirect, g, Blueprint, abort, session
 
 from flaskr.db import get_db
 
@@ -105,7 +104,7 @@ def admin_only(view: callable):
     # noinspection PyMissingOrEmptyDocstring
     @functools.wraps(view)
     def wrapped_view(**kwargs: dict):
-        if g.user is None or not g.user.is_admin:
+        if g.user is None or not g.user["admin"]:
             return abort(403)
 
         return view(**kwargs)

@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date
 
 import click
 from flask import current_app, g, Flask
@@ -51,13 +52,11 @@ def populate_db() -> None:
     from faker import Faker
 
     db = get_db()
+    db.execute("INSERT INTO user (username, password, dateOfBirth, admin) VALUES (?, ?, ?, ?)",
+               ("admin", generate_password_hash("admin"), date(2000, 1, 1), 1))
 
-
-    db.execute("INSERT INTO user (username, password, admin) VALUES (?, ?, ?)",
-               ("admin", generate_password_hash("admin"), 1))
-
-    db.execute("INSERT INTO user (username, password) VALUES (?, ?)",
-               ("user", generate_password_hash("user")))
+    db.execute("INSERT INTO user (username, password, dateOfBirth) VALUES (?, ?, ?)",
+               ("user", generate_password_hash("user"), date(2000, 1, 1)))
 
     faker = Faker('fr_FR')
 
@@ -65,7 +64,8 @@ def populate_db() -> None:
         profile = faker.simple_profile()
 
         db.execute("INSERT INTO user (username, password, dateOfBirth, email) VALUES (?, ?, ?, ?)",
-                   (profile["username"], faker.password(), profile["birthdate"], profile["mail"]))
+                   (profile["username"], generate_password_hash(faker.password()),
+                    profile["birthdate"], profile["mail"]))
 
         db.execute("INSERT INTO post (body, author_id) VALUES (?, ?)", (faker.sentence(), user_id))
 

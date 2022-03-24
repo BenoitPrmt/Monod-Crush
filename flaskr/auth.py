@@ -9,51 +9,48 @@ from flaskr.db import get_db
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
-@bp.route("/register")
-def register() -> str:
-    return render_template("auth/register.html")
-
-
-@bp.route("/register", methods=["POST"])
-def post_register() -> Union[Response, str]:
+@bp.route("/register", methods=["GET", "POST"])
+def register() -> Union[Response, str]:
     """Register a new user.
 
     Validates that the username is not already taken. Hashes the
     password for security.
     """
-    username = request.form["username"]
-    dateOfBirth = request.form["dateOfBirth"]
-    password = request.form["password"]
+    if request.method == "POST":
 
-    db = get_db()
-    error = False
+        username = request.form["username"]
+        dateOfBirth = request.form["dateOfBirth"]
+        password = request.form["password"]
 
-    is_valid, msg = check_username(username)
-    if not is_valid:
-        flash(msg)
-        error = True
+        error = False
 
-    is_valid, msg = check_date_of_birth(dateOfBirth)
-    if not is_valid:
-        flash(msg)
-        error = True
+        is_valid, msg = check_username(username)
+        if not is_valid:
+            flash(msg)
+            error = True
 
-    is_valid, msg = check_password_strength(password)
-    if not is_valid:
-        flash(msg)
-        error = True
+        is_valid, msg = check_date_of_birth(dateOfBirth)
+        if not is_valid:
+            flash(msg)
+            error = True
 
-    if error:
-        return render_template("auth/register.html")
-    else:
-        r = db.execute(
-            "INSERT INTO user (username, dateOfBirth, password) VALUES (?, ?, ?)",
-            (username, dateOfBirth, generate_password_hash(password)),
-        )
-        db.commit()
-        # auto login after registration
-        session["user_id"] = r.lastrowid
-        return redirect(url_for("blog.index"))
+        is_valid, msg = check_password_strength(password)
+        if not is_valid:
+            flash(msg)
+            error = True
+
+        if not error:
+            db = get_db()
+            r = db.execute(
+                "INSERT INTO user (username, dateOfBirth, password) VALUES (?, ?, ?)",
+                (username, dateOfBirth, generate_password_hash(password)),
+            )
+            db.commit()
+            # auto login after registration
+            session["user_id"] = r.lastrowid
+            return redirect(url_for("blog.index"))
+
+    return render_template("auth/register.html")
 
 
 @bp.route("/login", methods=("GET", "POST"))

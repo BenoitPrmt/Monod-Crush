@@ -107,9 +107,20 @@ flask init-db
 flask populate-db
 
 # run gunicorn
-
-
 ```
+
+https://www.digitalocean.com/community/questions/url-is-still-showing-the-nginx-default-page-instead-of-the-application-page-ubuntu-nginx-flask
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-20-04-fr
+
+https://realpython.com/kickstarting-flask-on-ubuntu-setup-and-deployment/
+
+https://stackoverflow.com/questions/3759981/get-ip-address-of-visitors-using-flask-for-python
+
+https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/GitHub-SSH-Key-Setup-Config-Ubuntu-Linux
+
+#SETUP HTTPS
+#Setup git hooks to deploy automatically
+#change cookies dev key to a secure key
 
 # Test
 

@@ -6,10 +6,12 @@
 <h1>Log In</h1>
 <section>
     <form method="post">
-        <label>Nom d'utilisateur:</label>
-        <input type="text" id="username" name="username"><br><br>
-        <label>Mot de passe:</label>
-        <input type="password" id="password" name="password"><br><br>
+        <label>Nom d'utilisateur :</label>
+        <input type="text" id="username" name="username" value="{{ request.form['username'] }}">
+
+        <label>Mot de passe :</label>
+        <input type="password" id="password" name="password" value="{{ request.form['password'] }}">
+
         <input type="submit" value="Se connecter">
         <input type="reset">
     </form>

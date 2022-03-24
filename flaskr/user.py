@@ -7,11 +7,8 @@ from flaskr.db import get_db
 
 bp = Blueprint("user", __name__, url_prefix="/user")
 
-today = date.today()
-
 
 @bp.route('/<username>')
-@login_required  # TODO required ?
 def profile(username: str):
     """Show profile of a user"""
 
@@ -20,13 +17,15 @@ def profile(username: str):
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
 
-    return render_template("/user/profile.html", user=user, date=str(today))
+    return render_template("/user/profile.html", user=user, date=str(date.today()))
 
 
-@bp.route('/<username>/edit', methods=["GET"])
+@bp.route('/<username>/edit')
 @login_required
 def edit(username: str):
     """Edit profile"""
+
+    # TODO: check if with user id == session id
 
     db = get_db()
     user = db.execute(
@@ -36,7 +35,8 @@ def edit(username: str):
     return render_template("/user/edit.html", user=user)
 
 
-@bp.route("/<username>", methods=("GET", "POST"))
+@bp.route("/<username>/edit", methods=["POST"])
+@login_required
 def update_user(username: str):
     """Update user"""
 
@@ -69,8 +69,12 @@ def update_user(username: str):
     if password != "":
         password = generate_password_hash(password)
 
-    forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter, github, website, password]
-    formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram", "facebook", "linkedin", "twitter", "github", "website", "password"]
+    forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter, github,
+             website, password]
+    formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram", "facebook",
+                 "linkedin", "twitter", "github", "website", "password"]
+
+    # TODO check fields constraints with dict {form: [sqlFormsName, functionToCheck]}
 
     new_request = "UPDATE user SET "
     c = 0
@@ -82,7 +86,7 @@ def update_user(username: str):
             new_request += f", {formsName[c]} = ?"
             args.append(form)
         c += 1
-        
+
     new_request += f" WHERE id = {userID}"
     new_request = new_request.replace(',', '', 1)
 
@@ -91,21 +95,19 @@ def update_user(username: str):
 
     db.execute(new_request, tuple(args))
     db.commit()
-    return render_template("/user/profile.html", user=user, date=today)
+    return render_template("/user/profile.html", user=user, date=str(date.today()))
 
-@bp.route("/<username>", methods=("GET", "POST"))
-def delete(username:str):
+
+@bp.route("/<username>/delete", methods=["POST"])
+def delete(username: str):
     """Delete account
 
     Args:
         username (str): _description_
     """
 
-    print('aaa')
-
     db = get_db()
-    cur = db.cursor()
-    user = cur.execute(
+    user = db.execute(
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
 

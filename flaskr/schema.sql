@@ -9,6 +9,7 @@ CREATE TABLE user (
   -- required fields
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
+  dateOfBirth TEXT NOT NULL, -- YYYY-MM-DD
   password TEXT NOT NULL,
   admin INTEGER NOT NULL DEFAULT 0,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -18,7 +19,6 @@ CREATE TABLE user (
   email TEXT,
   firstName TEXT,
   bio TEXT,
-  dateOfBirth TEXT, -- YYYY-MM-DD
 
   class_number TEXT,
   class_level TEXT,

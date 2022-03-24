@@ -6,11 +6,11 @@
 <section>
     <h1>Editer le message </h1>
     <form method="post">
-        <label for="body">Body</label><br><br>
+        <label for="body">Body</label>
         <textarea name="body" id="body">{{ request.form['body'] or post['body'] }}</textarea><br><br>
         <input type="submit" value="Save">
     </form>
-    <hr>
+
     <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
         <input class="danger" type="submit" value="Delete" onclick="confirm('Etes vous sûr ?');">
     </form>

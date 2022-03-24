@@ -1,7 +1,9 @@
-from flask import Blueprint, flash, g, redirect, render_template, request, url_for
+from typing import Union
+
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response
 
 from flaskr.auth_helper import login_required
-from flaskr.blog_helper import get_post
+from flaskr.blog_helper import get_post, check_message_body
 from flaskr.db import get_db
 
 bp = Blueprint("blog", __name__)
@@ -21,24 +23,25 @@ def index() -> str:
 
 @bp.route("/post/new", methods=("GET", "POST"))
 @login_required  # TODO autoriser l'utilisateur à créer un post sans être connecté
-def create():
+def create() -> Union[str, Response]:
     """Create a new post for the current user."""
     if request.method == "POST":
         body = request.form["body"]
         anonymous = request.form["anonymous"]
-        error = None
+        error = False
 
-        if not 1 <= len(body) <= 140:  # TODO vérifier la taille du message 140 ?
-            error = "Le message ne peut pas être vide."
+        is_valid, msg = check_message_body(body)
+        if not is_valid:
+            flash(msg)
+            error = True
 
         if anonymous not in ("on", "off"):
-            error = "invalid anonymous value"
+            flash("invalid anonymous value")
+            error = True
         else:
             anonymous = anonymous == "on"
 
-        if error is not None:
-            flash(error)
-        else:
+        if not error:
             db = get_db()
             db.execute(
                 "INSERT INTO post (body, author_id, anonymous) VALUES (?, ?, ?)",
@@ -52,20 +55,28 @@ def create():
 
 @bp.route("/post/<int:post_id>/edit", methods=("GET", "POST"))
 @login_required
-def edit(post_id: int):
+def edit(post_id: int) -> Union[str, Response]:
     """Update a post if the current user is the author."""
     post = get_post(post_id)
 
     if request.method == "POST":
         body = request.form["body"]
-        error = None
+        anonymous = request.form["anonymous"]
+        error = False
 
-        if not 1 <= len(body) <= 140:  # TODO vérifier la taille du message 140 ?
-            error = "Le message ne peut pas être vide."
+        is_valid, msg = check_message_body(body)
+        if not is_valid:
+            flash(msg)
+            error = True
 
-        if error is not None:
-            flash(error)
-        else:
+        # TODO add in html checkbox
+        # if anonymous not in ("on", "off"):
+        #     flash("invalid anonymous value")
+        #     error = True
+        # else:
+        #     anonymous = anonymous == "on"
+
+        if not error:
             db = get_db()
             db.execute(
                 "UPDATE post SET body = ? WHERE id = ?", (body, post_id)
@@ -78,14 +89,16 @@ def edit(post_id: int):
 
 @bp.route("/post/<int:post_id>/delete", methods=("POST",))
 @login_required
-def delete(post_id: int):
+def delete(post_id: int) -> Response:
     """Delete a post.
 
     Ensures that the post exists and that the logged in user is the
     author of the post.
     """
     get_post(post_id)
+
     db = get_db()
     db.execute("DELETE FROM post WHERE id = ?", (post_id,))
     db.commit()
+
     return redirect(url_for("blog.index"))

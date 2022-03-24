@@ -8,11 +8,14 @@
     <form method="post">
 
         <label>Nom d'utilisateur:</label>
-        <input type="text" id="uname" name="username"><br><br>
+        <input type="text" id="uname" name="username" value="{{ request.form['username'] }}">
+
         <label>Date de naissance:</label>
-        <input type="date" id="dateOfBirth" name="dateOfBirth"><br><br>
+        <input type="date" id="dateOfBirth" name="dateOfBirth" value="{{ request.form['dateOfBirth'] }}">
+
         <label>Mot de passe:</label>
-        <input type="password" id="password" name="password"><br><br>
+        <input type="password" id="password" name="password" value="{{ request.form['password'] }}">
+
         <input type="submit" value="S'inscrire">
         <input type="reset">
     </form>

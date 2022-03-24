@@ -1,5 +1,17 @@
+from typing import Tuple
+
 from flaskr.db import get_db
 from flask import abort, g
+
+
+def check_message_body(text: str) -> Tuple[bool, str]:
+    """ Check if the message body is empty and have less than 300 characters."""
+    if not 1 <= len(text):
+        return False, "Le message ne peut pas être vide."
+    if not len(text) <= 300:
+        return False, "Le message ne peut pas dépasser 300 caractères. Soyez plus concis."
+
+    return True, ""
 
 
 def get_post(post_id: int, check_author=True) -> dict:
@@ -7,6 +19,8 @@ def get_post(post_id: int, check_author=True) -> dict:
 
     Checks that the id exists and optionally that the current user is
     the author.
+
+    need to be after @login_required
 
     :param post_id: id of post to get
     :param check_author: require the current user to be the author
