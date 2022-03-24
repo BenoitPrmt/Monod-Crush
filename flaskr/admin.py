@@ -1,11 +1,13 @@
 from flask import Blueprint, render_template
 
+from flaskr.auth_helper import admin_only
 from flaskr.db import get_db
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 
 @bp.route('/')
+@admin_only
 def panel() -> str:
     """Show admin panel"""
 

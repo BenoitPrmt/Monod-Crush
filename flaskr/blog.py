@@ -1,6 +1,6 @@
 from typing import Union
 
-from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app
 
 from flaskr.auth_helper import login_required
 from flaskr.blog_helper import get_post, check_message_body
@@ -14,7 +14,7 @@ def index() -> str:
     """Show all the posts, most recent first."""
     db = get_db()
     posts = db.execute("""
-        SELECT p.id, p.body, p.created, p.author_id, u.username
+        SELECT p.id, p.body, p.status,p.anonymous, p.created, p.author_id, u.username
         FROM post p JOIN user u ON p.author_id = u.id
         ORDER BY p.created DESC
         """).fetchall()
@@ -27,7 +27,7 @@ def create() -> Union[str, Response]:
     """Create a new post for the current user."""
     if request.method == "POST":
         body = request.form["body"]
-        anonymous = request.form["anonymous"]
+        anonymous = request.form.get("anonymous", "off")
         error = False
 
         is_valid, msg = check_message_body(body)
@@ -76,18 +76,54 @@ def edit(post_id: int) -> Union[str, Response]:
         # else:
         #     anonymous = anonymous == "on"
 
+        # TODO reset status Check after edit
+
         if not error:
             db = get_db()
-            db.execute(
-                "UPDATE post SET body = ? WHERE id = ?", (body, post_id)
-            )
+            db.execute("UPDATE post SET body = ? WHERE id = ?", (body, post_id))
             db.commit()
             return redirect(url_for("blog.index"))
 
     return render_template("blog/edit.html", post=post)
 
 
-@bp.route("/post/<int:post_id>/delete", methods=("POST",))
+@bp.route("/post/<int:post_id>/report", methods=["POST"])
+@login_required
+def report(post_id: int) -> Response:
+    """Report a post.
+
+    Ensures that the post exists and that the logged-in user is the
+    author of the post.
+    """
+    get_post(post_id, check_author=False)
+
+    db = get_db()
+    r = db.execute("SELECT reported, status FROM post WHERE id = ?", (post_id,)).fetchone()
+    if r["reported"] is not None:
+        reports = r["reported"].split(",")
+    else:
+        reports = []
+
+    current_app.logger.debug(f"post {post_id} reported by {reports}")
+    if str(g.user["id"]) in reports:
+        flash("You have already reported this post.")
+        return redirect(url_for("blog.index"))
+
+    # status : visible, hidden, checked
+    if r["status"] == "visible":
+
+        current_app.logger.info(f"{g.user['username']} reported post {post_id}")
+
+        reports.append(str(g.user["id"]))
+        db.execute("UPDATE post SET reported = ? WHERE id = ?", (",".join(reports), post_id))
+        if len(reports) >= 3:
+            db.execute("UPDATE post SET status = 'hidden' WHERE id = ?", (post_id,))
+        db.commit()
+
+    return redirect(url_for("blog.index"))
+
+
+@bp.route("/post/<int:post_id>/delete", methods=["POST"])
 @login_required
 def delete(post_id: int) -> Response:
     """Delete a post.

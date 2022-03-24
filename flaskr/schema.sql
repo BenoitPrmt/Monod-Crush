@@ -41,6 +41,7 @@ CREATE TABLE post (
   body TEXT NOT NULL,
   author_id INTEGER,
   reported TEXT, -- add id of reporter for every report
+  status TEXT DEFAULT visible, -- visible, hidden, checked
   anonymous INTEGER NOT NULL DEFAULT 1,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
