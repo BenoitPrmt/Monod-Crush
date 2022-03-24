@@ -3,63 +3,70 @@
 {% block title %}Profil de {{user.username}}{% endblock %}
 
 {% block content %}
-<section>
-    <div class="profile-top">
-        {% if user.firstName %}
-        <h1>{{user.firstName}}</h1>
-        {% endif %}
-    
-        {% if user.admin == 1 %}
-        <h2>👑 {{user.username}}</h2><br>
-        {% else %}
-        <h2>{{user.username}}</h2><br>
-        {% endif %}
-    </div>
 
-    <div class="profile-bio">
-        <h3>Bio</h3>
-        {% if user.bio %}
-        <p>{{user.bio}}</p>
-        {% else %}
-        <p>Cet utilisateur n'a pas de bio !</p>
-        {% endif %}
-    </div>
+{% if user == None %}
+    <h1>Utilisateur inexistant !</h1>
+    <div class="error_message">J'ai traversé les ~ondes~ pour chercher cet utilisateur mais je ne l'ai pas trouvé... 😕</div>
+    <a href="{{ url_for('index') }}"><p>Cliquez ici </a>pour retourner à la page d'accueil</p>
+{% else %}
+    <section>
+        <div class="profile-top">
+            {% if user.firstName %}
+            <h1>{{user.firstName}}</h1>
+            {% endif %}
+        
+            {% if user.admin == 1 %}
+            <h2>👑 {{user.username}}</h2><br>
+            {% else %}
+            <h2>{{user.username}}</h2><br>
+            {% endif %}
+        </div>
 
-    <div class="profile-birthday">
-        <h3>Anniversaire</h3>
-        {% if date == user.dateOfBirth %}
-        <p>🎂 {{user.dateOfBirth}}</p>
-        {% else %}
-        <p>{{user.dateOfBirth}}</p>
-        {% endif %}
-    </div>
+        <div class="profile-bio">
+            <h3>Bio</h3>
+            {% if user.bio %}
+            <p>{{user.bio}}</p>
+            {% else %}
+            <p>Cet utilisateur n'a pas de bio !</p>
+            {% endif %}
+        </div>
 
-    <div class="profile-socials">
-        <h1>Réseaux sociaux</h1>
-        {% if user.instagram %}
-        <a href="https://instagram.com/{{user.instagram}}">{{user.instagram}}</a><br>
-        {% endif %}
-        {% if user.twitter %}
-        <a href="https://twitter.com/{{user.twitter}}">Twitter</a><br>
-        {% endif %}
-        {% if user.github %}
-        <a href="https://github.com/{{user.github}}">GitHub</a><br>
-        {% endif %}
-        {% if user.website %}
-        <a href="{{user.website}}">Site internet</a><br>
-        {% endif %}
-    </div>
+        <div class="profile-birthday">
+            <h3>Anniversaire</h3>
+            {% if date == user.dateOfBirth %}
+            <p>🎂 {{user.dateOfBirth}}</p>
+            {% else %}
+            <p>{{user.dateOfBirth}}</p>
+            {% endif %}
+        </div>
 
-    <br>
+        <div class="profile-socials">
+            <h1>Réseaux sociaux</h1>
+            {% if user.instagram %}
+            <a href="https://instagram.com/{{user.instagram}}">{{user.instagram}}</a><br>
+            {% endif %}
+            {% if user.twitter %}
+            <a href="https://twitter.com/{{user.twitter}}">Twitter</a><br>
+            {% endif %}
+            {% if user.github %}
+            <a href="https://github.com/{{user.github}}">GitHub</a><br>
+            {% endif %}
+            {% if user.website %}
+            <a href="{{user.website}}">Site internet</a><br>
+            {% endif %}
+        </div>
 
-    {% if user.id == g.user.id %}
-    <a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
-    <a class="button" href="{{ url_for('user.delete', username=user.username) }}" onclick="confirm('Etes vous sûr ?');">Supprimer
-        mon compte</a><br><br>
+        <br>
 
-    <form action="{{ url_for('user.edit', username=user.username) }}">
-        <input class="btn btn-edit" type="submit" value="Editer mon profil">
-    </form>
-    {% endif %}
-</section>
+        {% if user.id == g.user.id %}
+        <a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
+        <a class="button" href="{{ url_for('user.delete', username=user.username) }}" onclick="confirm('Etes vous sûr ?');">Supprimer
+            mon compte</a><br><br>
+
+        <form action="{{ url_for('user.edit', username=user.username) }}">
+            <input class="btn btn-edit" type="submit" value="Editer mon profil">
+        </form>
+        {% endif %}
+    </section>
+{% endif %}
 {% endblock %}
