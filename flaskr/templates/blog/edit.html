@@ -6,8 +6,7 @@
 <section>
     <h1>Editer le message </h1>
     <form method="post">
-        <label for="body">Body</label>
-        <textarea name="body" id="body">{{ request.form['body'] or post['body'] }}</textarea><br><br>
+        <textarea name="body" id="body">{{ request.form['body'] or post['body'] }}</textarea>
         <input type="submit" value="Save">
     </form>
 
