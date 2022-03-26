@@ -4,12 +4,49 @@
 
 {% block content %}
 <h1>Statistiques du site</h1>
-<p>📮 Nombre de posts : {{posts}}</p>
+<p>📮 Nombre de posts : {{nb_posts}}</p>
 <p>👤 Nombre d'utilisateurs : {{users}}</p>
 <p>👑 Nombre d'administrateurs : {{admins}}</p>
 <p>💬 Nombre de commentaires : {{comments}}</p>
 
 <h1>Modération</h1>
-<p>🚫 Nombre de posts signalés : À IMPLEMENTER</p>
+<div>
+    {% for post in posts %}
 
+    
+        <article class="card my-4 px-4 py-4 is-flex is-justify-content-space-between">
+            <div class="content">
+                <p class="body mt-2">{{ post['body'] }}</p>
+
+                {% if post['anonymous'] %}
+                <p class="content is-small">
+                    posté en anonyme par <a href="{{ url_for('user.profile', username=post['username']) }}">@{{ post['username'] }}</a> le {{ post['created'].strftime('%a %d %b %Y') }}
+                </p>
+                {% else %}
+                <p class="content is-small">
+                    posté par
+                    <a href="{{ url_for('user.profile', username=post['username']) }}">@{{ post['username'] }}</a>
+                    le {{ post['created'].strftime('%a %d %b %Y') }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
+                    <input class="button is-danger is-small is-fullwidth my-2" type="submit" value="Supprimer"
+                        onclick="return confirm('Etes vous sûr de vouloir supprimer le post ?');">
+                </form>
+            
+
+                
+                <form action="{{ url_for('admin.checking', post_id=post['id']) }}" method="post">
+                    <input class="button is-success is-small is-fullwidth my-2" type="submit" value="checking"
+                           onclick="return confirm('Check ce post ?');">
+                </form>
+
+            </div>
+        </article>
+    
+    
+    {% endfor %}    
+</div>
 {% endblock %}
