@@ -38,16 +38,16 @@ def check_password_strength(password: str) -> Tuple[bool, str]:
     """ Check if the password is strong enough """
     # TODO : return one message for all the errors
     # TODO : add check for non alphanumeric characters
-    if len(password) < 8:
-        return False, "Password must be at least 8 characters long"
+    if len(password) < 6:
+        return False, "Le mot de passe doit contenir au moins 6 caractères"
     elif len(password) > 25:
-        return False, "Password must be at most 25 characters long"
-    elif password.isalpha():  # only alphabets
-        return False, "Password must contain at least one number"
-    elif password.islower():  # only lowercase
-        return False, "Password must contain at least one uppercase letter"
-    elif password.isupper():  # only uppercase
-        return False, "Password must contain at least one lowercase letter"
+        return False, "Le mot de passe doit contenir 25 caractères maximum"
+    # elif password.isalpha():  # only alphabets
+    #     return False, "Le mot de passe doit contenir au moins un chiffre"
+    # elif password.islower():  # only lowercase
+    #     return False, "Le mot de passe doit contenir au moins une majuscule"
+    # elif password.isupper():  # only uppercase
+    #     return False, "Le mot de passe doit contenir au moins une minuscule"
 
     return True, ""
 
@@ -56,15 +56,15 @@ def check_username(username: str) -> Tuple[bool, str]:
     """ Check if the username is available """
 
     if len(username) < 3:
-        return False, "Username must be at least 3 characters long"
+        return False, "Votre nom d'utilisateur doit contenir au moins 3 caractères"
     elif len(username) > 20:
-        return False, "Username must be at most 20 characters long"
+        return False, "Votre nom d'utilisateur doit contenir 20 caractères maximum"
     elif not re.match(r'^[A-Za-z][A-Za-z0-9_-]+$', username):
-        return False, "Username must start with a letter and contain only letters, numbers, underscores and dashes"
+        return False, "Votre nom d'utilisateur doit commencer par une lettre et peut contenir uniquement des lettres, nombres, tirets bas and tirets"
 
     db = get_db()
     if db.execute("SELECT 1 FROM user WHERE username = ?", (username,)).fetchone() is not None:
-        return False, "Username already taken"
+        return False, "Ce nom d'utilisateur est déjà pris"
 
     return True, ""
 
@@ -74,12 +74,12 @@ def check_date_of_birth(date_of_birth: str) -> Tuple[bool, str]:
     try:
         date_of_birth = datetime.strptime(date_of_birth, "%Y-%m-%d")
     except ValueError:
-        return False, "Invalid date of birth format"
+        return False, "Le format de la date de naissance est invalide"
 
     if date_of_birth > datetime.now():
-        return False, "Date of birth must be in the past"
+        return False, "Vous voyagez dans le temps ? Votre date de naissance doit être dans le passé"
     elif date_of_birth < datetime(year=1920, month=1, day=1):
-        return False, "Give your real date of birth"
+        return False, "Veuillez indiquer une date de naissance valide"
 
     return True, ""
 

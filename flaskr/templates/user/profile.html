@@ -56,6 +56,40 @@
             {% endif %}
         </div>
 
+        <div>
+            {% for post in posts %}
+        
+            {% if post['status'] != 'hidden' %}
+            <article class="card my-6 px-4 py-4 is-flex is-justify-content-space-between">
+                <div class="content">
+                    <p class="body mt-2">{{ post['body'] }}</p>
+        
+                    <p class="content is-small">posté par <a href="{{ url_for('user.profile', username=post['username']) }}">{{
+                        post['username'] }}</a> le {{ post['created'].strftime('%a %d %b %Y') }}</p>
+                </div>
+        
+                <div>
+                    {% if g.user['id'] == post['author_id'] or g.user['admin'] %}
+                    <a class="button is-info is-small is-fullwidth my-2" href="{{ url_for('blog.edit', post_id=post['id']) }}">Modifier</a>
+                    <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
+                        <input class="button is-danger is-small is-fullwidth my-2" type="submit" value="Supprimer"
+                               onclick="return confirm('Etes vous sûr de vouloir supprimer le post ?');">
+                    </form>
+                    {% else %}
+        
+                    {% if g.user %}
+                    <form action="{{ url_for('blog.report', post_id=post['id']) }}" method="post">
+                        <input class="button is-warning is-small is-fullwidth my-2" type="submit" value="Signaler"
+                               onclick="return confirm('Signaler ce post ?');">
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </article>
+            {% endif %}
+            {% endfor %}
+        </div>
+
         <br>
 
         {% if user.id == g.user.id %}

@@ -17,7 +17,15 @@ def profile(username: str):
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
 
-    return render_template("/user/profile.html", user=user, date=str(date.today()))
+    posts = db.execute("""
+        SELECT p.id, p.body, p.status,p.anonymous, p.created, p.author_id, u.username
+        FROM post p JOIN user u ON p.author_id = u.id
+        WHERE p.author_id = ? AND p.anonymous = 0
+        ORDER BY p.created DESC
+        """, (user["id"],)
+    ).fetchall()
+
+    return render_template("/user/profile.html", user=user, date=str(date.today()), posts=posts)
 
 
 @bp.route('/<username>/edit')
