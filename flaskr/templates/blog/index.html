@@ -17,12 +17,15 @@
         <div class="content">
             <p class="body mt-2">{{ post['body'] }}</p>
 
-            {% if not post['anonymous'] %}
-            <p class="content is-small">posté par <a href="{{ url_for('user.profile', username=post['username']) }}">{{
-                post['username'] }}</a> le {{ post['created'].strftime('%a %d %b %Y') }}</p>
+            {% if post['anonymous'] %}
+            <p class="content is-small">
+                posté par un utilisateur anonyme le {{ post['created'].strftime('%a %d %b %Y') }}
+            </p>
             {% else %}
-            <p class="content is-small">posté par un utilisateur anonyme le {{ post['created'].strftime('%a %d %b %Y')
-                }}</p>
+            <p class="content is-small">
+                posté par
+                <a href="{{ url_for('user.profile', username=post['username']) }}">@{{ post['username'] }}</a>
+                le {{ post['created'].strftime('%a %d %b %Y') }}</p>
             {% endif %}
         </div>
 

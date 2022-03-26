@@ -128,6 +128,9 @@ def delete(username: str):
 
     # TODO: check if with user is owner of the account
     # TODO: @login_required
+    # html post request
+    # doesn't work
+    # check return in alert
 
     db = get_db()
     user = db.execute(
