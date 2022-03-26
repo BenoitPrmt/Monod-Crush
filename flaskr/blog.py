@@ -114,7 +114,6 @@ def report(post_id: int) -> Response:
     else:
         reports = []
 
-    current_app.logger.debug(f"post {post_id} reported by {reports}")
     if str(g.user["id"]) in reports:
         flash("You have already reported this post.")
         return redirect(url_for("blog.index"))
