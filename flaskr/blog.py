@@ -9,7 +9,8 @@ from flaskr.db import get_db
 
 bp = Blueprint("blog", __name__)
 
-locale.setlocale(locale.LC_TIME, '')
+# set locale date format to french
+locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
 
 
 @bp.route("/")
