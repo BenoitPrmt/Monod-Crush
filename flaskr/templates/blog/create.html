@@ -1,19 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}New Post{% endblock %}
+{% block title %}Nouveau Post{% endblock %}
 
 {% block content %}
-<section>
-    <h1>Nouveau Post</h1>
+<form method="post" class="box">
+    <div class="field">
+        <div class="control">
+            <textarea name="body" id="body" class="textarea" rows="5">{{ request.form['body'] }}</textarea>
+        </div>
+    </div>
 
-    <form method="post">
-        <label for="body">Message</label><br><br>
-        <textarea name="body" id="body">{{ request.form['body'] }}</textarea><br><br>
+    <div class="field">
+        <div class="control">
+            <label class="checkbox">
+                <input type="checkbox" id="anonymous" name="anonymous" checked>
+                Envoyer le message anonymement
+            </label>
+        </div>
+    </div>
 
-        <input type="checkbox" id="anonymous" name="anonymous" checked>
-        <label for="anonymous">Envoyer le message anonymement</label><br><br>
-
-        <input type="submit" value="Save">
-    </form>
-</section>
+    <button class="button is-success mt-5">
+        <span class="icon is-small">
+          <i class="fas fa-check"></i>
+        </span>
+        <span>Poster</span>
+    </button>
+</form>
 {% endblock %}

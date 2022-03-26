@@ -3,15 +3,30 @@
 {% block title %} Modifier {% endblock %}
 
 {% block content %}
-<section>
-    <h1>Editer le message </h1>
-    <form method="post">
-        <textarea name="body" id="body">{{ request.form['body'] or post['body'] }}</textarea>
-        <input type="submit" value="Save">
-    </form>
+<form method="post" class="box">
+    <div class="field">
+        <div class="control">
+            <textarea name="body" id="body" class="textarea"
+                      rows="5">{{ request.form['body'] or post['body'] }}</textarea>
+        </div>
+    </div>
 
-    <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
-        <input class="danger" type="submit" value="Delete" onclick="confirm('Etes vous sûr ?');">
-    </form>
-</section>
+    <div class="buttons mt-3">
+        <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
+            <button class="button is-danger is-outlined" onclick="return confirm('Etes vous sûr ?');">
+                <span>Delete</span>
+                <span class="icon is-small">
+                    <i class="fas fa-times"></i>
+                </span>
+            </button>
+        </form>
+
+        <button class="button is-success">
+            <span class="icon is-small">
+                <i class="fas fa-check"></i>
+            </span>
+            <span>Sauvegarder</span>
+        </button>
+    </div>
+</form>
 {% endblock %}

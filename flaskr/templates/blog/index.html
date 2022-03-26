@@ -1,51 +1,50 @@
 {% extends 'base.html' %}
 
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
-{% endblock %}
-
 
 {% block title %}Posts{% endblock %}
 
 {% block content %}
-<section>
-    <h1>Post</h1>
 
-    {% if g.user %}
-    <a class="btn btn-new" href="{{ url_for('blog.create') }}">New</a>
-    {% endif %}
+{% if g.user %}
+<a class="button is-success is-medium" href="{{ url_for('blog.create') }}">New</a>
+{% endif %}
 
+<div>
     {% for post in posts %}
 
     {% if post['status'] != 'hidden' %}
-    <article class="post">
-        <p class="body">{{ post['body'] }}</p>
+    <article class="card my-6 px-4 py-4 is-flex is-justify-content-space-between">
+        <div class="content">
+            <p class="body mt-2">{{ post['body'] }}</p>
 
-        {% if not post['anonymous'] %}
-        <p class="about">posté par {{ post['username'] }} le {{ post['created'].strftime('%Y-%m-%d') }}</p>
-        {% else %}
-        <p class="about">posté par un utilisateur anonyme le {{ post['created'].strftime('%Y-%m-%d') }}</p>
-        {% endif %}
+            {% if not post['anonymous'] %}
+            <p class="content is-small">posté par <a href="{{ url_for('user.profile', username=post['username']) }}">{{
+                post['username'] }}</a> le {{ post['created'].strftime('%a %d %b %Y') }}</p>
+            {% else %}
+            <p class="content is-small">posté par un utilisateur anonyme le {{ post['created'].strftime('%a %d %b %Y')
+                }}</p>
+            {% endif %}
+        </div>
 
-        <div class="action">
+        <div>
             {% if g.user['id'] == post['author_id'] or g.user['admin'] %}
-            <a class="btn btn-edit" href="{{ url_for('blog.edit', post_id=post['id']) }}">Modifier</a>
+            <a class="button is-info is-small is-fullwidth my-2" href="{{ url_for('blog.edit', post_id=post['id']) }}">Modifier</a>
             <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
-                <input class="btn btn-delete" type="submit" value="Supprimer" onclick="confirm('Etes vous sûr ?');">
+                <input class="button is-danger is-small is-fullwidth my-2" type="submit" value="Supprimer"
+                       onclick="return confirm('Etes vous sûr de vouloir supprimer le post ?');">
             </form>
             {% else %}
-                {% if g.user %}
-                <form action="{{ url_for('blog.report', post_id=post['id']) }}" method="post">
-                    <input class="btn btn-report" type="submit" value="Signaler ⚠" onclick="confirm('Etes vous sûr ?');">
-                </form>
-                {% endif %}
+
+            {% if g.user %}
+            <form action="{{ url_for('blog.report', post_id=post['id']) }}" method="post">
+                <input class="button is-warning is-small is-fullwidth my-2" type="submit" value="Signaler"
+                       onclick="return confirm('Signaler ce post ?');">
+            </form>
+            {% endif %}
             {% endif %}
         </div>
     </article>
-    {% if not loop.last %}
-    <hr>
-    {% endif %}
     {% endif %}
     {% endfor %}
-</section>
+</div>
 {% endblock %}
