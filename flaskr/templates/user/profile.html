@@ -10,38 +10,43 @@
     <a href="{{ url_for('index') }}"><p>Cliquez ici </a>pour retourner à la page d'accueil</p>
 {% else %}
     <section>
+
         <div class="profile-top">
             {% if user.firstName %}
-            <h1>{{user.firstName}}</h1>
+            <h1 class="title is-2">{{user.firstName}}</h1>
             {% endif %}
         
             {% if user.admin == 1 %}
-            <h2>👑 {{user.username}}</h2><br>
+            <h2 class="title is-3">👑 {{user.username}}</h2><br>
             {% else %}
             <h2>{{user.username}}</h2><br>
             {% endif %}
         </div>
 
+        <div class="block">
+
+        </div>
+
         <div class="profile-bio">
-            <h3>Bio</h3>
+            <h3 class="title is-5">Bio</h3>
             {% if user.bio %}
-            <p>{{user.bio}}</p>
+            <p>{{user.bio}}</p><br>
             {% else %}
-            <p>Cet utilisateur n'a pas de bio !</p>
+            <p>Cet utilisateur n'a pas de bio !</p><br>
             {% endif %}
         </div>
 
         <div class="profile-birthday">
-            <h3>Anniversaire</h3>
+            <h3 class="title is-5">Anniversaire</h3>
             {% if date == user.dateOfBirth %}
-            <p>🎂 {{user.dateOfBirth}}</p>
+            <p>🎂 {{user.dateOfBirth}}</p><br>
             {% else %}
-            <p>{{user.dateOfBirth}}</p>
+            <p>{{user.dateOfBirth}}</p><br>
             {% endif %}
         </div>
 
         <div class="profile-socials">
-            <h1>Réseaux sociaux</h1>
+            <h1 class="title is-5">Réseaux sociaux</h1>
             {% if user.instagram %}
             <a href="https://instagram.com/{{user.instagram}}">{{user.instagram}}</a><br>
             {% endif %}
@@ -53,6 +58,9 @@
             {% endif %}
             {% if user.website %}
             <a href="{{user.website}}">Site internet</a><br>
+            {% endif %}
+            {% if not user.instagram and not user.twitter and not user.github and not user.website %}
+            <p>Aucun réseau social n'est renseigné !</p>
             {% endif %}
         </div>
 
@@ -95,11 +103,8 @@
         {% if user.id == g.user.id %}
         <a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
         <a class="button" href="{{ url_for('user.delete', username=user.username) }}" onclick="confirm('Etes vous sûr ?');">Supprimer
-            mon compte</a><br><br>
+            mon compte</a>
 
-        <form action="{{ url_for('user.edit', username=user.username) }}">
-            <input class="btn btn-edit" type="submit" value="Editer mon profil">
-        </form>
         {% endif %}
     </section>
 {% endif %}

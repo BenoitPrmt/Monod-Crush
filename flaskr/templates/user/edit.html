@@ -4,78 +4,105 @@
 
 {% block content %}
 {% if user.id == g.user.id %}
-<h1>Edition de profil</h1>
 <section>
     <form action="{{ url_for('user.update_user', username=user.username) }}" method="post">
 
-        <h1>Profil</h1>
-        <label>Nom d'utilisateur</label> : <input type="text" name="username" id="username" value="{{user.username}}" onFocus="this.value='';"/><br>
-        <label>Bio</label> : <input type="text" name="bio" id="bio" value="{{ user.bio if user.bio }} " onFocus="this.value='';"/><br>
-        <label>Prénom</label> : <input type="text" name="firstName" id="firstName"  value="{{ user.firstName if user.firstName }} " onFocus="this.value='';"/><br>
-        <label>Email</label> : <input type="text" name="email" id="email"  value="{{ user.email if user.email }} " onFocus="this.value='';"/><br>
-        <label>Niveau</label> : <select name="class_level" id="class_level">
-        <option value="2">Seconde</option>
-        <option value="1">Première</option>
-        <option value="0">Terminale</option>
-    </select><br>
-        <label>Classe</label> : <input type="number" name="class_number" id="class_number" value="{{ user.class_number if user.class_number }} " onFocus="this.value='';"/><br>
-        <p>Exemple : Si vous êtes en 1ère 06, indiquez "Première" pour le niveau et "6" pour la classe.</p>
+        <h1 class="title is-2">Informations générales</h1>
 
-        <!-- BENOÎT : TOUT MARCHE SAUF L'AJOUT DANS LA BDD, JE M'EN CHARGERAIS PLUS TARD -->
-        <!-- {% if user.class_level == "0" or user.class_level == "1" %}
-        <h1>Spécialités</h1>
-        <div id="speciality_group">
-            <input type="checkbox" name="MATHS"><label>Mathématiques</label><br>
-            <input type="checkbox" name="PC"><label>Physique-Chimie</label><br>
-            <input type="checkbox" name="SVT"><label>Sciences de la vie et de la Terre</label><br>
-            <input type="checkbox" name="SES"><label>Sciences économiques et sociales</label><br>
-            <input type="checkbox" name="HGGSP"><label>Histoire-géographie géopolitique et sciences
-            politiques</label><br>
-            <input type="checkbox" name="LLCER "><label>LLCER - Anglais</label><br>
-            <input type="checkbox" name="HLP"><label>Humanités, littérature et philosophie</label><br>
-            <input type="checkbox" name="NSI"><label>Numérique et sciences informatiques</label><br>
-            <input type="checkbox" name="SI"><label>Sciences de l'ingénieur</label><br>
-            <input type="checkbox" name="AP"><label>Arts plastiques</label><br>
+        <div class="field">
+            <label class="label">Nom d'utilisateur</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Nom d'utilisateur" name="username" id="username" value="{{user.username}}" onFocus="this.value='';"/>
+            </div>
         </div>
-        <script type="text/javascript">
-            function speChecker(userClassLevel) {
-                var spe_group = document.getElementById('speciality_group').getElementsByTagName("input");
-                if(userClassLevel == "1") {
-                    var limit = 3;
-                } else {
-                    var limit = 2;
-                }
-                for (var i = 0; i < spe_group.length; i++) {
-                    spe_group[i].onclick = function() {
-                        var checkedcount = 0;
-                            for (var i = 0; i < spe_group.length; i++) {
-                            checkedcount += (spe_group[i].checked) ? 1 : 0;
-                        }
-                        if (checkedcount > limit) {
-                            alert("Vous ne pouvez séléctionner que " + limit + " spécialités maximum.");
-                            this.checked = false;
-                        }
-                    }
-                }
-            }
-            speChecker("{{user.class_level}}");
 
+        <div class="field">
+            <label class="label">Biographie</label>
+            <div class="control">
+                <textarea class="input" type="text" placeholder="Bio" name="bio" id="bio" value="{{ user.bio if user.bio }}" onFocus="this.value='';"></textarea>
+            </div>
+        </div>
 
-        </script>
-        {% endif %} -->
+        <div class="field">
+            <label class="label">Prénom</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Prénom" name="firstName" id="firstName"  value="{{ user.firstName if user.firstName }}" onFocus="this.value='';"/>
+            </div>
+        </div>
 
-        <h1>Social</h1>
-        <p>Indiquez votre nom d'utilisateur.</p><br>
-        <label>Instagram</label> : <input type="text" name="instagram" id="instagram" value="{{ user.instagram if user.instagram }} " onFocus="this.value='';"/><br>
-        <label>Twitter</label> : <input type="text" name="twitter" id="twitter" value="{{ user.twitter if user.twitter }} " onFocus="this.value='';"/><br>
-        <label>Facebook</label> : <input type="text" name="facebook" id="facebook" value="{{ user.facebook if user.facebook }} " onFocus="this.value='';"/><br>
-        <label>GitHub</label> : <input type="text" name="github" id="github" value="{{ user.github if user.github }} " onFocus="this.value='';"/><br>
-        <label>Linkedin</label> : <input type="text" name="linkedin" id="linkedin" value="{{ user.linkedin if user.linkedin }} " onFocus="this.value='';"/><br>
-        <label>Site web</label> : <input type="text" name="website" id="website" value="{{ user.website if user.website }} " onFocus="this.value='';"/><br>
+        <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Email" name="email" id="email"  value="{{ user.email if user.email }}" onFocus="this.value='';"/>
+            </div>
+        </div>
+          
+        <div class="field">
+            <label class="label">Niveau</label>
+            <div class="control">
+              <div class="select">
+                <select name="class_level" id="class_level">
+                    <option value="2">Seconde</option>
+                    <option value="1">Première</option>
+                    <option value="0">Terminale</option>
+                </select>
+              </div>
+            </div>
+        </div>
 
-        <h1>Sécurité</h1>
-        <label>Mot de passe</label> : <input type="password" name="password" id="password"/><br>
-        <input class="btn btn-save" type="submit" value="Enregistrer">
+        <div class="field">
+            <label class="label">Numéro de classe</label>
+            <div class="control">
+                <input type="number" placeholder="Numéro de classe" name="class_number" id="class_number" value="{{ user.class_number if user.class_number }}"/>
+            </div>
+        </div>
+        <p>Exemple : Si vous êtes en 1ère 06, indiquez "Première" pour le niveau et "6" pour la classe.</p><br>
+
+        <h1 class="title is-2">Social</h1>
+        <p class="subtitle">Indiquez votre nom d'utilisateur.</p><br>
+
+        <div class="field">
+            <label class="label">Instagram</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Instagram" name="instagram" id="instagram" value="{{ user.instagram if user.instagram }} " onFocus="this.value='';"/>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Twitter</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Twitter" name="twitter" id="twitter" value="{{ user.twitter if user.twitter }} " onFocus="this.value='';"/>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">GitHub</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="GitHub" name="github" id="github" value="{{ user.github if user.github }} " onFocus="this.value='';"/>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Site web</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Site internet" name="website" id="website" value="{{ user.website if user.website }} " onFocus="this.value='';"/>
+            </div>
+        </div>
+
+        <h1 class="title is-2">Sécurité</h1>
+
+        <div class="field">
+            <label class="label">Mot de passe</label>
+            <div class="control">
+                <input class="input" type="password" name="password" id="password" placeholder="********"/>
+            </div>
+        </div>
+          
+        <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-link">Enregistrer</button>
+            </div>
+        </div>
     </form>
 </section>
 {% else %}

@@ -34,7 +34,7 @@ def get_post(post_id: int, check_author=True) -> dict:
         WHERE p.id = ?""", (post_id,)).fetchone()
 
     if post is None:
-        abort(404, f"Post id {post_id} doesn't exist.")
+        abort(404, f"Le post {post_id} n'existe pas.")
 
     if check_author and post["author_id"] != g.user["id"] and not g.user["admin"]:
         abort(403)
