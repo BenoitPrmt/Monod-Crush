@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g
 from datetime import date
 
 from werkzeug.security import generate_password_hash
@@ -39,9 +39,6 @@ def edit(username: str):
 @login_required
 def update_user(username: str):
     """Update user"""
-
-    current_app.logger.info(f"update user: {username}")
-    current_app.logger.debug(f"request.form: {request.form}")
 
     db = get_db()
     cur = db.cursor()
@@ -104,6 +101,9 @@ def update_user(username: str):
 
         db.execute(new_request, tuple(args))
         db.commit()
+
+        current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has edited his profile")
+
         return render_template("/user/profile.html", user=user, date=str(date.today()))
 
 
@@ -118,6 +118,8 @@ def delete(username: str):
         username (str): _description_
     """
 
+    # TODO: check if with user is owner of the account
+
     db = get_db()
     user = db.execute(
         "SELECT * FROM user WHERE username = ?", (username,)
@@ -129,4 +131,7 @@ def delete(username: str):
     db.execute(f"DELETE FROM user WHERE id = ?", (userID,))
     db.commit()
     session.clear()
+
+    current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has deleted his account, bye bye")
+
     return redirect(url_for("blog.index"))

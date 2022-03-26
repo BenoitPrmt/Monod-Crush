@@ -1,9 +1,9 @@
 from typing import Union
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, Response
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, Response, current_app, g
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from flaskr.auth_helper import check_password_strength, check_username, check_date_of_birth
+from flaskr.auth_helper import check_password_strength, check_username, check_date_of_birth, login_required
 from flaskr.db import get_db
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -48,6 +48,9 @@ def register() -> Union[Response, str]:
             db.commit()
             # auto login after registration
             session["user_id"] = r.lastrowid
+
+            current_app.logger.info(f"{r.lastrowid} ({username}) - registered, welcome!")
+
             return redirect(url_for("blog.index"))
 
     return render_template("auth/register.html")
@@ -59,30 +62,39 @@ def login() -> Union[Response, str]:
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        error = False
 
-        db = get_db()
-        error = None
-        user = db.execute(
-            "SELECT password, id FROM user WHERE username = ?", (username,)
-        ).fetchone()
-
-        if user is None:
-            error = "Nom d'utilisateur incorrect"
-        elif not check_password_hash(user["password"], password):
-            error = "Mot de passe incorrect"
+        if not username and not password:
+            error = True
+        else:
+            db = get_db()
+            user = db.execute(
+                "SELECT password, id FROM user WHERE username = ?", (username,)
+            ).fetchone()
+            if user is None:
+                error = True
+            elif not check_password_hash(user["password"], password):
+                error = True
 
         if error:
-            flash(error)
+            flash("Nom d'utilisateur ou mot de passe incorrect")
         else:
             session.clear()  # TODO : clear only the user_id
             session["user_id"] = user["id"]
+
+            current_app.logger.info(f"{user['id']} ({username}) - logged in")
+
             return redirect(url_for("blog.index"))
 
     return render_template("auth/login.html")
 
 
 @bp.route("/logout")
+@login_required
 def logout() -> Response:
     """Clear the current session, including the stored user id."""
     session.clear()
+
+    current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - logged out")
+
     return redirect(url_for("blog.index"))

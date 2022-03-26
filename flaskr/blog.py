@@ -47,11 +47,14 @@ def create() -> Union[str, Response]:
 
         if not error:
             db = get_db()
-            db.execute(
+            r = db.execute(
                 "INSERT INTO post (body, author_id, anonymous) VALUES (?, ?, ?)",
                 (body, g.user["id"], anonymous)
             )
             db.commit()
+
+            current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - created a new post with id {r.lastrowid}")
+
             return redirect(url_for("blog.index"))
 
     return render_template("blog/create.html")
@@ -86,6 +89,9 @@ def edit(post_id: int) -> Union[str, Response]:
             db = get_db()
             db.execute("UPDATE post SET body = ? WHERE id = ?", (body, post_id))
             db.commit()
+
+            current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - edited post {post_id}")
+
             return redirect(url_for("blog.index"))
 
     return render_template("blog/edit.html", post=post)
@@ -124,6 +130,8 @@ def report(post_id: int) -> Response:
             db.execute("UPDATE post SET status = 'hidden' WHERE id = ?", (post_id,))
         db.commit()
 
+        current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - reported post {post_id}")
+
     return redirect(url_for("blog.index"))
 
 
@@ -140,5 +148,7 @@ def delete(post_id: int) -> Response:
     db = get_db()
     db.execute("DELETE FROM post WHERE id = ?", (post_id,))
     db.commit()
+
+    current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - deleted post {post_id}")
 
     return redirect(url_for("blog.index"))
