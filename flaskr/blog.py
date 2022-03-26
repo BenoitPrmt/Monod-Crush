@@ -1,3 +1,4 @@
+import locale
 from typing import Union
 
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app
@@ -8,10 +9,13 @@ from flaskr.db import get_db
 
 bp = Blueprint("blog", __name__)
 
+locale.setlocale(locale.LC_TIME, '')
+
 
 @bp.route("/")
 def index() -> str:
     """Show all the posts, most recent first."""
+
     db = get_db()
     posts = db.execute("""
         SELECT p.id, p.body, p.status,p.anonymous, p.created, p.author_id, u.username
@@ -61,7 +65,7 @@ def edit(post_id: int) -> Union[str, Response]:
 
     if request.method == "POST":
         body = request.form["body"]
-        anonymous = request.form["anonymous"]
+        # anonymous = request.form["anonymous"]
         error = False
 
         is_valid, msg = check_message_body(body)
