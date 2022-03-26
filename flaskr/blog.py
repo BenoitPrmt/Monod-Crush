@@ -122,8 +122,6 @@ def report(post_id: int) -> Response:
     # status : visible, hidden, checked
     if r["status"] == "visible":
 
-        current_app.logger.info(f"{g.user['username']} reported post {post_id}")
-
         reports.append(str(g.user["id"]))
         db.execute("UPDATE post SET reported = ? WHERE id = ?", (",".join(reports), post_id))
         if len(reports) >= 3:
