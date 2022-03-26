@@ -12,6 +12,13 @@
     </div>
 
     <div class="buttons mt-3">
+        <button class="button is-success">
+            <span class="icon is-small">
+                <i class="fas fa-check"></i>
+            </span>
+            <span>Sauvegarder</span>
+        </button>
+
         <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
             <button class="button is-danger is-outlined" onclick="return confirm('Etes vous sûr ?');">
                 <span>Delete</span>
@@ -20,13 +27,6 @@
                 </span>
             </button>
         </form>
-
-        <button class="button is-success">
-            <span class="icon is-small">
-                <i class="fas fa-check"></i>
-            </span>
-            <span>Sauvegarder</span>
-        </button>
     </div>
 </form>
 {% endblock %}

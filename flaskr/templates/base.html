@@ -6,18 +6,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Monod Crush, à la recherche de rencontre, tu es au bon endroit.">
 
     <!-- css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
     <!-- icons -->
-    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css" crossorigin="">
 
     <!-- favicon -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" as="script">
 
     <!-- title -->
     <title>{% block title %}{% endblock %} - MonodCrush</title>
+
+    <!-- js -->
+    <link rel="preload" href="{{ url_for('static', filename='scripts/menu.js') }}">
 
     {% block head %}{% endblock %}
 </head>
@@ -27,7 +31,7 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="{{ url_for('blog.index') }}">
-                <img src="{{ url_for('static', filename='styles/logo_top.png')}}" width="112" height="28">
+                <img src="{{ url_for('static', filename='styles/logo_top.png')}}" alt="Monod Crush logo">
             </a>
 
             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
@@ -60,23 +64,23 @@
                 <div class="navbar-item">
                     <div class="buttons">
                         {% if g.user %}
-                        <a class="button is-primary is-inverted"
+                        <a class="button is-link is-inverted"
                            href="{{ url_for('user.profile', username=g.user['username']) }}">
                             {{ g.user['username'] }}
                         </a>
 
 
                         {% if g.user['admin'] %}
-                        <a class="button is-primary" href="{{ url_for('admin.panel') }}">Modération</a>
+                        <a class="button is-link" href="{{ url_for('admin.panel') }}">Modération</a>
                         {% endif %}
 
-                        <a class="button is-light" href="{{ url_for('auth.logout') }}">Log Out</a>
+                        <a class="button is-link is-light" href="{{ url_for('auth.logout') }}">Log Out</a>
 
                         {% else %}
-                        <a class="button is-primary" href="{{ url_for('auth.register') }}">
+                        <a class="button is-link" href="{{ url_for('auth.register') }}">
                             <strong>Créer un Compte</strong>
                         </a>
-                        <a class="button is-light" href="{{ url_for('auth.login') }}">Se connecter</a>
+                        <a class="button is-link is-light" href="{{ url_for('auth.login') }}">Se connecter</a>
                         {% endif %}
                     </div>
                 </div>
@@ -85,7 +89,7 @@
     </nav>
 </header>
 
-<section class="section">
+<section class="section" style="background:#eee;">
     <div class="container is-max-desktop">
         <h1 class="title">{{ self.title() }}</h1>
 
@@ -110,9 +114,8 @@
     </div>
 </footer>
 
-</body>
-
 <!-- js -->
-<script src="{{ url_for('static', filename='scripts/menu.js')}}"></script>
+<script src="{{ url_for('static', filename='scripts/menu.js') }}"></script>
 
+</body>
 </html>
