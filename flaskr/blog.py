@@ -1,7 +1,7 @@
 import locale
 from typing import Union
 
-from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app, abort
 
 from flaskr.auth_helper import login_required
 from flaskr.blog_helper import get_post, check_message_body
@@ -41,7 +41,7 @@ def create() -> Union[str, Response]:
             error = True
 
         if anonymous not in ("on", "off"):
-            flash("invalid anonymous value")
+            abort(400)
             error = True
         else:
             anonymous = anonymous == "on"
@@ -116,7 +116,7 @@ def report(post_id: int) -> Response:
         reports = []
 
     if str(g.user["id"]) in reports:
-        flash("You have already reported this post.")
+        flash("Vous avez déjà signalé ce post")
         return redirect(url_for("blog.index"))
 
     # status : visible, hidden, checked
@@ -128,6 +128,7 @@ def report(post_id: int) -> Response:
             db.execute("UPDATE post SET status = 'hidden' WHERE id = ?", (post_id,))
         db.commit()
 
+        flash("Post signalé")
         current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - reported post {post_id}")
 
     return redirect(url_for("blog.index"))

@@ -110,6 +110,7 @@ class DiscordHandler(logging.Handler):
         self._max_length = max_length
 
     def write_to_discord(self, message: str):
+        """ Sends a message to Discord using a webhook. """
         request = requests.post(self._url, data={"content": message})
 
         if not request.ok:
@@ -136,6 +137,5 @@ class DiscordHandler(logging.Handler):
             if record.levelno >= logging.ERROR and len(self._notify_users) > 0:
                 self.write_to_discord(f"{users}")
 
-
-        except Exception:
+        except requests.exceptions:
             self.handleError(record)
