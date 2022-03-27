@@ -1,11 +1,8 @@
-from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app
-from flaskr.blog_helper import get_post, check_message_body
-from flaskr.auth_helper import admin_only, login_required
+from flask import Blueprint, g, redirect, render_template, url_for, Response, current_app
+
+from flaskr.auth_helper import admin_only
+from flaskr.blog_helper import get_post
 from flaskr.db import get_db
-import locale
-from typing import Union
-
-
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -32,7 +29,6 @@ def panel() -> str:
                            admins=admins[0], comments=comments[0], posts=posts)
 
 
-
 @bp.route("/post/<int:post_id>/delete", methods=["POST"])
 @admin_only
 def delete(post_id: int) -> Response:
@@ -55,14 +51,12 @@ def delete(post_id: int) -> Response:
 @bp.route("/post/<int:post_id>/checking", methods=["POST"])
 @admin_only
 def checking(post_id: int) -> Response:
-    
     get_post(post_id, check_author=False)
 
     db = get_db()
     r = db.execute("SELECT reported, status FROM post WHERE id = ?", (post_id,)).fetchone()
     db.execute("UPDATE post SET reported = NULL WHERE id = ?", (post_id,)).fetchone()
-    
-    
+
     if r["status"] == "hidden":
         db.execute("UPDATE post SET status = 'visible' WHERE id = ?", (post_id,))
 
