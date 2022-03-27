@@ -10,6 +10,7 @@ def error_handler(error: HTTPException):
                                  f" '{request.method} {request.url} {request.headers}'")
 
     else:
-        current_app.logger.warning(f"{request.remote_addr} {error.code} '{request.method} {request.url}'")
+        current_app.logger.warning(
+            f"{request.headers.get('X-Real-IP', request.remote_addr)} {error.code} '{request.method} {request.url}'")
 
     return render_template("error/all_error.html", error_code=error.code), error.code
