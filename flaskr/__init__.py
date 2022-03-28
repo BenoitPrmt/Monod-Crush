@@ -4,9 +4,7 @@ from logging.config import dictConfig
 from flask import Flask
 from werkzeug.exceptions import HTTPException
 
-from flaskr import auth_helper
 from flaskr.custom_logging import logging_config_dev, logging_config_prod
-from flaskr.error import error_handler
 
 
 def create_app(test_config: dict = None) -> Flask:
@@ -45,7 +43,7 @@ def create_app(test_config: dict = None) -> Flask:
     db.init_app(app)
 
     # apply the blueprints to the app
-    from flaskr import auth, blog, admin, user
+    from flaskr import auth, blog, admin, user, auth_helper
 
     # register the blueprints
     app.register_blueprint(auth.bp)
@@ -54,7 +52,12 @@ def create_app(test_config: dict = None) -> Flask:
     app.register_blueprint(admin.bp)
     app.register_blueprint(user.bp)
 
+    # register sitemap blueprint
+    from flaskr import sitemap
+    app.register_blueprint(sitemap.bp)
+
     # register the error handlers
+    from flaskr.error import error_handler
     app.register_error_handler(HTTPException, error_handler)
 
     # make url_for('index') == url_for('blog.index')
