@@ -15,8 +15,6 @@ def search_user():
     db = get_db()
     username = request.args["search_user"]
     
-    username = str(username)
-    print(username)
     users = db.execute("SELECT admin FROM user WHERE username = ?", (username,)).fetchone()
     if users is None:
         print(users)
