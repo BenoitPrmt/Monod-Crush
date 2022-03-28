@@ -56,5 +56,4 @@ disallow: /post/
 
 sitemap: https://monodcrush/sitemap.xml"""
 
-    print(page)
     return Response(page, mimetype='text/plain')
