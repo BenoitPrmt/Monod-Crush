@@ -11,11 +11,9 @@ def search_user() -> str:
 
     db = get_db()
     username = request.args["search_user"]
-    
+
     users = db.execute("SELECT admin FROM user WHERE username = ?", (username,)).fetchone()
     if users is None:
-        print(users)
-        return render_template("search/search_user.html", user="None")
+        return render_template("error/404_user_not_found.html")
     else:
-        print(users)
         return render_template("search/search_user.html", user=username)
