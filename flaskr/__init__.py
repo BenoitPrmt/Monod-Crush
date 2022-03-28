@@ -43,7 +43,7 @@ def create_app(test_config: dict = None) -> Flask:
     db.init_app(app)
 
     # apply the blueprints to the app
-    from flaskr import auth, blog, admin, user, auth_helper
+    from flaskr import auth, blog, admin, user, auth_helper, search
 
     # register the blueprints
     app.register_blueprint(auth.bp)
@@ -51,6 +51,7 @@ def create_app(test_config: dict = None) -> Flask:
     app.register_blueprint(blog.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(user.bp)
+    app.register_blueprint(search.bp)
 
     # register sitemap blueprint
     from flaskr import sitemap

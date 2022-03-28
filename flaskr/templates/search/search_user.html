@@ -3,4 +3,24 @@
 {% block title %}Recherche Utilisateur{% endblock %}
 
 {% block content %}
+{% if user == "None" %}
+
+<article class="card my-4 px-4 py-4 is-flex is-justify-content-space-between">
+    <div class="content">
+        <p class="mt-2">0 Utilisateurs trouvés</p>
+    </div>
+</article>
+
+
+{% else %}
+
+<article class="card my-4 px-4 py-4 is-flex is-justify-content-space-between">
+    <div class="content">
+        <p class="content is-small">
+            <a href="{{ url_for('user.profile', username=user) }}">@{{user}}</a>
+        </p>
+    </div>
+</article>
+
+{% endif %}
 {% endblock %}
