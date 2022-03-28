@@ -1,20 +1,17 @@
-from re import search
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g
-from datetime import date
+from flask import Blueprint, render_template, request
 
-from werkzeug.security import generate_password_hash
-from flaskr.auth_helper import login_required, check_password_strength, check_username
 from flaskr.db import get_db
 
-bp = Blueprint("search", __name__) #a faire jspl quoi mettre dedans
+bp = Blueprint("search", __name__)
+
 
 @bp.route("/search")
-def search_user():
+def search_user() -> str:
     """search user and return best result on search_user.html"""
 
     db = get_db()
     username = request.args["search_user"]
-    
+
     username = str(username)
     print(username)
     users = db.execute("SELECT admin FROM user WHERE username = ?", (username,)).fetchone()
