@@ -42,17 +42,19 @@ def sitemap() -> Response:
 
 
 @bp.route("/robots.txt")
-def robots() -> str:
+def robots() -> Response:
     """
         Route to dynamically generate a robots.txt file.
         Disallow all routes that are not static.
     """
 
-    """
-    user-agent: *
-    disallow: /static/
-    disallow: /admin/
-    disallow: /post/
-    
-    sitemap: https://monodcrush/sitemap.xml
-    """
+    page = """
+user-agent: *
+disallow: /static/
+disallow: /admin/
+disallow: /post/
+
+sitemap: https://monodcrush/sitemap.xml"""
+
+    print(page)
+    return Response(page, mimetype='text/plain')
