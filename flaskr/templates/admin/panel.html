@@ -3,13 +3,13 @@
 {% block title %}Panel administrateur{% endblock %}
 
 {% block content %}
-<h1>Statistiques du site</h1>
+<h1 class="title is-4">Statistiques du site</h1>
 <p>📮 Nombre de posts : {{nb_posts}}</p>
 <p>👤 Nombre d'utilisateurs : {{users}}</p>
 <p>👑 Nombre d'administrateurs : {{admins}}</p>
 <p>💬 Nombre de commentaires : {{comments}}</p>
 
-<h1>Modération</h1>
+<h1 class="title is-4">Modération</h1>
 <div>
     {% for post in posts %}
     <article class="card my-4 px-4 py-4 is-flex is-justify-content-space-between">
