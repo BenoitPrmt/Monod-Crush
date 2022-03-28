@@ -34,8 +34,25 @@ def sitemap() -> Response:
         if user["username"] not in exclude_users:
             dynamic_urls.add(host_url + "/user/" + user["username"])
 
-    xml_sitemap = render_template("sitemap/sitemap.xml", static_urls=static_urls, dynamic_urls=dynamic_urls,)
+    xml_sitemap = render_template("sitemap/sitemap.xml", static_urls=static_urls, dynamic_urls=dynamic_urls, )
 
     # convert xml
 
     return Response(xml_sitemap, mimetype='text/xml')
+
+
+@bp.route("/robots.txt")
+def robots() -> str:
+    """
+        Route to dynamically generate a robots.txt file.
+        Disallow all routes that are not static.
+    """
+
+    """
+    user-agent: *
+    disallow: /static/
+    disallow: /admin/
+    disallow: /post/
+    
+    sitemap: https://monodcrush/sitemap.xml
+    """
