@@ -62,12 +62,29 @@
 
             <div class="navbar-end">
                 <div class="navbar-item">
-                    <div class="buttons">
+
+
+                    
+
+                    <div class="buttons">                          
+                        
                         {% if g.user %}
                         <a class="button is-link is-inverted"
                            href="{{ url_for('user.profile', username=g.user['username']) }}">
                             {{ g.user['username'] }}
                         </a>
+
+                    </div>
+
+    
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input class="input is-normal py-4" type="text" placeholder="Rechercher...">
+                                <span class="icon is-small is-left ">
+                                    <i class="fas fa-globe"></i>
+                                </span>
+                            </p>
+                        </div>
 
                         {% if g.user['admin'] %}
                         <a class="button is-link" href="{{ url_for('admin.panel') }}">Modération</a>
