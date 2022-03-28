@@ -3,109 +3,96 @@
 {% block title %}Profil de {{user.username}}{% endblock %}
 
 {% block content %}
+<section>
 
-{% if user == None %}
-    <h1>Utilisateur inexistant !</h1>
-    <div class="error_message">J'ai traversé les ~ondes~ pour chercher cet utilisateur mais je ne l'ai pas trouvé... 😕</div>
-    <a href="{{ url_for('index') }}"><p>Cliquez ici </a>pour retourner à la page d'accueil</p>
-{% else %}
-    <section>
-
-        <div class="profile-top">
-            {% if user.firstName %}
-            <h1 class="title is-2">{{user.firstName}}</h1>
-            {% endif %}
-        
-            {% if user.admin == 1 %}
-            <h2 class="title is-3">👑 {{user.username}}</h2><br>
-            {% else %}
-            <h2 class="title is-3">{{user.username}}</h2><br>
-            {% endif %}
-        </div>
-
-        <div class="block">
-
-        </div>
-
-        <div class="profile-bio">
-            <h3 class="title is-5">Bio</h3>
-            {% if user.bio %}
-            <p>{{user.bio}}</p><br>
-            {% else %}
-            <p>Cet utilisateur n'a pas de bio !</p><br>
-            {% endif %}
-        </div>
-
-        <div class="profile-birthday">
-            <h3 class="title is-5">Anniversaire</h3>
-            {% if date == user.dateOfBirth %}
-            <p>🎂 {{user.dateOfBirth}}</p><br>
-            {% else %}
-            <p>{{user.dateOfBirth}}</p><br>
-            {% endif %}
-        </div>
-
-        <div class="profile-socials">
-            <h1 class="title is-5">Réseaux sociaux</h1>
-            {% if user.instagram %}
-            <a href="https://instagram.com/{{user.instagram}}">{{user.instagram}}</a><br>
-            {% endif %}
-            {% if user.twitter %}
-            <a href="https://twitter.com/{{user.twitter}}">Twitter</a><br>
-            {% endif %}
-            {% if user.github %}
-            <a href="https://github.com/{{user.github}}">GitHub</a><br>
-            {% endif %}
-            {% if user.website %}
-            <a href="{{user.website}}">Site internet</a><br>
-            {% endif %}
-            {% if not user.instagram and not user.twitter and not user.github and not user.website %}
-            <p>Aucun réseau social n'est renseigné !</p>
-            {% endif %}
-        </div>
-
-        <div>
-            {% for post in posts %}
-        
-            {% if post['status'] != 'hidden' %}
-            <article class="card my-6 px-4 py-4 is-flex is-justify-content-space-between">
-                <div class="content">
-                    <p class="body mt-2">{{ post['body'] }}</p>
-        
-                    <p class="content is-small">posté par <a href="{{ url_for('user.profile', username=post['username']) }}">{{
-                        post['username'] }}</a> le {{ post['created'].strftime('%a %d %b %Y') }}</p>
-                </div>
-        
-                <div>
-                    {% if g.user['id'] == post['author_id'] or g.user['admin'] %}
-                    <a class="button is-info is-small is-fullwidth my-2" href="{{ url_for('blog.edit', post_id=post['id']) }}">Modifier</a>
-                    <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
-                        <input class="button is-danger is-small is-fullwidth my-2" type="submit" value="Supprimer"
-                               onclick="return confirm('Etes vous sûr de vouloir supprimer le post ?');">
-                    </form>
-                    {% else %}
-        
-                    {% if g.user %}
-                    <form action="{{ url_for('blog.report', post_id=post['id']) }}" method="post">
-                        <input class="button is-warning is-small is-fullwidth my-2" type="submit" value="Signaler"
-                               onclick="return confirm('Signaler ce post ?');">
-                    </form>
-                    {% endif %}
-                    {% endif %}
-                </div>
-            </article>
-            {% endif %}
-            {% endfor %}
-        </div>
-
-        <br>
-
-        {% if user.id == g.user.id %}
-        <a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
-        <a class="button" href="{{ url_for('user.delete', username=user.username) }}" onclick="confirm('Etes vous sûr ?');">Supprimer
-            mon compte</a>
-
+    <div class="profile-top">
+        {% if user.firstName %}
+        <h1 class="title is-2">{{user.firstName}}</h1>
         {% endif %}
-    </section>
-{% endif %}
+
+        {% if user.admin == 1 %}
+        <h2 class="title is-3">👑 {{user.username}}</h2><br>
+        {% else %}
+        <h2 class="title is-3">{{user.username}}</h2><br>
+        {% endif %}
+    </div>
+
+    <div class="block">
+
+    </div>
+
+    <div class="profile-bio">
+        <h3 class="title is-5">Bio</h3>
+        {% if user.bio %}
+        <p>{{user.bio}}</p><br>
+        {% else %}
+        <p>Cet utilisateur n'a pas de bio !</p><br>
+        {% endif %}
+    </div>
+
+    <div class="profile-birthday">
+        <h3 class="title is-5">Anniversaire</h3>
+        {% if date == user.dateOfBirth %}
+        <p>🎂 {{user.dateOfBirth}}</p><br>
+        {% else %}
+        <p>{{user.dateOfBirth}}</p><br>
+        {% endif %}
+    </div>
+
+    <div class="profile-socials">
+        <h1 class="title is-5">Réseaux sociaux</h1>
+        {% if user.instagram %}
+        <a href="https://instagram.com/{{user.instagram}}">{{user.instagram}}</a><br>
+        {% endif %}
+        {% if user.twitter %}
+        <a href="https://twitter.com/{{user.twitter}}">Twitter</a><br>
+        {% endif %}
+        {% if user.github %}
+        <a href="https://github.com/{{user.github}}">GitHub</a><br>
+        {% endif %}
+        {% if user.website %}
+        <a href="{{user.website}}">Site internet</a><br>
+        {% endif %}
+        {% if not user.instagram and not user.twitter and not user.github and not user.website %}
+        <p>Aucun réseau social n'est renseigné !</p>
+        {% endif %}
+    </div>
+
+    <div>
+        {% for post in posts if post['status'] != 'hidden' %}
+        <article class="card my-6 px-4 py-4 is-flex is-justify-content-space-between">
+            <div class="content">
+                <p class="body mt-2">{{ post['body'] }}</p>
+                <p class="content is-small">posté par
+                    <a href="{{ url_for('user.profile', username=post['username']) }}"> {{ post['username'] }}</a>
+                    le {{ post['created'].strftime('%a %d %b %Y') }}</p>
+            </div>
+
+            <div>
+                {% if g.user['id'] == post['author_id'] or g.user['admin'] %}
+                <a class="button is-info is-small is-fullwidth my-2"
+                   href="{{ url_for('blog.edit', post_id=post['id']) }}">Modifier</a>
+                <form action="{{ url_for('blog.delete', post_id=post['id']) }}" method="post">
+                    <input class="button is-danger is-small is-fullwidth my-2" type="submit" value="Supprimer"
+                           onclick="return confirm('Etes vous sûr de vouloir supprimer le post ?');">
+                </form>
+                {% elif g.user %}
+                <form action="{{ url_for('blog.report', post_id=post['id']) }}" method="post">
+                    <input class="button is-warning is-small is-fullwidth my-2" type="submit" value="Signaler"
+                           onclick="return confirm('Signaler ce post ?');">
+                </form>
+                {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% if user.id == g.user.id %}
+    <a class="button" href="{{ url_for('user.edit', username=user.username) }}">Editer mon profil</a><br><br>
+    <a class="button" href="{{ url_for('user.delete', username=user.username) }}"
+       onclick="return confirm('Etes vous sûr ?');">Supprimer
+        mon compte</a>
+
+    {% endif %}
+</section>
 {% endblock %}

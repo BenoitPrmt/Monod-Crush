@@ -1,6 +1,6 @@
 from datetime import date
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g, abort
 from werkzeug.security import generate_password_hash
 
 from flaskr.auth_helper import login_required, check_password_strength, check_username
@@ -18,6 +18,9 @@ def profile(username: str):
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
 
+    if user is None:
+        return render_template("error/user_not_found.html", username=username)
+
     posts = db.execute("""
         SELECT p.id, p.body, p.status,p.anonymous, p.created, p.author_id, u.username
         FROM post p JOIN user u ON p.author_id = u.id
@@ -34,12 +37,13 @@ def profile(username: str):
 def edit(username: str):
     """Edit profile"""
 
-    # TODO: check if with user id == session id
-
     db = get_db()
     user = db.execute(
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
+
+    if user is None or user["username"] != g.user["username"]:
+        abort(403)  # Forbidden
 
     return render_template("/user/edit.html", user=user)
 

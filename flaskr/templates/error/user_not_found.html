@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Utilisateur inexistant !{% endblock %}
+
+{% block content %}
+<p>J'ai traversé les ~ondes~ pour chercher cet utilisateur mais je ne l'ai pas trouvé... 😕
+    <a href="{{ url_for('index') }}">Cliquez ici</a> pour retourner à la page d'accueil</p>
+
+{% endblock content %}
