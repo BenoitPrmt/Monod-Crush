@@ -26,17 +26,17 @@ def register() -> Union[Response, str]:
 
         is_valid, msg = check_username(username)
         if not is_valid:
-            flash(msg)
+            flash(msg, "warning")
             error = True
 
         is_valid, msg = check_date_of_birth(dateOfBirth)
         if not is_valid:
-            flash(msg)
+            flash(msg, "warning")
             error = True
 
         is_valid, msg = check_password_strength(password)
         if not is_valid:
-            flash(msg)
+            flash(msg, "warning")
             error = True
 
         if not error:
@@ -77,7 +77,7 @@ def login() -> Union[Response, str]:
                 error = True
 
         if error:
-            flash("Nom d'utilisateur ou mot de passe incorrect")
+            flash("Nom d'utilisateur ou mot de passe incorrect", "error")
         else:
             session.clear()  # TODO : clear only the user_id
             session["user_id"] = user["id"]

@@ -5,14 +5,14 @@
 
 {% block content %}
 
+{{ super() }}
+
 {% if g.user %}
 <a class="button is-success is-medium" href="{{ url_for('blog.create') }}">New</a>
 {% endif %}
 
 <div>
-    {% for post in posts %}
-
-    {% if post['status'] != 'hidden' %}
+    {% for post in posts if post['status'] != 'hidden' %}
     <article class="card my-6 px-4 py-4 is-flex is-justify-content-space-between">
         <div class="content">
             <p class="body mt-2">{{ post['body'] }}</p>
@@ -47,7 +47,6 @@
             {% endif %}
         </div>
     </article>
-    {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

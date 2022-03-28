@@ -1,0 +1,59 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="{{ url_for('blog.index') }}">
+            <img src="{{ url_for('static', filename='styles/logo_top.png')}}" alt="Monod Crush logo">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+           data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="{{ url_for('blog.index') }}">Home</a>
+            <a class="navbar-item" href="{{ url_for('blog.index') }}">Insta Map</a>
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <span class="navbar-link">Plus</span>
+
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" href="{{ url_for('blog.index') }}">À propos</a>
+                    <a class="navbar-item" href="{{ url_for('blog.index') }}">Contact</a>
+                    <hr class="navbar-divider">
+                    <a class="navbar-item" href="{{ url_for('blog.index') }}">Suggestions</a>
+                    <a class="navbar-item" href="{{ url_for('blog.index') }}">Signaler un bug</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    {% if g.user %}
+                    <a class="button is-link is-inverted"
+                       href="{{ url_for('user.profile', username=g.user['username']) }}">
+                        {{ g.user['username'] }}
+                    </a>
+
+                    {% if g.user['admin'] %}
+                    <a class="button is-link" href="{{ url_for('admin.panel') }}">Modération</a>
+                    {% endif %}
+
+                    <a class="button is-link is-light" href="{{ url_for('auth.logout') }}">Log Out</a>
+
+                    {% else %}
+                    <a class="button is-link" href="{{ url_for('auth.register') }}">
+                        <strong>Créer un Compte</strong>
+                    </a>
+                    <a class="button is-link is-light" href="{{ url_for('auth.login') }}">Se connecter</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+

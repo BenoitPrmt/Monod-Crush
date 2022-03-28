@@ -37,7 +37,7 @@ def delete(post_id: int) -> Response:
     Ensures that the post exists and that the logged in user is the
     author of the post.
     """
-    get_post(post_id)
+    get_post(post_id, check_author=False)
 
     db = get_db()
     db.execute("DELETE FROM post WHERE id = ?", (post_id,))

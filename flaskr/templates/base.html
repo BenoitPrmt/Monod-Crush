@@ -12,109 +12,54 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
     <!-- icons -->
-    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css" crossorigin="">
+    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
 
     <!-- favicon -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" as="script">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     <!-- title -->
-    <title>{% block title %}{% endblock %} - MonodCrush</title>
+    <title>{% block title required %}{% endblock %} - MonodCrush</title>
 
-    <!-- js -->
-    <link rel="preload" href="{{ url_for('static', filename='scripts/menu.js') }}">
-
-    {% block head %}{% endblock %}
+    {%- block head -%}
+    <!-- preload js-->
+    <link rel="preload" href="{{ url_for('static', filename='scripts/nav-bar.js') }}" as="script">
+    {% endblock head %}
 </head>
 
+{%- block body -%}
+
 <body>
-<header>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="{{ url_for('blog.index') }}">
-                <img src="{{ url_for('static', filename='styles/logo_top.png')}}" alt="Monod Crush logo">
-            </a>
 
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-               data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
+    {%- block header -%}
+    {% include "header.html"%}
+    {% endblock header %}
+
+    {%- block page -%}
+    <section class="section" style="background:#eee;">
+        <div class="container is-max-desktop">
+
+            {%- block title_page -%}
+            <h1 class="title">{{ self.title() }}</h1>
+            {% endblock title_page %}
+
+            {%- block notif -%}
+            {% include 'notifications.html' %}
+            {% endblock notif %}
+
+            {% block content %}{% endblock content %}
         </div>
+    </section>
+    {% endblock page %}
 
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="{{ url_for('blog.index') }}">Home</a>
-                <a class="navbar-item" href="{{ url_for('blog.index') }}">Insta Map</a>
-
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <span class="navbar-link">Plus</span>
-
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item" href="{{ url_for('blog.index') }}">À propos</a>
-                        <a class="navbar-item" href="{{ url_for('blog.index') }}">Contact</a>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item" href="{{ url_for('blog.index') }}">Suggestions</a>
-                        <a class="navbar-item" href="{{ url_for('blog.index') }}">Signaler un bug</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        {% if g.user %}
-                        <a class="button is-link is-inverted"
-                           href="{{ url_for('user.profile', username=g.user['username']) }}">
-                            {{ g.user['username'] }}
-                        </a>
-
-                        {% if g.user['admin'] %}
-                        <a class="button is-link" href="{{ url_for('admin.panel') }}">Modération</a>
-                        {% endif %}
-
-                        <a class="button is-link is-light" href="{{ url_for('auth.logout') }}">Log Out</a>
-
-                        {% else %}
-                        <a class="button is-link" href="{{ url_for('auth.register') }}">
-                            <strong>Créer un Compte</strong>
-                        </a>
-                        <a class="button is-link is-light" href="{{ url_for('auth.login') }}">Se connecter</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<section class="section" style="background:#eee;">
-    <div class="container is-max-desktop">
-        <h1 class="title">{{ self.title() }}</h1>
-
-        <div>
-            {# show error/info message send by server #}
-            {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
-            <ul class=flashes>
-                {% for category, message in messages %}
-                <li class="alert alert-{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %} {% endwith %}
-        </div>
-
-        {% block content %}{% endblock %}
-    </div>
-</section>
-
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>MonodCrush n'est affilié à aucun compte Instagram !</p>
-    </div>
-</footer>
-
-<!-- js -->
-<script src="{{ url_for('static', filename='scripts/menu.js') }}"></script>
+    {%- block footer -%}
+    {% include "footer.html"%}
+    {% endblock footer %}
 
 </body>
+{% endblock body %}
+
+{%- block scripts -%}
+<script src="{{ url_for('static', filename='scripts/nav-bar.js') }}"></script>
+{% endblock scripts %}
+
 </html>
