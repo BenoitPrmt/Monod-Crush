@@ -1,7 +1,8 @@
 from typing import Tuple
 
-from flaskr.db import get_db
 from flask import abort, g
+
+from flaskr.db import get_db
 
 
 def check_message_body(text: str) -> Tuple[bool, str]:

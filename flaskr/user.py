@@ -1,7 +1,8 @@
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g
 from datetime import date
 
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g
 from werkzeug.security import generate_password_hash
+
 from flaskr.auth_helper import login_required, check_password_strength, check_username
 from flaskr.db import get_db
 
@@ -23,7 +24,7 @@ def profile(username: str):
         WHERE p.author_id = ? AND p.anonymous = 0
         ORDER BY p.created DESC
         """, (user["id"],)
-    ).fetchall()
+                       ).fetchall()
 
     return render_template("/user/profile.html", user=user, date=str(date.today()), posts=posts)
 
@@ -70,7 +71,7 @@ def update_user(username: str):
     github = request.form["github"]
     website = request.form["website"]
     password = request.form["password"]
-    
+
     error = False
 
     is_valid, msg = check_username(username)
@@ -86,10 +87,11 @@ def update_user(username: str):
         password = generate_password_hash(password)
 
     if not error:
-        forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter, github,
-             website, password]
+        forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter,
+                 github,
+                 website, password]
         formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram", "facebook",
-                    "linkedin", "twitter", "github", "website", "password"]
+                     "linkedin", "twitter", "github", "website", "password"]
 
         # TODO check fields constraints with dict {form: [sqlFormsName, functionToCheck]}
 
@@ -113,7 +115,6 @@ def update_user(username: str):
         current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has edited his profile")
 
         return render_template("/user/profile.html", user=user, date=str(date.today()))
-
 
     return render_template("/user/edit.html", user=user)
 

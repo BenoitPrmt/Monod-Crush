@@ -1,4 +1,3 @@
-import locale
 from typing import Union
 
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app, abort
@@ -8,6 +7,7 @@ from flaskr.blog_helper import get_post, check_message_body
 from flaskr.db import get_db
 
 bp = Blueprint("blog", __name__)
+
 
 # set locale date format to french
 # locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
