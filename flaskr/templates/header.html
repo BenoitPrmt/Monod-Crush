@@ -34,14 +34,16 @@
             <div class="navbar-item">
                 <div class="buttons">
 
-                    <div class="field">
-                        <p class="control has-icons-left">
-                            <input class="input is-normal py-4" type="text" placeholder="Rechercher...">
-                            <span class="icon is-small is-left ">
-                                <i class="fas fa-globe"></i>
-                            </span>
-                        </p>
-                    </div>
+                    
+                    <form method="get" action="{{ url_for('search.search_user')}}">
+                        <div class="field mx-3 py-4 my-2 ">
+                            <label class="label" for="search"></label>
+                                <div class="control">
+                                <input class="input" id="search" name="search_user" type="text" placeholder="Rechercher..."
+                                value="{{ request.args['search_user'] }}">
+                                </div>
+                            </div>
+                    </form>
 
                     {% if g.user %}
                     <a class="button is-link is-inverted"
