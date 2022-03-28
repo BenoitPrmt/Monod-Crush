@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-
-{% block title %}Page Not Found{% endblock %}
-
-{% block content %}
-<div class="error_tittle">Error {{error_code}}</div>
-<div class="error_message">Oops! No life detected</div>
-<a href="{{ url_for('index') }}"><p> Click Here </a>To go to the Home Page</p>
-{% endblock %}

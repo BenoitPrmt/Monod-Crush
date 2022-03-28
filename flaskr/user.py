@@ -19,10 +19,10 @@ def profile(username: str):
     ).fetchone()
 
     if user is None:
-        return render_template("error/user_not_found.html", username=username)
+        return render_template("error/404_user_not_found.html", username=username)
 
     posts = db.execute("""
-        SELECT p.id, p.body, p.status,p.anonymous, p.created, p.author_id, u.username
+        SELECT p.id, p.body, p.status, p.anonymous, p.created, p.author_id, u.username
         FROM post p JOIN user u ON p.author_id = u.id
         WHERE p.author_id = ? AND p.anonymous = 0
         ORDER BY p.created DESC
@@ -42,7 +42,7 @@ def edit(username: str):
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
 
-    if user is None or user["username"] != g.user["username"]:
+    if user is None or user["id"] != g.user["id"]:
         abort(403)  # Forbidden
 
     return render_template("/user/edit.html", user=user)
@@ -54,10 +54,12 @@ def update_user(username: str):
     """Update user"""
 
     db = get_db()
-    cur = db.cursor()
-    user = cur.execute(
+    user = db.execute(
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
+
+    if user is None or user["username"] != g.user["username"]:
+        abort(403)  # Forbidden
 
     userID = tuple(user)[0]
     print(userID)
@@ -139,14 +141,15 @@ def delete(username: str):
 
     db = get_db()
     user = db.execute(
-        "SELECT * FROM user WHERE username = ?", (username,)
+        "SELECT id FROM user WHERE username = ?", (username,)
     ).fetchone()
 
-    userID = tuple(user)[0]
-    print(userID)
+    if user is None or user["id"] != g.user["id"]:
+        abort(403)  # Forbidden
 
-    db.execute(f"DELETE FROM user WHERE id = ?", (userID,))
+    db.execute(f"DELETE FROM user WHERE id = ?", (user["id"],))
     db.commit()
+
     session.clear()
 
     current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has deleted his account, bye bye")

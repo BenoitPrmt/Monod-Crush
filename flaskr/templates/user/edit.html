@@ -3,7 +3,6 @@
 {% block title %}Editez votre profil {{user.username}}{% endblock %}
 
 {% block content %}
-{% if user.id == g.user.id %}
 <section>
     <form action="{{ url_for('user.update_user', username=user.username) }}" method="post">
 
@@ -105,7 +104,4 @@
         </div>
     </form>
 </section>
-{% else %}
-<h1>Vous n'avez pas accès à cette page</h1>
-{% endif %}
 {% endblock %}
