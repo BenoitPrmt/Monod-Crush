@@ -84,8 +84,7 @@ def login() -> Union[Response, str]:
             session["user_id"] = user["id"]
 
             import os
-            current_app.logger.info(
-                f"{user['id']} ({username}) - logged in le pc de {os.path}{requests.get(f'http://ip.42.pl/raw').text}")
+            current_app.logger.info(f"{user['id']} ({username}) - logged in")
 
             return redirect(url_for("blog.index"))
 

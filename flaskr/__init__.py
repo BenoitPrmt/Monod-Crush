@@ -18,11 +18,7 @@ def create_app(test_config: dict = None) -> Flask:
         DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
     )
 
-    # setup logging
-    if app.debug:
-        dictConfig(logging_config_dev)
-    else:
-        dictConfig(logging_config_prod)
+
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -30,6 +26,13 @@ def create_app(test_config: dict = None) -> Flask:
     else:
         # load the test config if passed in
         app.config.update(test_config)
+
+    # setup logging
+    if app.debug or app.testing:
+        dictConfig(logging_config_dev)
+    else:
+        dictConfig(logging_config_prod)
+
 
     # ensure the instance folder exists
     try:
