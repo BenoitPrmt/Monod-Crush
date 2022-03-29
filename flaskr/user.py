@@ -107,6 +107,7 @@ def update_user(username: str):
 
 
 @bp.route("/<username>/delete", methods=["POST"])
+@login_required
 def delete(username: str):
     """Delete account
 
