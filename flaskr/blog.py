@@ -3,7 +3,7 @@ from typing import Union
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app, abort
 
 from flaskr.auth_helper import login_required
-from flaskr.blog_helper import get_post, check_message_body
+from flaskr.blog_helper import get_post, check_message_body, parse_user_from_sql
 from flaskr.db import get_db
 
 bp = Blueprint("blog", __name__)
@@ -110,10 +110,8 @@ def report(post_id: int) -> Response:
 
     db = get_db()
     r = db.execute("SELECT reported, status FROM post WHERE id = ?", (post_id,)).fetchone()
-    if r["reported"] is not None:
-        reports = r["reported"].split(",")
-    else:
-        reports = []
+
+    reports = parse_user_from_sql(r["reported"])
 
     if str(g.user["id"]) in reports:
         flash("Vous avez déjà signalé ce post")

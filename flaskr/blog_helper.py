@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 
 from flask import abort, g
 
@@ -41,3 +41,11 @@ def get_post(post_id: int, check_author=True) -> dict:
         abort(403)
 
     return post
+
+
+def parse_user_from_sql(text: str) -> List[str]:
+    """ Parse the user id from the sql request. """
+    if text is not None:
+        return text.split(",")
+    else:
+        return []
