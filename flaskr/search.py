@@ -25,6 +25,7 @@ def all_user():
     user = db.execute("""
         SELECT username
         FROM user 
+        WHERE id != admin
         ORDER BY username
         """).fetchall()
     

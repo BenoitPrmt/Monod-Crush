@@ -42,13 +42,14 @@
     <div class="profile-socials">
         <h1 class="title is-5">Réseaux sociaux</h1>
         {% if user.instagram %}
-        <a href="https://instagram.com/{{user.instagram}}">{{user.instagram}}</a><br>
+        
+        <a href="https://instagram.com/{{user.instagram}}">@{{user.instagram}}</a><br>
         {% endif %}
         {% if user.twitter %}
-        <a href="https://twitter.com/{{user.twitter}}">Twitter</a><br>
+        <a href="https://twitter.com/{{user.twitter}}">@{{user.twitter}}</a><br>
         {% endif %}
         {% if user.github %}
-        <a href="https://github.com/{{user.github}}">GitHub</a><br>
+        <a href="https://github.com/{{user.github}}">@{{user.github}}</a><br>
         {% endif %}
         {% if user.website %}
         <a href="{{user.website}}">Site internet</a><br>
