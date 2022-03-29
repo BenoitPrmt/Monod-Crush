@@ -4,15 +4,14 @@
             <img src="{{ url_for('static', filename='styles/logo_top.png')}}" alt="Monod Crush logo">
         </a>
 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-           data-target="navbarBasicExample">
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
         </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-menu">
         <div class="navbar-start">
             <a class="navbar-item" href="{{ url_for('blog.index') }}">Home</a>
             <a class="navbar-item" href="{{ url_for('blog.index') }}">Insta Map</a>
@@ -31,19 +30,18 @@
         </div>
 
         <div class="navbar-end">
+            <form class="navbar-item" method="get" action="{{ url_for('search.search_user')}}">
+                <div class="control has-icons-right">
+                    <input class="input" name="search_user" type="text" placeholder="Rechercher..." value="{{ request.args['search_user'] }}">
+                    <span class="icon is-small is-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path
+                                fill="#ddd"
+                                d="M23.822 20.88l-6.353-6.354c.93-1.465 1.467-3.2 1.467-5.059.001-5.219-4.247-9.467-9.468-9.467s-9.468 4.248-9.468 9.468c0 5.221 4.247 9.469 9.468 9.469 1.768 0 3.421-.487 4.839-1.333l6.396 6.396 3.119-3.12zm-20.294-11.412c0-3.273 2.665-5.938 5.939-5.938 3.275 0 5.94 2.664 5.94 5.938 0 3.275-2.665 5.939-5.94 5.939-3.274 0-5.939-2.664-5.939-5.939z"/></svg>
+                    </span>
+                </div>
+            </form>
             <div class="navbar-item">
                 <div class="buttons">
-
-                    
-                    <form method="get" action="{{ url_for('search.search_user')}}">
-                        <div class="field mx-3 py-4 my-2 ">
-                            <label class="label" for="search"></label>
-                                <div class="control">
-                                <input class="input" id="search" name="search_user" type="text" placeholder="Rechercher..."
-                                value="{{ request.args['search_user'] }}">
-                                </div>
-                            </div>
-                    </form>
 
                     {% if g.user %}
                     <a class="button is-link is-inverted"
