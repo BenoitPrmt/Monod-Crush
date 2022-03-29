@@ -94,6 +94,11 @@ def update_user(username: str):
         rows_values.append(request.form[form_name])
         sql_rows_name.append(f"{form_name} = ?")
 
+    if len(sql_rows_name) == 0:
+        # if there is no change, redirect to the profile
+        flash("Aucune modification n'a été effectuée", "info")
+        return redirect(url_for("user.profile", username=username))
+
     rows_values.append(user["id"])
 
     db.execute(f"UPDATE user SET {', '.join(sql_rows_name)} WHERE id = ?", rows_values)
