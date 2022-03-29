@@ -1,9 +1,8 @@
 from datetime import date
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g, abort
-from werkzeug.security import generate_password_hash
 
-from flaskr.auth_helper import login_required, check_password_strength, check_username
+from flaskr.auth_helper import login_required, check_username
 from flaskr.db import get_db
 
 bp = Blueprint("user", __name__, url_prefix="/user")
@@ -61,68 +60,50 @@ def update_user(username: str):
     if user is None or user["username"] != g.user["username"]:
         abort(403)  # Forbidden
 
-    userID = tuple(user)[0]
-    print(userID)
+    # {"sql_row_name and form_name", function_to_check_input}
+    form = {
+        "username": check_username,
+        # "email": check_email,
+        # "firstName": check_firstName,
+        # "bio": check_bio,
+        # "class_level": check_class_level,
+        # "class_number": check_class_number,
+        # "instagram": check_instagram,
+        # "twitter": check_twitter,
+        # "github": check_github,
+        # "website": check_website,
+    }
 
-    username = request.form["username"]
-    firstName = request.form["firstName"]
-    bio = request.form["bio"]
-    email = request.form["email"]
-    class_level = request.form["class_level"]
-    class_number = request.form["class_number"]
-    instagram = request.form["instagram"]
-    facebook = request.form["facebook"]
-    linkedin = request.form["linkedin"]
-    twitter = request.form["twitter"]
-    github = request.form["github"]
-    website = request.form["website"]
-    password = request.form["password"]
+    sql_rows_name = []
+    rows_values = []
 
-    error = False
+    for form_name, check_function in form.items():
 
-    is_valid, msg = check_username(username)
-    if not is_valid:
-        flash(msg)
-        error = True
+        form_value = request.form[form_name]
 
-    if password != "":
-        is_valid, msg = check_password_strength(password)
+        # if the value is the same that the one in the database, skip
+        if form_value == user[form_name]:
+            continue
+
+        # check if all the values are valid
+        is_valid, error_message = check_function(request.form[form_name])
         if not is_valid:
-            flash(msg)
-            error = True
-        password = generate_password_hash(password)
+            flash(error_message)
+            return render_template("/user/edit.html", user=user)
 
-    if not error:
-        forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter,
-                 github,
-                 website, password]
-        formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram", "facebook",
-                     "linkedin", "twitter", "github", "website", "password"]
+        rows_values.append(request.form[form_name])
+        sql_rows_name.append(f"{form_name} = ?")
 
-        # TODO check fields constraints with dict {form: [sqlFormsName, functionToCheck]}
+    rows_values.append(user["id"])
 
-        new_request = "UPDATE user SET "
-        c = 0
-        args = []
-        for form in forms:
-            if form != "":
-                if form == " " and formsName[c] != "password" and formsName[c] != "username":
-                    form = None
-                new_request += f", {formsName[c]} = ?"
-                args.append(form)
-            c += 1
+    db.execute(f"UPDATE user SET {', '.join(sql_rows_name)} WHERE id = ?", rows_values)
+    db.commit()
 
-        new_request += f" WHERE id = {userID}"
-        new_request = new_request.replace(',', '', 1)
+    current_app.logger.info(
+        f"{g.user['id']} ({g.user['username']}) - has edited his profile ({sql_rows_name})")  # TODO remove '= ?'
 
-        db.execute(new_request, tuple(args))
-        db.commit()
-
-        current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has edited his profile")
-
-        return render_template("/user/profile.html", user=user, date=str(date.today()))
-
-    return render_template("/user/edit.html", user=user)
+    flash("Your profile has been updated!", "success")
+    return redirect(url_for("user.profile", username=request.form.get("username", user["username"])))
 
 
 @bp.route("/<username>/delete", methods=["POST"])

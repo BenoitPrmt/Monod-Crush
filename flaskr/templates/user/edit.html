@@ -18,43 +18,47 @@
         <div class="field">
             <label class="label">Biographie</label>
             <div class="control">
-                <textarea class="input" type="text" placeholder="Bio" name="bio" id="bio" value="{{ user.bio if user.bio }}" onFocus="this.value='';"></textarea>
+                <textarea class="input" placeholder="Bio" name="bio" id="bio">{{ user.bio if user.bio }}</textarea>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Prénom</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Prénom" name="firstName" id="firstName"  value="{{ user.firstName if user.firstName }}" onFocus="this.value='';"/>
+                <input class="input" type="text" placeholder="Prénom" name="firstName" id="firstName"
+                       value="{{ user.firstName if user.firstName }}" onFocus="this.value='';"/>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Email</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Email" name="email" id="email"  value="{{ user.email if user.email }}" onFocus="this.value='';"/>
+                <input class="input" type="text" placeholder="Email" name="email" id="email"
+                       value="{{ user.email if user.email }}" onFocus="this.value='';"/>
             </div>
         </div>
-          
+
         <div class="field">
             <label class="label">Niveau</label>
             <div class="control">
-              <div class="select">
-                <select name="class_level" id="class_level">
-                    <option value="2">Seconde</option>
-                    <option value="1">Première</option>
-                    <option value="0">Terminale</option>
-                </select>
-              </div>
+                <div class="select">
+                    <select name="class_level" id="class_level">
+                        <option value="2">Seconde</option>
+                        <option value="1">Première</option>
+                        <option value="0">Terminale</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Numéro de classe</label>
             <div class="control">
-                <input type="number" placeholder="Numéro de classe" name="class_number" id="class_number" value="{{ user.class_number if user.class_number }}"/>
+                <input type="number" placeholder="Numéro de classe" name="class_number" id="class_number"
+                       value="{{ user.class_number if user.class_number }}"/>
             </div>
-            <p class="help">Exemple : Si vous êtes en 1ère 06, indiquez "Première" pour le niveau et "6" pour la classe.</p><br>
+            <p class="help">Exemple : Si vous êtes en 1ère 06, indiquez "Première" pour le niveau et "6" pour la
+                classe.</p><br>
         </div>
 
         <h1 class="title is-2">Social</h1>
@@ -63,28 +67,32 @@
         <div class="field">
             <label class="label">Instagram</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Instagram" name="instagram" id="instagram" value="{{ user.instagram if user.instagram }} " onFocus="this.value='';"/>
+                <input class="input" type="text" placeholder="Instagram" name="instagram" id="instagram"
+                       value="{{ user.instagram if user.instagram }} " onFocus="this.value='';"/>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Twitter</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Twitter" name="twitter" id="twitter" value="{{ user.twitter if user.twitter }} " onFocus="this.value='';"/>
+                <input class="input" type="text" placeholder="Twitter" name="twitter" id="twitter"
+                       value="{{ user.twitter if user.twitter }} " onFocus="this.value='';"/>
             </div>
         </div>
 
         <div class="field">
             <label class="label">GitHub</label>
             <div class="control">
-                <input class="input" type="text" placeholder="GitHub" name="github" id="github" value="{{ user.github if user.github }} " onFocus="this.value='';"/>
+                <input class="input" type="text" placeholder="GitHub" name="github" id="github"
+                       value="{{ user.github if user.github }} " onFocus="this.value='';"/>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Site web</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Site internet" name="website" id="website" value="{{ user.website if user.website }} " onFocus="this.value='';"/>
+                <input class="input" type="text" placeholder="Site internet" name="website" id="website"
+                       value="{{ user.website if user.website }} " onFocus="this.value='';"/>
             </div>
         </div>
 
@@ -96,10 +104,10 @@
                 <input class="input" type="password" name="password" id="password" placeholder="********"/>
             </div>
         </div>
-          
+
         <div class="field is-grouped">
             <div class="control">
-              <button class="button is-link">Enregistrer</button>
+                <button class="button is-link">Enregistrer</button>
             </div>
         </div>
     </form>
