@@ -74,8 +74,8 @@ def update_user(username: str):
         # "website": check_website,
     }
 
-    sql_rows_name = []
-    rows_values = []
+    sql_column_name = []
+    sql_values = []
 
     for form_name, check_function in form.items():
 
@@ -91,21 +91,21 @@ def update_user(username: str):
             flash(error_message)
             return render_template("/user/edit.html", user=user)
 
-        rows_values.append(request.form[form_name])
-        sql_rows_name.append(f"{form_name} = ?")
+        sql_values.append(request.form[form_name])
+        sql_column_name.append(f"{form_name} = ?")
 
-    if len(sql_rows_name) == 0:
+    if len(sql_column_name) == 0:
         # if there is no change, redirect to the profile
         flash("Aucune modification n'a été effectuée", "info")
         return redirect(url_for("user.profile", username=username))
 
-    rows_values.append(user["id"])
+    sql_values.append(user["id"])
 
-    db.execute(f"UPDATE user SET {', '.join(sql_rows_name)} WHERE id = ?", rows_values)
+    db.execute(f"UPDATE user SET {', '.join(sql_column_name)} WHERE id = ?", sql_values)
     db.commit()
 
     current_app.logger.info(
-        f"{g.user['id']} ({g.user['username']}) - has edited his profile ({sql_rows_name})")  # TODO remove '= ?'
+        f"{g.user['id']} ({g.user['username']}) - has edited his profile ({sql_column_name})")  # TODO remove '= ?'
 
     flash("Your profile has been updated!", "success")
     return redirect(url_for("user.profile", username=request.form.get("username", user["username"])))
