@@ -32,10 +32,10 @@
 
     <div class="profile-birthday">
         <h3 class="title is-5">Anniversaire</h3>
-        {% if date == user.dateOfBirth %}
-        <p>🎂 {{user.dateOfBirth}}</p><br>
+        {% if date[5:] == user.dateOfBirth[5:] %}
+        <p>🎂 {{user.dateOfBirth.split('-')[2]}}/{{user.dateOfBirth.split('-')[1]}}/{{user.dateOfBirth.split('-')[0]}}</p><br>
         {% else %}
-        <p>{{user.dateOfBirth}}</p><br>
+        <p>{{user.dateOfBirth.split('-')[2]}}/{{user.dateOfBirth.split('-')[1]}}/{{user.dateOfBirth.split('-')[0]}}</p><br>
         {% endif %}
     </div>
 
