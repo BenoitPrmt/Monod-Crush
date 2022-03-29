@@ -164,4 +164,10 @@ def delete(username: str):
 
     current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has deleted his account, bye bye")
 
-    return redirect(url_for("blog.index"))
+    posts = db.execute("""
+        SELECT p.id, p.body, p.status,p.anonymous, p.created, p.author_id, u.username
+        FROM post p JOIN user u ON p.author_id = u.id
+        ORDER BY p.created DESC
+        """).fetchall()
+
+    return render_template("/blog/index.html", posts=posts)
