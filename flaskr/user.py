@@ -71,8 +71,6 @@ def update_user(username: str):
     class_level = request.form["class_level"]
     class_number = request.form["class_number"]
     instagram = request.form["instagram"]
-    facebook = request.form["facebook"]
-    linkedin = request.form["linkedin"]
     twitter = request.form["twitter"]
     github = request.form["github"]
     website = request.form["website"]
@@ -80,10 +78,15 @@ def update_user(username: str):
 
     error = False
 
-    is_valid, msg = check_username(username)
-    if not is_valid:
-        flash(msg)
-        error = True
+    print(username)
+    print(g.user["username"])
+
+    if username != "" and username != g.user["username"]:
+        is_valid, msg = check_username(username)
+        if not is_valid:
+            flash(msg)
+            error = True
+    
 
     if password != "":
         is_valid, msg = check_password_strength(password)
@@ -93,11 +96,10 @@ def update_user(username: str):
         password = generate_password_hash(password)
 
     if not error:
-        forms = [username, firstName, bio, email, class_level, class_number, instagram, facebook, linkedin, twitter,
-                 github,
-                 website, password]
-        formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram", "facebook",
-                     "linkedin", "twitter", "github", "website", "password"]
+        forms = [username, firstName, bio, email, class_level, class_number, instagram, twitter,
+                 github, website, password]
+        formsName = ["username", "firstName", "bio", "email", "class_level", "class_number", "instagram","twitter",
+                "github", "website", "password"]
 
         # TODO check fields constraints with dict {form: [sqlFormsName, functionToCheck]}
 
@@ -120,7 +122,15 @@ def update_user(username: str):
 
         current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has edited his profile")
 
-        return render_template("/user/profile.html", user=user, date=str(date.today()))
+        posts = db.execute("""
+        SELECT p.id, p.body, p.status, p.anonymous, p.created, p.author_id, u.username
+        FROM post p JOIN user u ON p.author_id = u.id
+        WHERE p.author_id = ? AND p.anonymous = 0
+        ORDER BY p.created DESC
+        """, (user["id"],)
+                       ).fetchall()
+
+        return render_template("/user/profile.html", user=user, date=str(date.today()), posts=posts)
 
     return render_template("/user/edit.html", user=user)
 
