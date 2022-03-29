@@ -19,11 +19,39 @@ def index() -> str:
 
     db = get_db()
     posts = db.execute("""
-        SELECT p.id, p.body, p.status,p.anonymous, p.created, p.author_id, u.username
+        SELECT p.id, p.body, p.status,p.anonymous, p.created, p.like ,p.author_id, like, u.username
         FROM post p JOIN user u ON p.author_id = u.id
         ORDER BY p.created DESC
         """).fetchall()
+
     return render_template("blog/index.html", posts=posts)
+
+@bp.route("/post/<int:post_id>/like", methods = ["POST"])
+@login_required
+def like(post_id : int ):
+    get_post(post_id, check_author=False)
+
+    db = get_db()
+    r = db.execute("SELECT like FROM post WHERE id = ?", (post_id,)).fetchone()
+
+    like = parse_user_from_sql(r["like"])
+
+    if like is None:
+        like.append(str(g.user["id"]))
+
+    elif str(g.user["id"]) in like:
+        like.remove(str(g.user["id"]))
+        db.execute("UPDATE post SET like = ? WHERE id = ?",(",".join(like),post_id,))
+        
+    else:
+        like.append(str(g.user["id"]))
+        db.execute("UPDATE post SET like = ? WHERE id = ?", (",".join(like), post_id))
+        current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - like post {post_id}")
+
+    db.commit()
+    return redirect(url_for("blog.index"))
+    
+
 
 
 @bp.route("/post/new", methods=("GET", "POST"))

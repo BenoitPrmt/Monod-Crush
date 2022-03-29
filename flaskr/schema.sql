@@ -44,6 +44,7 @@ CREATE TABLE post (
   status TEXT DEFAULT visible, -- visible, hidden, checked
   anonymous INTEGER NOT NULL DEFAULT 1,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  like TEXT,
 
   FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE -- # TODO test delete cascade
 );
