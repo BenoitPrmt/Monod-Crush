@@ -5,5 +5,9 @@
 {% block content %}
 <p>J'ai traversé les ~ondes~ pour chercher cet utilisateur mais je ne l'ai pas trouvé... 😕
     <a href="{{ url_for('index') }}">Cliquez ici</a> pour retourner à la page d'accueil</p>
+    
+<p class="content is-small">
+    <a href="{{ url_for('search.all_user') }}">voir tout</a>
+</p>
 
 {% endblock content %}

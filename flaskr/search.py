@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 
 from flaskr.db import get_db
 
+
 bp = Blueprint("search", __name__)
 
 
@@ -17,3 +18,16 @@ def search_user() -> str:
         return render_template("error/404_user_not_found.html")
     else:
         return render_template("search/search_user.html", user=username)
+
+@bp.route("/all_user")
+def all_user():
+    db = get_db()
+    user = db.execute("""
+        SELECT username
+        FROM user 
+        ORDER BY username
+        """).fetchall()
+    
+    print(user)
+    return render_template("search/all_user.html", user=user)
+    

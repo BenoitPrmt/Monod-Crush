@@ -3,6 +3,7 @@
 {% block title %}Recherche Utilisateur{% endblock %}
 
 {% block content %}
+
 <article class="card my-4 px-4 py-4 is-flex is-justify-content-space-between">
     <div class="content">
         <p class="content is-small">
@@ -10,4 +11,8 @@
         </p>
     </div>
 </article>
-{% endblock %}
+
+<p class="content is-small">
+    <a href="{{ url_for('search.all_user') }}">voir tout</a>
+</p>
+{% endblock %} 

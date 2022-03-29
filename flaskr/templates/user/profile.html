@@ -64,7 +64,7 @@
             <div class="content">
                 <p class="body mt-2">{{ post['body'] }}</p>
                 <p class="content is-small">posté par
-                    <a href="{{ url_for('user.profile', username=post['username']) }}"> {{ post['username'] }}</a>
+                    <a href="{{ url_for('user.profile', username=post['username']) }}"> @{{ post['username'] }}</a>
                     le {{ post['created'].strftime('%a %d %b %Y') }}</p>
             </div>
 
