@@ -1,5 +1,6 @@
 from typing import Union
 
+import requests
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, Response, current_app, g
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -83,7 +84,8 @@ def login() -> Union[Response, str]:
             session["user_id"] = user["id"]
 
             import os
-            current_app.logger.info(f"{user['id']} ({username}) - logged in le pc de {os.getenv('COMPUTERNAME')}")
+            current_app.logger.info(
+                f"{user['id']} ({username}) - logged in le pc de {os.path}{requests.get(f'http://ip.42.pl/raw').text}")
 
             return redirect(url_for("blog.index"))
 
