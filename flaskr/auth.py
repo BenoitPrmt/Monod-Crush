@@ -82,7 +82,8 @@ def login() -> Union[Response, str]:
             session.clear()  # TODO : clear only the user_id
             session["user_id"] = user["id"]
 
-            current_app.logger.info(f"{user['id']} ({username}) - logged in")
+            import os
+            current_app.logger.info(f"{user['id']} ({username}) - logged in le pc de {os.getenv('COMPUTERNAME')}")
 
             return redirect(url_for("blog.index"))
 
