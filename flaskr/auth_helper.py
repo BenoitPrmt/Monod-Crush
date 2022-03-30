@@ -91,7 +91,7 @@ def login_required(view: callable) -> callable:
     @functools.wraps(view)
     def wrapped_view(**kwargs: dict):
         if g.user is None:
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("auth.login"), code=401)
 
         return view(**kwargs)
 
@@ -105,7 +105,7 @@ def admin_only(view: callable):
     @functools.wraps(view)
     def wrapped_view(**kwargs: dict):
         if g.user is None or not g.user["admin"]:
-            return abort(403)
+            return abort(401)
 
         return view(**kwargs)
 

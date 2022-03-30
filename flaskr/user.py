@@ -42,7 +42,7 @@ def edit(username: str):
     ).fetchone()
 
     if user is None or user["id"] != g.user["id"]:
-        abort(403)  # Forbidden
+        abort(401)  # Unauthorized
 
     return render_template("/user/edit.html", user=user)
 
@@ -58,7 +58,7 @@ def update_user(username: str):
     ).fetchone()
 
     if user is None or user["username"] != g.user["username"]:
-        abort(403)  # Forbidden
+        abort(401)  # Unauthorized
 
     # {"sql_row_name and form_name", function_to_check_input}
     form = {
@@ -132,7 +132,7 @@ def delete(username: str):
     ).fetchone()
 
     if user is None or user["id"] != g.user["id"]:
-        abort(403)  # Forbidden
+        abort(401)  # Unauthorized
 
     db.execute(f"DELETE FROM user WHERE id = ?", (user["id"],))
     db.commit()

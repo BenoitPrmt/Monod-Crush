@@ -22,7 +22,7 @@ def error_handler(error: HTTPException):
 
     elif error.code == 403:
         current_app.logger.error(f"{get_user_or_ip()} - 403 '{request.method} {request.path}'")
-        return render_template('error/403_forbidden.html'), 403
+        return render_template('error/401_forbidden.html'), 403
 
     elif error.code == 500:
         current_app.logger.error(
