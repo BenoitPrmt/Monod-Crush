@@ -11,10 +11,6 @@ from flaskr.sql_helper import UserSet
 bp = Blueprint("blog", __name__)
 
 
-# set locale date format to french
-# locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
-# ~~
-
 @bp.route("/")
 def index() -> str:
     """Show all the posts, most recent first."""
@@ -46,19 +42,13 @@ def like(post_id: int):
     db.execute("UPDATE post SET like = ? WHERE id = ?", (likes.join(), post_id,))
     db.commit()
 
-    # return redirect(url_for("blog.index"))
     return jsonify({"likes": len(likes), "my": g.user["id"] in likes})
 
 
 @bp.route("/post/new", methods=("GET", "POST"))
-@login_required  # TODO autoriser l'utilisateur à créer un post sans être connecté
+@login_required
 def create() -> Union[str, Response]:
-    """
-    Create
-    a
-    new
-    post
-    for the current user."""
+    """Create a new post for the current user."""
     if request.method == "POST":
         body = request.form["body"]
         anonymous = request.form.get("anonymous", "off")
@@ -98,20 +88,12 @@ def edit(post_id: int) -> Union[str, Response]:
 
     if request.method == "POST":
         body = request.form["body"]
-        # anonymous = request.form["anonymous"]
         error = False
 
         is_valid, msg = check_message_body(body)
         if not is_valid:
             flash(msg)
             error = True
-
-        # TODO add in html checkbox
-        # if anonymous not in ("on", "off"):
-        #     flash("invalid anonymous value")
-        #     error = True
-        # else:
-        #     anonymous = anonymous == "on"
 
         # TODO reset status Check after edit
 
@@ -130,20 +112,7 @@ def edit(post_id: int) -> Union[str, Response]:
 @bp.route("/post/<int:post_id>/report", methods=["POST"])
 @login_required
 def report(post_id: int) -> Response:
-    """Report a post.
-
-    Ensures
-    that
-    the
-    post
-    exists and that
-    the
-    logged - in user is the
-    author
-    of
-    the
-    post.
-    """
+    """Report a post."""
     get_post(post_id, check_author=False)
 
     db = get_db()
@@ -175,23 +144,7 @@ def report(post_id: int) -> Response:
 @bp.route("/post/<int:post_id>/delete", methods=["POST"])
 @login_required
 def delete(post_id: int) -> Response:
-    """
-    Delete
-    a
-    post.
-
-    Ensures
-    that
-    the
-    post
-    exists and that
-    the
-    logged in user is the
-    author
-    of
-    the
-    post.
-    """
+    """Delete a post."""
     get_post(post_id)
 
     db = get_db()

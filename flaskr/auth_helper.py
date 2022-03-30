@@ -15,23 +15,13 @@ def load_logged_in_user() -> None:
     """If a user id is stored in the session, load the user object from
     the database into ``g.user``."""
 
-    # g.t = time.time()
     user_id = session.get("user_id")
 
     if user_id is None:
         g.user = None
     else:
-        # get information for header
         g.user = get_db().execute("SELECT id, username, admin FROM user WHERE id = ?", (user_id,)).fetchone()
-    # current_app.logger.debug(f"g.user : {g.user}, time : {time.time() - g.t}")
 
-
-# @bp.after_app_request
-# def after_request(response: Response) -> Response:
-#     """ Profile the response time of the request. If in debug mode"""
-#     current_app.logger.debug(f"request response time: {time.time() - g.t}, response : {request.path}")
-#     # TODO : add the response time to the log and store it in db for analysis
-#     return response
 
 
 def check_password_strength(password: str) -> Tuple[bool, str]:
@@ -42,12 +32,6 @@ def check_password_strength(password: str) -> Tuple[bool, str]:
         return False, "Le mot de passe doit contenir au moins 6 caractères"
     elif len(password) > 25:
         return False, "Le mot de passe doit contenir 25 caractères maximum"
-    # elif password.isalpha():  # only alphabets
-    #     return False, "Le mot de passe doit contenir au moins un chiffre"
-    # elif password.islower():  # only lowercase
-    #     return False, "Le mot de passe doit contenir au moins une majuscule"
-    # elif password.isupper():  # only uppercase
-    #     return False, "Le mot de passe doit contenir au moins une minuscule"
 
     return True, ""
 
@@ -87,7 +71,6 @@ def check_date_of_birth(date_of_birth: str) -> Tuple[bool, str]:
 def login_required(view: callable) -> callable:
     """View decorator that redirects anonymous users to the login page."""
 
-    # noinspection PyMissingOrEmptyDocstring
     @functools.wraps(view)
     def wrapped_view(**kwargs: dict):
         if g.user is None:
@@ -100,8 +83,7 @@ def login_required(view: callable) -> callable:
 
 def admin_only(view: callable):
     """View decorator that requires an admin user."""
-
-    # noinspection PyMissingOrEmptyDocstring
+    
     @functools.wraps(view)
     def wrapped_view(**kwargs: dict):
         if g.user is None or not g.user["admin"]:
