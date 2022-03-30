@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
 
 from flaskr.db import get_db
 
@@ -13,10 +13,20 @@ def search_user() -> str:
     username = request.args["search_user"]
 
     users = db.execute("SELECT admin FROM user WHERE username = ?", (username,)).fetchone()
+
     if users is None:
         return render_template("error/404_user_not_found.html")
+    elif username == "admin":
+        username = db.execute("""
+        SELECT username
+        FROM user 
+        WHERE admin = 1
+        ORDER BY username
+        """).fetchall()
+        return render_template("search/all_user.html", user=username)
+
     else:
-        return render_template("search/search_user.html", user=username)
+        return redirect(url_for('user.profile', username=username))
 
 
 @bp.route("/all_user")
