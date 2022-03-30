@@ -3,6 +3,7 @@ from datetime import date
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g, abort
 
 from flaskr.auth_helper import login_required, check_username
+from flaskr.user_helper import check_email, check_firstname, check_bio, check_class_level, check_class_number, check_social, check_website
 from flaskr.db import get_db
 
 bp = Blueprint("user", __name__, url_prefix="/user")
@@ -63,15 +64,15 @@ def update_user(username: str):
     # {"sql_row_name and form_name", function_to_check_input}
     form = {
         "username": check_username,
-        # "email": check_email,
-        # "firstName": check_firstName,
-        # "bio": check_bio,
-        # "class_level": check_class_level,
-        # "class_number": check_class_number,
-        # "instagram": check_instagram,
-        # "twitter": check_twitter,
-        # "github": check_github,
-        # "website": check_website,
+        "email": check_email,
+        "firstName": check_firstname,
+        "bio": check_bio,
+        "class_level": check_class_level,
+        "class_number": check_class_number,
+        "instagram": check_social,
+        "twitter": check_social,
+        "github": check_social,
+        "website": check_website,
     }
 
     sql_column_name = []
@@ -80,6 +81,9 @@ def update_user(username: str):
     for form_name, check_function in form.items():
 
         form_value = request.form[form_name]
+
+        if form_value == "":
+            continue
 
         # if the value is the same that the one in the database, skip
         if form_value == user[form_name]:

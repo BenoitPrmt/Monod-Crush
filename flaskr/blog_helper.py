@@ -1,4 +1,4 @@
-from typing import Tuple, List, Any, Iterator
+from typing import Tuple
 
 from flask import abort, g
 

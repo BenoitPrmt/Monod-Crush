@@ -10,7 +10,7 @@ bp = Blueprint("admin", __name__, url_prefix="/admin")
 @bp.route('/')
 @admin_only
 def panel() -> str:
-    """Show admin panel"""
+    """Show admin panel with stats and reports posts"""
 
     db = get_db()
     users = db.execute("SELECT COUNT(id) FROM user").fetchone()

@@ -3,6 +3,10 @@
 
 {% block title %}Posts{% endblock %}
 
+{% block scripts %}
+<script src="{{ url_for('static', filename='scripts/bg-like.js') }}"></script>
+{% endblock scripts %}
+
 {% block content %}
 
 {{ super() }}
