@@ -1,10 +1,11 @@
 [![Python package](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml/badge.svg)](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml)
 
-# Monod Crush
+# ♥️ Monod Crush
 
+Website is available at [monodcrush.fr](https://monodcrush.fr)<br>
 NSI project realized by [@BenoitObelia](https://github.com/BenoitObelia), [@JulesGrd](https://github.com/JulesGrd) and [@KillianTib](https://github.com/KillianTib)
 
-## Install
+## 📥 Install
 
 ### Windows and Linux
 
@@ -31,7 +32,7 @@ or for development
 pip install -r requirements-dev.txt
 ```
 
-## Usage
+## 🧰 Usage
 
 ## For development
 *don't forget to activate the virtual environment if you have it installed*
@@ -80,7 +81,7 @@ flask run --host=0.0.0.0
 
 Then open http://localhost:5000/
 
-## For production
+## ✅ For production
 
 ```bash
 sudo apt-get update
@@ -112,7 +113,7 @@ flask populate-db
 #Setup git hooks to deploy automatically
 #change cookies dev key to a secure key
 
-# Test
+## ⚒️ Test
 
 Run with coverage report
 ```bash
