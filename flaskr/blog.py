@@ -1,17 +1,19 @@
 from typing import Union
 
-from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app, abort
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app, abort, \
+    jsonify
 
 from flaskr.auth_helper import login_required
-from flaskr.blog_helper import get_post, check_message_body, parse_user_from_sql
+from flaskr.blog_helper import get_post, check_message_body
 from flaskr.db import get_db
+from flaskr.sql_helper import UserSet
 
 bp = Blueprint("blog", __name__)
 
 
 # set locale date format to french
 # locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
-
+# ~~
 
 @bp.route("/")
 def index() -> str:
@@ -19,45 +21,44 @@ def index() -> str:
 
     db = get_db()
     posts = db.execute("""
-        SELECT p.id, p.body, p.status,p.anonymous, p.created, p.like ,p.author_id, like, u.username
+        SELECT p.id, p.body, p.status, p.reported, p.anonymous, p.created, count_users(p.like) AS nb_likes, like, p.author_id, u.username
         FROM post p JOIN user u ON p.author_id = u.id
         ORDER BY p.created DESC
         """).fetchall()
 
-    return render_template("blog/index.html", posts=posts)
+    return render_template("blog/index.html", posts=posts, UserSet=UserSet)
 
-@bp.route("/post/<int:post_id>/like", methods = ["POST"])
+
+@bp.route("/post/<int:post_id>/like", methods=["POST"])
 @login_required
-def like(post_id : int ):
+def like(post_id: int):
+    """ Like a post. """
     get_post(post_id, check_author=False)
 
     db = get_db()
     r = db.execute("SELECT like FROM post WHERE id = ?", (post_id,)).fetchone()
 
-    like = parse_user_from_sql(r["like"])
+    likes = UserSet(r["like"])
 
-    if like is None:
-        like.append(str(g.user["id"]))
+    likes.toggle(g.user["id"])
+    print(likes)
 
-    elif str(g.user["id"]) in like:
-        like.remove(str(g.user["id"]))
-        db.execute("UPDATE post SET like = ? WHERE id = ?",(",".join(like),post_id,))
-        
-    else:
-        like.append(str(g.user["id"]))
-        db.execute("UPDATE post SET like = ? WHERE id = ?", (",".join(like), post_id))
-        current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - like post {post_id}")
-
+    db.execute("UPDATE post SET like = ? WHERE id = ?", (likes.join(), post_id,))
     db.commit()
-    return redirect(url_for("blog.index"))
-    
 
+    # return redirect(url_for("blog.index"))
+    return jsonify({"likes": len(likes), "my": g.user["id"] in likes})
 
 
 @bp.route("/post/new", methods=("GET", "POST"))
 @login_required  # TODO autoriser l'utilisateur à créer un post sans être connecté
 def create() -> Union[str, Response]:
-    """Create a new post for the current user."""
+    """
+    Create
+    a
+    new
+    post
+    for the current user."""
     if request.method == "POST":
         body = request.form["body"]
         anonymous = request.form.get("anonymous", "off")
@@ -131,31 +132,42 @@ def edit(post_id: int) -> Union[str, Response]:
 def report(post_id: int) -> Response:
     """Report a post.
 
-    Ensures that the post exists and that the logged-in user is the
-    author of the post.
+    Ensures
+    that
+    the
+    post
+    exists and that
+    the
+    logged - in user is the
+    author
+    of
+    the
+    post.
     """
     get_post(post_id, check_author=False)
 
     db = get_db()
     r = db.execute("SELECT reported, status FROM post WHERE id = ?", (post_id,)).fetchone()
 
-    reports = parse_user_from_sql(r["reported"])
+    reports = UserSet(r["reported"])
 
-    if str(g.user["id"]) in reports:
+    if g.user["id"] in reports:
         flash("Vous avez déjà signalé ce post")
         return redirect(url_for("blog.index"))
 
     # status : visible, hidden, checked
     if r["status"] == "visible":
 
-        reports.append(str(g.user["id"]))
-        db.execute("UPDATE post SET reported = ? WHERE id = ?", (",".join(reports), post_id))
-        if len(reports) >= 3:
-            db.execute("UPDATE post SET status = 'hidden' WHERE id = ?", (post_id,))
-        db.commit()
+        reports.add(g.user["id"])
+        db.execute("UPDATE post SET reported = ? WHERE id = ?", (reports.join(), post_id))
 
         flash("Post signalé")
         current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - reported post {post_id}")
+
+        if len(reports) >= 1:
+            db.execute("UPDATE post SET status = 'hidden' WHERE id = ?", (post_id,))
+            current_app.logger.info(f"post {post_id} is now hidden")
+        db.commit()
 
     return redirect(url_for("blog.index"))
 
@@ -163,10 +175,22 @@ def report(post_id: int) -> Response:
 @bp.route("/post/<int:post_id>/delete", methods=["POST"])
 @login_required
 def delete(post_id: int) -> Response:
-    """Delete a post.
+    """
+    Delete
+    a
+    post.
 
-    Ensures that the post exists and that the logged in user is the
-    author of the post.
+    Ensures
+    that
+    the
+    post
+    exists and that
+    the
+    logged in user is the
+    author
+    of
+    the
+    post.
     """
     get_post(post_id)
 

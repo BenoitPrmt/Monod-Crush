@@ -6,6 +6,8 @@ from flask import current_app, g, Flask
 from flask.cli import with_appcontext
 from werkzeug.security import generate_password_hash
 
+from flaskr.sql_helper import count_users, user_set
+
 
 def get_db() -> sqlite3.Connection:
     """Connect to the application's configured database. The connection
@@ -17,6 +19,7 @@ def get_db() -> sqlite3.Connection:
             current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
         )
         g.db.row_factory = sqlite3.Row
+        g.db.create_function("count_users", 1, count_users)
 
     return g.db
 
@@ -37,6 +40,14 @@ def init_db() -> None:
 
     with current_app.open_resource("schema.sql") as f:
         db.executescript(f.read().decode("utf8"))
+
+
+def register_custom_functions() -> None:
+    """Register custom functions with the database."""
+    return
+    db = get_db()
+    db.create_function("count_users", 1, count_users)
+    db.create_function("user_set", 1, user_set)
 
 
 @click.command("init-db")

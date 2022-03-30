@@ -18,8 +18,6 @@ def create_app(test_config: dict = None) -> Flask:
         DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
     )
 
-
-
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile("config.py", silent=True)
@@ -33,7 +31,6 @@ def create_app(test_config: dict = None) -> Flask:
     else:
         dictConfig(logging_config_prod)
 
-
     # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
@@ -44,6 +41,9 @@ def create_app(test_config: dict = None) -> Flask:
     from flaskr import db
 
     db.init_app(app)
+
+    # add custom function to the database
+    db.register_custom_functions()
 
     # apply the blueprints to the app
     from flaskr import auth, blog, admin, user, auth_helper, search
