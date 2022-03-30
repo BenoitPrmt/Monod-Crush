@@ -20,7 +20,7 @@ def error_handler(error: HTTPException):
     if error.code == 404 and request.path.endswith('/') and not request.path.endswith('//'):
         return redirect(request.path[:-1])
 
-    elif error.code == 403:
+    elif error.code == 401:
         current_app.logger.error(f"{get_user_or_ip()} - 403 '{request.method} {request.path}'")
         return render_template('error/401_forbidden.html'), 403
 
