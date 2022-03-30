@@ -39,6 +39,7 @@ La liste des bibliothèques est aussi disponible dans le fichier "requirements.t
 Le site n'est pas terminé à 100%, les fonctionnalités suivantes sont prévues dans de prochaines mises à jour : 
 - Abonnements à d'autres utilisateurs (comme sur Facebook, Instagram)
 - Map Instagram : carte des profils Instagram des utilisateurs du site avec leurs relations communes
+- Commentaires sous les posts
 
 ### Répartition
 - **Jules** : Création de la base de données (init-db, populate-db), création, édition, suppression des posts (blog), création du schéma de la base de données (schema.sql), système de signalement des posts (Python, HTML), système de likes (Python, HTML)
