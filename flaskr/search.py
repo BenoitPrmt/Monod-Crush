@@ -14,9 +14,8 @@ def search_user() -> str:
 
     users = db.execute("SELECT admin FROM user WHERE username = ?", (username,)).fetchone()
 
-    if users is None:
-        return render_template("error/404_user_not_found.html")
-    elif username == "admin":
+    
+    if username == "admin":
         username = db.execute("""
         SELECT username
         FROM user 
@@ -24,6 +23,18 @@ def search_user() -> str:
         ORDER BY username
         """).fetchall()
         return render_template("search/all_user.html", user=username)
+    
+    elif username == "all":
+        user = db.execute("""
+        SELECT username
+        FROM user 
+        WHERE username != 'admin'
+        ORDER BY username
+        """).fetchall()
+        return render_template("search/all_user.html", user=user)
+
+    elif users is None:
+        return render_template("error/404_user_not_found.html")
 
     else:
         return redirect(url_for('user.profile', username=username))
