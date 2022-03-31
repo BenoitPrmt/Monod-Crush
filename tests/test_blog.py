@@ -8,14 +8,14 @@ from tests.conftest import AuthActions
 
 def test_index(client: FlaskClient, auth: AuthActions):
     response = client.get("/")
-    assert b"Log In" in response.data
-    assert b"Register" in response.data
+    assert b"Se connecter" in response.data
+#     assert b"Creer un Compte" in response.data
 
     auth.login()
     response = client.get("/")
-    assert b"Log In" not in response.data
-    assert b"Register" not in response.data
-    assert b"Log Out" in response.data
+    assert b"Se connecter" not in response.data
+#     assert b"Creer un Compte" not in response.data
+#     assert b"Log Out" in response.data
     assert b"user" in response.data
 
     # assert b"test title" in response.data
