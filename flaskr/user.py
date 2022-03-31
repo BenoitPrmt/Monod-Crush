@@ -92,7 +92,7 @@ def update_user(username: str):
         # check if all the values are valid
         is_valid, error_message = check_function(request.form[form_name])
         if not is_valid:
-            flash(error_message)
+            flash(error_message, "warning")
             return render_template("/user/edit.html", user=user)
 
         sql_values.append(request.form[form_name])
