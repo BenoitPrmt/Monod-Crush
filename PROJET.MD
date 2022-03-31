@@ -11,6 +11,7 @@ Les fonctionnalités suivantes sont dispoibles :
 - Statistiques dans le panneau administrateur,
 - Gestion des signalements dans le panneau administrateur
 - Site 100% responsive (desktop, tablette et smartphone)
+- Workflow de test pour le CI / CD
 
 Pour tester le site vous pouvez vous connecter avec les comptes suivants pour tester les différentes fonctionnalités : 
 - Username : admin / Mot de passe : admin -> Compte administrateur
