@@ -10,6 +10,7 @@ Les fonctionnalités suivantes sont dispoibles :
 - Like des posts des autres utilisateurs,
 - Statistiques dans le panneau administrateur,
 - Gestion des signalements dans le panneau administrateur
+- Site 100% responsive (desktop, tablette et smartphone)
 
 Pour tester le site vous pouvez vous connecter avec les comptes suivants pour tester les différentes fonctionnalités : 
 - Username : admin / Mot de passe : admin -> Compte administrateur
