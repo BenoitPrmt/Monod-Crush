@@ -23,6 +23,7 @@ Pour lancer le site en local, lancez le fichier wsgi.py !
 Versions de Python compatibles avec le projet : **3.7+**
 
 ### Bibliothèques
+```
 Flask==2.0.3
 pytest==7.0.1
 coverage==6.3.2
@@ -30,7 +31,7 @@ Faker==13.2.0
 requests==2.27.1
 
 Bulma==0.9.3 (CSS)
-
+```
 La liste des bibliothèques est aussi disponible dans le fichier "requirements.txt"
 
 ### Sitographie
