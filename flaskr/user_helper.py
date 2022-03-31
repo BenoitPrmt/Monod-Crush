@@ -1,4 +1,5 @@
 import re
+import string
 from typing import Tuple
 
 from flask import Blueprint
@@ -21,7 +22,8 @@ def check_email(email: str) -> Tuple[bool, str]:
 def check_firstname(firstname: str) -> Tuple[bool, str]:
     """Check firstname"""
 
-    if not re.match(r'^[A-Za-z][A-Za-z0-9_-]+$', firstname):
+    alpha = string.ascii_letters
+    if not firstname.startswith(tuple(alpha)):
         return False, "Votre prénom doit commencer par une lettre"
 
     if len(firstname) < 3:
