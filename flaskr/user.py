@@ -135,7 +135,7 @@ def delete(username: str):
         "SELECT id FROM user WHERE username = ?", (username,)
     ).fetchone()
 
-    if user is None or user["id"] != g.user["id"]:
+    if user is None or (user["id"] != g.user["id"] and not g.user["admin"]):
         abort(401)  # Unauthorized
 
     db.execute(f"DELETE FROM user WHERE id = ?", (user["id"],))
