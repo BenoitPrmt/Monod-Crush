@@ -141,7 +141,8 @@ def delete(username: str):
     db.execute(f"DELETE FROM user WHERE id = ?", (user["id"],))
     db.commit()
 
-    session.clear()
+    if not g.user["admin"] :
+        session.clear()
 
     current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has deleted his account, bye bye")
 
