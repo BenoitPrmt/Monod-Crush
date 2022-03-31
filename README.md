@@ -81,6 +81,15 @@ flask run --host=0.0.0.0
 
 Then open http://localhost:5000/
 
+## ⚒️ Test
+
+Run with coverage report
+```bash
+coverage run -m pytest
+coverage report
+coverage html  # open htmlcov/index.html in a browser
+```
+
 ## ✅ For production
 
 ```bash
@@ -107,17 +116,4 @@ flask init-db
 flask populate-db
 
 # run gunicorn
-```
-
-#SETUP HTTPS
-#Setup git hooks to deploy automatically
-#change cookies dev key to a secure key
-
-## ⚒️ Test
-
-Run with coverage report
-```bash
-coverage run -m pytest
-coverage report
-coverage html  # open htmlcov/index.html in a browser
 ```
