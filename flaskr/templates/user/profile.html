@@ -102,9 +102,9 @@
 
     {% if g.user['username'] == 'admin' and user.id != g.user.id %}
         {% if user.admin == 0%}
-            <a class="button my-2 is-danger is-light" href="{{ url_for('admin.ajout_admin', username=user.username) }}">Ajout admin</a>
+            <a class="button is-info is-light is-outlined my-2" href="{{ url_for('admin.ajout_admin', username=user.username) }}">Ajout admin</a>
         {% else %}
-        <a class="button my-2 is-danger is-light" href="{{ url_for('admin.supprimer_admin', username=user.username) }}">Supprimer admin</a>
+        <a class="button is-danger is-light is-outlined my-2" href="{{ url_for('admin.supprimer_admin', username=user.username) }}">Supprimer admin</a>
         {%endif%}
         <form action="{{ url_for('user.delete', username=user.username) }}" method="post">
             <input class="button is-danger is-light my-2" type="submit" value="Supprimer ce compte"
