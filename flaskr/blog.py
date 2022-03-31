@@ -17,7 +17,8 @@ def index() -> str:
 
     db = get_db()
     posts = db.execute("""
-        SELECT p.id, p.body, p.status, p.reported, p.anonymous, p.created, count_users(p.like) AS nb_likes, like, p.author_id, u.username
+        SELECT p.id, p.body, p.status, p.reported, p.anonymous, p.created,
+        count_users(p.like) AS nb_likes, like, p.author_id, u.username
         FROM post p JOIN user u ON p.author_id = u.id
         ORDER BY p.created DESC
         """).fetchall()

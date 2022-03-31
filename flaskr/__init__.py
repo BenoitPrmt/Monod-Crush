@@ -42,9 +42,6 @@ def create_app(test_config: dict = None) -> Flask:
 
     db.init_app(app)
 
-    # add custom function to the database
-    db.register_custom_functions()
-
     # apply the blueprints to the app
     from flaskr import auth, blog, admin, user, auth_helper, search
 

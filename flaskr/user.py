@@ -1,9 +1,11 @@
 from datetime import date
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g, abort
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g, abort, \
+    Response
 
 from flaskr.auth_helper import login_required, check_username
-from flaskr.user_helper import check_email, check_firstname, check_bio, check_class_level, check_class_number, check_social, check_website
+from flaskr.user_helper import check_email, check_firstname, check_bio, check_class_level, check_class_number, \
+    check_social, check_website
 from flaskr.db import get_db
 
 bp = Blueprint("user", __name__, url_prefix="/user")
@@ -117,33 +119,42 @@ def update_user(username: str):
 
 @bp.route("/<username>/delete", methods=["POST"])
 @login_required
-def delete(username: str):
+def delete(username: str) -> Response:
     """Delete account
 
     Args:
-        username (str): _description_
+        username (str): username of the user to delete
     """
-
-    # TODO: check if with user is owner of the account
-    # TODO: @login_required
-    # html post request
-    # doesn't work
-    # check return in alert
 
     db = get_db()
     user = db.execute(
-        "SELECT id FROM user WHERE username = ?", (username,)
+        "SELECT id, admin FROM user WHERE username = ?", (username,)
     ).fetchone()
 
-    if user is None or (user["id"] != g.user["id"] and not g.user["admin"]):
-        abort(401)  # Unauthorized
+    if user is None:
+        abort(404)  # Not found
 
-    db.execute(f"DELETE FROM user WHERE id = ?", (user["id"],))
-    db.commit()
+    if user["id"] == g.user["id"]:
+        db.execute(f"DELETE FROM user WHERE id = ?", (user["id"],))
+        db.commit()
 
-    if not g.user["admin"] :
         session.clear()
 
-    current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has deleted his account, bye bye")
+        current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has deleted his account, bye bye")
 
-    return redirect(url_for("blog.index"))
+        return redirect(url_for("index"))
+
+    elif g.user["admin"]:
+
+        # an admin can delete any admin account
+        if user["admin"]:
+            abort(403)  # Forbidden
+
+        db.execute(f"DELETE FROM user WHERE id = ?", (user["id"],))
+        db.commit()
+
+        current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - has deleted {user['id']} ({username})")
+
+        return redirect(url_for("admin.panel"))
+    else:
+        abort(403)  # Forbidden

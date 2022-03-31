@@ -19,6 +19,8 @@ def get_db() -> sqlite3.Connection:
             current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
         )
         g.db.row_factory = sqlite3.Row
+
+        # add a custom function to the database
         g.db.create_function("count_users", 1, count_users)
 
     return g.db
@@ -40,14 +42,6 @@ def init_db() -> None:
 
     with current_app.open_resource("schema.sql") as f:
         db.executescript(f.read().decode("utf8"))
-
-
-def register_custom_functions() -> None:
-    """Register custom functions with the database."""
-    return
-    db = get_db()
-    db.create_function("count_users", 1, count_users)
-    db.create_function("user_set", 1, user_set)
 
 
 @click.command("init-db")
@@ -87,7 +81,6 @@ def populate_db() -> None:
 @with_appcontext
 def populate_db_command() -> None:
     """Push fake data to the database."""
-    # from flaskr.models import User, Post, Comment
     populate_db()
     click.echo("populated the database.")
 

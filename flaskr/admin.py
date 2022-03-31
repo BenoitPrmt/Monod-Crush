@@ -1,4 +1,4 @@
-from flask import Blueprint, g, redirect, render_template, url_for, Response, current_app, request
+from flask import Blueprint, g, redirect, render_template, url_for, Response, current_app
 
 from flaskr.auth_helper import admin_only
 from flaskr.blog_helper import get_post
@@ -63,21 +63,24 @@ def checking(post_id: int) -> Response:
     db.commit()
     return redirect(url_for("admin.panel"))
 
-@bp.route("user/<username>/add")
+
+@bp.route("user/<username>/set_admin")
 @admin_only
-def ajout_admin(username):
+def add_admin(username: str) -> Response:
+    """set user as admin"""
     db = get_db()
     db.execute(
         "UPDATE user SET admin = 1 WHERE username = ?", (username,)).fetchone()
     db.commit()
     return redirect(url_for('user.profile', username=username))
 
-@bp.route("user/<username>/sup")
+
+@bp.route("user/<username>/remove_admin")
 @admin_only
-def supprimer_admin(username):
+def remove_admin(username: str) -> Response:
+    """remove admin rights from user"""
     db = get_db()
     db.execute(
         "UPDATE user SET admin = 0 WHERE username = ?", (username,)).fetchone()
     db.commit()
     return redirect(url_for('user.profile', username=username))
-
