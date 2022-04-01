@@ -100,6 +100,8 @@ def edit(post_id: int) -> Union[str, Response]:
 
         # TODO reset status Check after edit
 
+        body = moderate_message_body(body)
+
         if not error:
             db = get_db()
             db.execute("UPDATE post SET body = ? WHERE id = ?", (body, post_id))
