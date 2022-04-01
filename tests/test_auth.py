@@ -17,7 +17,7 @@ def test_register(client: FlaskClient, app: Flask):
                            data={"username": "username", "dateOfBirth": "2020-04-14", "password": "pa12OU!!45sds"})
 
     # test that successful registration redirects to the login page
-    assert "http://localhost/" == response.headers["Location"]
+    assert response.headers["Location"] in ("http://localhost/", "/")
 
     # test that the user was inserted into the database
     with app.app_context():
@@ -65,7 +65,7 @@ def test_login(client: FlaskClient):
     assert get_flashed_messages(response) == []
 
     # test that successful login redirects to the index page
-    assert response.headers["Location"] == "http://localhost/"
+    assert response.headers["Location"] in ("http://localhost/", "/")
 
     # login request set the user_id in the session
     # check that the user is loaded from the session
@@ -95,4 +95,4 @@ def test_logout(client: FlaskClient, auth: AuthActions):
     with client:
         response = client.get("/auth/logout")
         assert "user_id" not in session
-        assert response.headers["Location"] == "http://localhost/"
+        assert response.headers["Location"] in ("http://localhost/", "/")

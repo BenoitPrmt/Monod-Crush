@@ -27,13 +27,15 @@ def test_index(client: FlaskClient, auth: AuthActions):
 @pytest.mark.parametrize("path", ("/post/new", "/post/1/edit"))
 def test_login_required_get(client: FlaskClient, path: str):
     response = client.get(path)
-    assert response.headers["Location"] == "http://localhost/auth/login"
+    assert response.headers["Location"] in ("http://localhost/auth/login", "/auth/login")
 
 
 @pytest.mark.parametrize("path", ("/post/1/delete", "/post/1/report", "/post/1/like"))
 def test_login_required_post(client: FlaskClient, path: str):
     response = client.post(path)
-    assert response.headers["Location"] == "http://localhost/auth/login"
+    assert response.headers["Location"] in ("http://localhost/auth/login", "/auth/login")
+
+
 
 
 def test_author_required(app: Flask, client: FlaskClient, auth: AuthActions):
@@ -98,7 +100,7 @@ def test_create_update_validate(client, auth, path):
 def test_delete(client, auth, app):
     auth.login()
     response = client.post("post/1/delete")
-    assert response.headers["Location"] == "http://localhost/"
+    assert response.headers["Location"] in ("http://localhost/", "/")
 
     with app.app_context():
         db = get_db()
