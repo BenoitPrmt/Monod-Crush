@@ -1,6 +1,6 @@
 import functools
 import re
-from datetime import datetime
+from datetime import datetime, date
 from typing import Tuple
 
 from flask import url_for, redirect, g, Blueprint, abort, session
@@ -23,7 +23,6 @@ def load_logged_in_user() -> None:
         g.user = get_db().execute("SELECT id, username, admin FROM user WHERE id = ?", (user_id,)).fetchone()
 
 
-
 def check_password_strength(password: str) -> Tuple[bool, str]:
     """ Check if the password is strong enough """
     # TODO : return one message for all the errors
@@ -44,7 +43,8 @@ def check_username(username: str) -> Tuple[bool, str]:
     elif len(username) > 20:
         return False, "Votre nom d'utilisateur doit contenir 20 caractères maximum"
     elif not re.match(r'^[A-Za-z][A-Za-z0-9_-]+$', username):
-        return False, "Votre nom d'utilisateur doit commencer par une lettre et peut contenir uniquement des lettres, nombres, tirets bas and tirets"
+        return False, "Votre nom d'utilisateur doit commencer par une lettre et peut contenir uniquement des lettres," \
+                      " nombres, tirets du bas et tirets"
 
     db = get_db()
     if db.execute("SELECT 1 FROM user WHERE username = ?", (username,)).fetchone() is not None:
@@ -56,13 +56,13 @@ def check_username(username: str) -> Tuple[bool, str]:
 def check_date_of_birth(date_of_birth: str) -> Tuple[bool, str]:
     """ Check if the date of birth is valid """
     try:
-        date_of_birth = datetime.strptime(date_of_birth, "%Y-%m-%d")
+        date_of_birth = datetime.strptime(date_of_birth, "%Y-%m-%d").date()
     except ValueError:
         return False, "Le format de la date de naissance est invalide"
 
-    if date_of_birth > datetime.now():
+    if date_of_birth > date.today():
         return False, "Vous voyagez dans le temps ? Votre date de naissance doit être dans le passé"
-    elif date_of_birth < datetime(year=1920, month=1, day=1):
+    elif date_of_birth < date(year=1920, month=1, day=1):
         return False, "Veuillez indiquer une date de naissance valide"
 
     return True, ""
@@ -83,7 +83,7 @@ def login_required(view: callable) -> callable:
 
 def admin_only(view: callable):
     """View decorator that requires an admin user."""
-    
+
     @functools.wraps(view)
     def wrapped_view(**kwargs: dict):
         if g.user is None or not g.user["admin"]:
