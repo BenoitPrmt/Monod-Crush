@@ -4,7 +4,7 @@ from flask import Blueprint, flash, g, redirect, render_template, request, url_f
     jsonify
 
 from flaskr.auth_helper import login_required
-from flaskr.blog_helper import get_post, check_message_body
+from flaskr.blog_helper import get_post, check_message_body, moderate_message_body
 from flaskr.db import get_db
 from flaskr.sql_helper import UserSet
 
@@ -20,8 +20,7 @@ def index() -> str:
         SELECT p.id, p.body, p.status, p.reported, p.anonymous, p.created,
         count_users(p.like) AS nb_likes, like, p.author_id, u.username
         FROM post p JOIN user u ON p.author_id = u.id
-        ORDER BY p.created DESC
-        """).fetchall()
+        ORDER BY p.created DESC""").fetchall()
 
     return render_template("blog/index.html", posts=posts, UserSet=UserSet)
 
@@ -55,16 +54,19 @@ def create() -> Union[str, Response]:
         anonymous = request.form.get("anonymous", "off")
         error = False
 
-        is_valid, msg = check_message_body(body)
-        if not is_valid:
-            flash(msg)
-            error = True
-
         if anonymous not in ("on", "off"):
             abort(400)
             error = True
         else:
             anonymous = anonymous == "on"
+
+        is_valid, msg = check_message_body(body)
+        if not is_valid:
+            flash(msg)
+            error = True
+
+        # Moderate the content message
+        body = moderate_message_body(body)
 
         if not error:
             db = get_db()
