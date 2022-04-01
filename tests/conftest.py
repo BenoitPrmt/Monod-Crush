@@ -10,7 +10,7 @@ from flask.testing import FlaskClient, FlaskCliRunner
 from werkzeug.test import TestResponse
 
 from flaskr import create_app
-from flaskr.db import init_db, populate_db
+from flaskr.db import init_db, get_db
 
 # read in SQL for populating test data
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
@@ -28,8 +28,7 @@ def app() -> Iterator[Flask]:
     # create the database and load test data
     with app.app_context():
         init_db()
-        populate_db()
-        # get_db().executescript(_data_sql)
+        get_db().executescript(_data_sql)
 
     yield app
 
@@ -62,7 +61,7 @@ class AuthActions:
         """Register helper function for testing"""
 
         return self._client.post(
-            "/auth/register.py",
+            "/auth/register",
             data={"username": username, "dateOfBirth": date_of_birth, "password": password},
         )
 
@@ -92,7 +91,8 @@ def auth(client: FlaskClient) -> AuthActions:
 
 def get_flashed_messages(response: TestResponse) -> List[str]:
     """Get flashed messages from a html response"""
-    regex = re.compile(r'<li class="alert alert-\w*">(.*?)</li>')
+    regex = re.compile(r'class="message (.*?)".*?\n *?<div class="message-body">\n *(.*?)\n *</div>')
     # replace escaped html characters
     data = html.unescape(response.data.decode("utf8"))
+    a = re.findall(regex, data)
     return re.findall(regex, data)
