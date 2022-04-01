@@ -1,10 +1,11 @@
+from datetime import date, timedelta
+
 import pytest
 from flask import g, Flask, session
 from flask.testing import FlaskClient
 
 from conftest import get_flashed_messages, AuthActions
 from flaskr.db import get_db
-from datetime import date, timedelta
 
 
 def test_auth(client: FlaskClient, auth: AuthActions):
@@ -28,14 +29,14 @@ def test_register(client: FlaskClient, app: Flask):
                          (("", "Votre nom d'utilisateur doit contenir au moins 3 caractères"),
                           ("a" * 21, "Votre nom d'utilisateur doit contenir 20 caractères maximum"),
                           ("1abc",
-                           "Votre nom d'utilisateur doit commencer par une lettre et peut contenir uniquement des lettres,"
-                           " nombres, tirets du bas et tirets"),
+                           "Votre nom d'utilisateur doit commencer par une lettre et peut contenir"
+                           " uniquement des lettres, nombres, tirets du bas et tirets"),
                           ("-abc",
-                           "Votre nom d'utilisateur doit commencer par une lettre et peut contenir uniquement des lettres,"
-                           " nombres, tirets du bas et tirets"),
+                           "Votre nom d'utilisateur doit commencer par une lettre et peut contenir"
+                           " uniquement des lettres, nombres, tirets du bas et tirets"),
                           ("abc!",
-                           "Votre nom d'utilisateur doit commencer par une lettre et peut contenir uniquement des lettres,"
-                           " nombres, tirets du bas et tirets"),
+                           "Votre nom d'utilisateur doit commencer par une lettre et peut contenir"
+                           " uniquement des lettres, nombres, tirets du bas et tirets"),
                           ("user", "Ce nom d'utilisateur est déjà pris")))
 def test_register_validate_input_username(client: FlaskClient, username: str, message: str, auth: AuthActions):
     response = auth.register(username=username)

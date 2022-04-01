@@ -94,5 +94,5 @@ def get_flashed_messages(response: TestResponse) -> List[str]:
     regex = re.compile(r'class="message (.*?)".*?\n *?<div class="message-body">\n *(.*?)\n *</div>')
     # replace escaped html characters
     data = html.unescape(response.data.decode("utf8"))
-    a = re.findall(regex, data)
+
     return re.findall(regex, data)

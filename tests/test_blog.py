@@ -36,8 +36,6 @@ def test_login_required_post(client: FlaskClient, path: str):
     assert response.headers["Location"] in ("http://localhost/auth/login", "/auth/login")
 
 
-
-
 def test_author_required(app: Flask, client: FlaskClient, auth: AuthActions):
     # change the post author to another user
     with app.app_context():
@@ -84,7 +82,7 @@ def test_update(app: Flask, client: FlaskClient, auth: AuthActions):
 
 
 @pytest.mark.parametrize("path", ("/new", "post/1/edit"))
-def test_create_update_validate(client, auth, path):
+def test_create_update_validate(client: FlaskClient, auth: AuthActions, path: str):
     auth.login()
 
     # anonymous is useless for update
@@ -97,7 +95,7 @@ def test_create_update_validate(client, auth, path):
         ('is-warning', 'Le message ne peut pas être vide.')]
 
 
-def test_delete(client, auth, app):
+def test_delete(client: FlaskClient, auth: AuthActions, app: Flask):
     auth.login()
     response = client.post("post/1/delete")
     assert response.headers["Location"] in ("http://localhost/", "/")
