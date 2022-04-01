@@ -16,7 +16,8 @@ def check_message_body(text: str) -> Tuple[bool, str]:
 
     return True, ""
 
-def moderate_message_body(text)-> str:
+
+def moderate_message_body(text) -> str:
     data = {
         'text': text,
         'mode': 'standard',
@@ -24,11 +25,9 @@ def moderate_message_body(text)-> str:
         'opt_countries': 'us,gb,fr',
         'api_user': '856965332',
         'api_secret': '3xBURpFF2fznLme5ceVw'
-        }
-
+    }
 
     # {'status': 'success', 'request': {'id': 'req_bzWZ6JQImX740V0PX2XAj', 'timestamp': 1648817142.015168, 'operations': 1}, 'profanity': {'matches': []}, 'personal': {'matches': []}, 'link': {'matches': []}}
-    
 
     r = requests.post('https://api.sightengine.com/1.0/text/check.json', data=data)
 
@@ -41,11 +40,6 @@ def moderate_message_body(text)-> str:
         text = text.replace(i["match"][1:], "*" * len(i["match"][1:]))
 
     return text
-
-
-
-
-
 
 
 def get_post(post_id: int, check_author=True) -> dict:
@@ -71,6 +65,6 @@ def get_post(post_id: int, check_author=True) -> dict:
         abort(404, f"Le post {post_id} n'existe pas.")
 
     if check_author and post["author_id"] != g.user["id"] and not g.user["admin"]:
-        abort(401)
+        abort(403)
 
     return post

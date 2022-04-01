@@ -62,9 +62,10 @@ def test_register_validate_input_date(client: FlaskClient, date_of_birth: str, m
 
 def test_login(client: FlaskClient):
     response = client.post("/auth/login", data={"username": "user", "password": "user"})
+    assert get_flashed_messages(response) == []
 
     # test that successful login redirects to the index page
-    assert "http://localhost/" == response.headers["Location"]
+    assert response.headers["Location"] == "http://localhost/"
 
     # login request set the user_id in the session
     # check that the user is loaded from the session
