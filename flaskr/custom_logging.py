@@ -101,6 +101,16 @@ class DiscordHandler(logging.Handler):
 
         if not webhook_url:
             raise ValueError("webhook_url parameter must be given and can not be empty!")
+        
+        try :
+            response = requests.get("https://dicord.com", timeout=3.15)
+        except requests.Timeout:
+            print('I waited far too long, discord isban of your network')
+        else:
+            print(response.status_code)
+            if response.text == "":
+                print('I waited far too long, discord isban of your network')
+
 
         if notify_users is None:
             notify_users = []
@@ -137,5 +147,5 @@ class DiscordHandler(logging.Handler):
             if record.levelno >= logging.ERROR and len(self._notify_users) > 0:
                 self.write_to_discord(f"{users}")
 
-        except requests.exceptions:
+        except Exception:
             self.handleError(record)
