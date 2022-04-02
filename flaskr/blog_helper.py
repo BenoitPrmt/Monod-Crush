@@ -16,36 +16,34 @@ def check_message_body(text: str) -> Tuple[bool, str]:
 
     return True, ""
 
-def moderate_message_body(text)-> str:
+
+def moderate_message_body(text: str) -> str:
+    """ CHeck with the API if the message is clean or not.
+    If it is not clean, we replace the word with asterisks.
+    example : "Hello world" -> "H**** w***" """
+
     data = {
         'text': text,
         'mode': 'standard',
         'lang': 'fr',
         'opt_countries': 'us,gb,fr',
-        'api_user': '856965332',
+        'api_user': '856965332',  # TODO : change this
         'api_secret': '3xBURpFF2fznLme5ceVw'
-        }
+    }
 
+    rep = requests.post('https://api.sightengine.com/1.0/text/check.json', data=data).json()
 
-    # {'status': 'success', 'request': {'id': 'req_bzWZ6JQImX740V0PX2XAj', 'timestamp': 1648817142.015168, 'operations': 1}, 'profanity': {'matches': []}, 'personal': {'matches': []}, 'link': {'matches': []}}
-    
+    if len(rep["profanity"]["matches"]) > 0:
+        current_app.logger.error("Message contains profanity")
 
-    r = requests.post('https://api.sightengine.com/1.0/text/check.json', data=data)
+    text = list(text)
+    for match in rep["profanity"]["matches"]:
 
-    output = json.loads(r.text)
+        for c in range(match["start"], match["end"] + 1):
+            if text[c].isalnum() and c != 0 and text[c - 1] != " ":
+                text[c] = "*"
 
-    current_app.logger.info(output)
-
-    for i in output["profanity"]["matches"]:
-        current_app.logger.info(i)
-        text = text.replace(i["match"][1:], "*" * len(i["match"][1:]))
-
-    return text
-
-
-
-
-
+    return "".join(text)
 
 
 def get_post(post_id: int, check_author=True) -> dict:
@@ -71,6 +69,6 @@ def get_post(post_id: int, check_author=True) -> dict:
         abort(404, f"Le post {post_id} n'existe pas.")
 
     if check_author and post["author_id"] != g.user["id"] and not g.user["admin"]:
-        abort(401)
+        abort(403)
 
     return post

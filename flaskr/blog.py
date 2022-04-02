@@ -62,13 +62,13 @@ def create() -> Union[str, Response]:
 
         is_valid, msg = check_message_body(body)
         if not is_valid:
-            flash(msg)
+            flash(msg, "warning")
             error = True
 
-        # Moderate the content message
-        body = moderate_message_body(body)
-
         if not error:
+            # Moderate the content message
+            body = moderate_message_body(body)
+
             db = get_db()
             r = db.execute(
                 "INSERT INTO post (body, author_id, anonymous) VALUES (?, ?, ?)",
@@ -95,12 +95,15 @@ def edit(post_id: int) -> Union[str, Response]:
 
         is_valid, msg = check_message_body(body)
         if not is_valid:
-            flash(msg)
+            flash(msg, "warning")
             error = True
 
         # TODO reset status Check after edit
 
         if not error:
+            # Moderate the content message
+            body = moderate_message_body(body)
+
             db = get_db()
             db.execute("UPDATE post SET body = ? WHERE id = ?", (body, post_id))
             db.commit()

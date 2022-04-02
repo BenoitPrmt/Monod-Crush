@@ -1,8 +1,8 @@
-INSERT INTO user (username, password)
+INSERT INTO user (username,dateOfBirth, password)
 VALUES
-  ('user', 'pbkdf2:sha256:50000$TCI4GzcX$0de171a4f4dac32e3364c7ddc7c14f3e2fa61f2d17574483f7ffbb431b4acb2f'),
-  ('admin', 'pbkdf2:sha256:50000$kJPKsz6N$d2d4784f1b030a9761f5ccaeeaca413f27f2ecb76d6168407af962ddce849f79');
+  ('user','2004-07-01', 'pbkdf2:sha256:260000$j1yvJi5yhb2HmR6T$79a8aebea29853932285e324c925beec0b2b0637ebf00e048301b2f59c17670e'),
+  ('admin', '2004-01-07', 'pbkdf2:sha256:260000$mKgiehuI9Pjl8LWD$70165e84779168d1cc6f96197c6ab044e0a7d1dfcfc1406b9a9e2c31c47735ae');
 
-INSERT INTO post (body, author_id, created)
+INSERT INTO post (body, author_id, anonymous, created)
 VALUES
-  ('test' || x'0a' || 'body', 1, '2018-01-01 00:00:00');
+  ('test body', 1,  1, "2018-01-01 22:54:14");
