@@ -4,9 +4,8 @@ from typing import Tuple
 
 from flask import Blueprint
 
-from flaskr.db import get_db
-
 bp = Blueprint('auth_helper', __name__)
+
 
 def check_email(email: str) -> Tuple[bool, str]:
     """ Check if the email is true """
@@ -18,6 +17,7 @@ def check_email(email: str) -> Tuple[bool, str]:
         return False, "Votre email doit commencer par une lettre"
 
     return True, ""
+
 
 def check_firstname(firstname: str) -> Tuple[bool, str]:
     """Check firstname"""
@@ -33,6 +33,7 @@ def check_firstname(firstname: str) -> Tuple[bool, str]:
 
     return True, ""
 
+
 def check_bio(bio: str) -> Tuple[bool, str]:
     """ Check bio"""
 
@@ -40,6 +41,7 @@ def check_bio(bio: str) -> Tuple[bool, str]:
         return False, "Votre bio doit contenir 300 caractères maximum"
 
     return True, ""
+
 
 def check_class_level(class_level: str) -> Tuple[bool, str]:
     """ Check class level"""
@@ -49,6 +51,7 @@ def check_class_level(class_level: str) -> Tuple[bool, str]:
 
     return True, ""
 
+
 def check_class_number(class_number: str) -> Tuple[bool, str]:
     """ Check class number"""
 
@@ -56,6 +59,7 @@ def check_class_number(class_number: str) -> Tuple[bool, str]:
         return False, "Le numéro de classe doit être compris entre 1 et 18"
 
     return True, ""
+
 
 def check_social(social: str) -> Tuple[bool, str]:
     """ Check social"""
@@ -73,6 +77,7 @@ def check_social(social: str) -> Tuple[bool, str]:
         return False, "Votre compte social doit contenir 20 caractères maximum"
 
     return True, ""
+
 
 def check_website(website: str) -> Tuple[bool, str]:
     """ Check website"""
