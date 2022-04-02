@@ -160,3 +160,9 @@ def delete(post_id: int) -> Response:
     current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - deleted post {post_id}")
 
     return redirect(url_for("blog.index"))
+
+
+@bp.route("/post/latest")
+def latest() -> Response:
+    """Return the latest posts."""
+    return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
