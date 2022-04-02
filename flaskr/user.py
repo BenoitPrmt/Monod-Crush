@@ -4,9 +4,9 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
     Response
 
 from flaskr.auth_helper import login_required, check_username
+from flaskr.db import get_db
 from flaskr.user_helper import check_email, check_firstname, check_bio, check_class_level, check_class_number, \
     check_social, check_website
-from flaskr.db import get_db
 
 bp = Blueprint("user", __name__, url_prefix="/user")
 
