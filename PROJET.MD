@@ -6,6 +6,7 @@ Le site est en ligne et disponible [ici](https://monodcrush.fr)
 Les fonctionnalités suivantes sont dispoibles : 
 - Création et édition de profil,
 - Création et modification de posts,
+- Modération automatique des posts par IA (https://sightengine.com)
 - Signalement des posts des autres utilisateurs,
 - Like des posts des autres utilisateurs,
 - Statistiques dans le panneau administrateur,
