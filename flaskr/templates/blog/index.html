@@ -6,6 +6,8 @@
 {% block scripts %}
 {{ super() }}
 <script src="{{ url_for('static', filename='scripts/bg-like.js') }}"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7170523417378892"
+        crossorigin="anonymous"></script>
 {% endblock scripts %}
 
 {% block content %}
@@ -16,6 +18,14 @@
 
     {% from 'components/posts_list.html' import select_list_view %}
     {{ select_list_view(posts) }}
+
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-format="fluid"
+         data-ad-layout-key="-f1+5r+5a-db+57"
+         data-ad-client="ca-pub-7170523417378892"
+         data-ad-slot="8021977558"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 
 </div>
 {% endblock %}
