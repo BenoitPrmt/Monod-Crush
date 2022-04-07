@@ -157,7 +157,7 @@ def report(post_id: int) -> Response:
         flash("Post signalé")
         current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - reported post {post_id}")
 
-        if len(reports) >= 1:
+        if len(reports) >= 3:
             db.execute("UPDATE post SET status = 'hidden' WHERE id = ?", (post_id,))
             current_app.logger.info(f"post {post_id} is now hidden")
         db.commit()

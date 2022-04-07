@@ -4,13 +4,11 @@ from datetime import date
 
 from instagrapi import Client
 from PIL import Image, ImageDraw, ImageFont
+from settings import INSTA_USERNAME, INSTA_PASSWORD
 import textwrap
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
-
-USERNAME = "monodcrush2022"
-PASSWORD = "P$8B274A5xZ5DqV%*#Z#"
 
 
 def login() -> Client:
@@ -24,7 +22,7 @@ def login() -> Client:
     else:
         log.info("Loading dump.json file")
         cl.load_settings("tmp/dump.json")
-        cl.login(USERNAME, PASSWORD)
+        cl.login(INSTA_USERNAME, INSTA_PASSWORD)
         cl.get_timeline_feed()  # check session
     return cl
 
