@@ -104,7 +104,7 @@ class DiscordHandler(logging.Handler):
             raise ValueError("webhook_url parameter must be given and can not be empty!")
         
         try :
-            response = requests.get("https://dicord.com", timeout=3.15)
+            response = requests.get("https://discord.com", timeout=3.15)
         except requests.Timeout:
             print('I waited far too long, discord isban of your network')
         else:
