@@ -97,7 +97,7 @@ class DiscordHandler(logging.Handler):
     to a Discord Server using webhooks.
     """
 
-    def __init__(self, webhook_url: str, notify_users: List[Union[int, str]] = (), max_length: int = 2000):
+    def __init__(self, webhook_url: str, notify_users: List[Union[int, str]] = [], max_length: int = 2000):
         logging.Handler.__init__(self)
 
         if not webhook_url:
@@ -111,10 +111,6 @@ class DiscordHandler(logging.Handler):
             print(response.status_code)
             if response.text == "":
                 print('I waited far too long, discord isban of your network')
-
-
-        if notify_users is None:
-            notify_users = []
 
         self._notify_users = notify_users
         self._url = webhook_url
