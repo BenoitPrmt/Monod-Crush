@@ -52,12 +52,11 @@ def insta(post_id: int):
     """ Like a post. """
     post = get_post(post_id, check_author=False)
 
-    try :
+    try:
         generate_pic(post["body"])
     except Exception as e:
         current_app.logger.error(e)
         return jsonify({"error": str(e)}), 500
-
 
     current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - instagram post {post_id}")
 

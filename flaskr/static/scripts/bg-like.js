@@ -27,6 +27,9 @@ function like(postId, btn) {
 }
 
 function insta(postId, btn) {
+    btn.classList.add("is-hidden");
+
+
     var xhr = new XMLHttpRequest();
     xhr.open('POST', "post/" + postId + "/insta", true);
     xhr.setRequestHeader("crendentials", "include");
@@ -34,7 +37,6 @@ function insta(postId, btn) {
     xhr.onload = function() {
         if (xhr.status === 200) {
 
-            btn.classLista.add("is-hidden");
 
         } else if (xhr.status === 401) {
             document.location.href = "/auth/login";

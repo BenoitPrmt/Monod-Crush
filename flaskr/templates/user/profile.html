@@ -2,6 +2,8 @@
 
 {% block title %}Profil de {{user.username}}{% endblock %}
 
+{% block title_page %}{% endblock %}
+
 {% block content %}
 <section>
 
@@ -33,9 +35,12 @@
     <div class="profile-birthday">
         <h3 class="title is-5">Anniversaire</h3>
         {% if date[5:] == user.dateOfBirth[5:] %}
-        <p>🎂 {{user.dateOfBirth.split('-')[2]}}/{{user.dateOfBirth.split('-')[1]}}/{{user.dateOfBirth.split('-')[0]}}</p><br>
+        <p>🎂
+            {{user.dateOfBirth.split('-')[2]}}/{{user.dateOfBirth.split('-')[1]}}/{{user.dateOfBirth.split('-')[0]}}</p>
+        <br>
         {% else %}
-        <p>{{user.dateOfBirth.split('-')[2]}}/{{user.dateOfBirth.split('-')[1]}}/{{user.dateOfBirth.split('-')[0]}}</p><br>
+        <p>{{user.dateOfBirth.split('-')[2]}}/{{user.dateOfBirth.split('-')[1]}}/{{user.dateOfBirth.split('-')[0]}}</p>
+        <br>
         {% endif %}
     </div>
 
@@ -43,21 +48,36 @@
         <h1 class="title is-5">Réseaux sociaux</h1>
 
         {% if user.instagram %}
-        <a href="https://instagram.com/{{user.instagram}}">@{{user.instagram}}</a><br>
+        <div class="is-flex my-3">
+            <img src="{{ url_for('static', filename='icons/instagram.svg') }}"
+                 height="24px" width="24px">
+            <a class="ml-2" href="https://instagram.com/{{user.instagram}}">@{{user.instagram}}</a>
+        </div>
         {% endif %}
 
         {% if user.twitter %}
-        <a href="https://twitter.com/{{user.twitter}}">@{{user.twitter}}</a><br>
+        <div class="is-flex my-3">
+            <img src="{{ url_for('static', filename='icons/twitter.svg') }}"
+                 height="24px" width="24px">
+            <a class="ml-2" href="https://twitter.com/{{user.twitter}}">@{{user.twitter}}</a></div>
         {% endif %}
 
         {% if user.github %}
-        <a href="https://github.com/{{user.github}}">@{{user.github}}</a><br>
+        <div class="is-flex my-3">
+            <img src="{{ url_for('static', filename='icons/github.svg') }}"
+                 height="24px" width="24px">
+            <a class="ml-2" href="https://github.com/{{user.github}}">@{{user.github}}</a>
+        </div>
         {% endif %}
 
         {% if user.website %}
-        <a href="{{user.website}}">Site internet</a><br>
+        <div class="is-flex my-3">
+            <img src="{{ url_for('static', filename='icons/link.svg') }}"
+                 height="24px" width="24px">
+            <a class="ml-2" href="{{user.website}}">{{user.website}}</a>
+        </div>
         {% endif %}
-        
+
         {% if not user.instagram and not user.twitter and not user.github and not user.website %}
         <p>Aucun réseau social n'est renseigné !</p>
         {% endif %}
@@ -101,14 +121,16 @@
     {% endif %}
 
     {% if g.user['admin'] and not user['admin'] and user.id != g.user['id'] %}
-        {% if user.admin == 0%}
-            <a class="button is-info is-light is-outlined my-2" href="{{ url_for('admin.add_admin', username=user.username) }}">Ajout admin</a>
-        {% else %}
-        <a class="button is-danger is-light is-outlined my-2" href="{{ url_for('admin.remove_admin', username=user.username) }}">Supprimer admin</a>
-        {%endif%}
-        <form action="{{ url_for('user.delete', username=user.username) }}" method="post">
-            <input class="button is-danger is-light my-2" type="submit" value="Supprimer ce compte"
-                   onclick="return confirm('Etes vous sûr ?');">
-        </form>
+    {% if user.admin == 0%}
+    <a class="button is-info is-light is-outlined my-2" href="{{ url_for('admin.add_admin', username=user.username) }}">Ajout
+        admin</a>
+    {% else %}
+    <a class="button is-danger is-light is-outlined my-2"
+       href="{{ url_for('admin.remove_admin', username=user.username) }}">Supprimer admin</a>
+    {%endif%}
+    <form action="{{ url_for('user.delete', username=user.username) }}" method="post">
+        <input class="button is-danger is-light my-2" type="submit" value="Supprimer ce compte"
+               onclick="return confirm('Etes vous sûr ?');">
+    </form>
     {% endif %}
-{% endblock %}
+    {% endblock %}
