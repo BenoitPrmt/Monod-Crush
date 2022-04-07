@@ -1,11 +1,11 @@
 import logging
 import os
+import textwrap
 from datetime import date
 
-from instagrapi import Client
 from PIL import Image, ImageDraw, ImageFont
 from settings import INSTA_USERNAME, INSTA_PASSWORD
-import textwrap
+from instagrapi import Client
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -17,7 +17,7 @@ def login() -> Client:
         # create a new file and directory
         log.info("Creating new dump.json file")
         os.makedirs("tmp", exist_ok=True)
-        cl.login(USERNAME, PASSWORD)
+        cl.login(INSTA_USERNAME, INSTA_PASSWORD)
         cl.dump_settings('tmp/dump.json')
     else:
         log.info("Loading dump.json file")
@@ -33,18 +33,18 @@ def login() -> Client:
 
 # generate a new image
 IMAGE_SIZE = (1080, 1080)
-BACKGROUND_COLOR = "#ff5266"
+BACKGROUND_COLOR = "#ff5265"
 
 # logo
 LOGO_PATH = "flaskr/assets/qr_code.png"
-LOGO_SIZE = (200, 200)
+LOGO_SIZE = (150, 150)
 LOGO_MARGIN = (20, 20)
 
 # date
-DATE_FONT_SIZE = 30
+DATE_FONT_SIZE = 40
 DATE_FONT_PATH = "flaskr/assets/Ubuntu-Regular.ttf"
 DATE_FORMAT = "%d/%m/%Y"
-DATE_MARGIN = (20, 20)
+DATE_MARGIN = (40, 50)
 DATE_COLOR = "#ffffff"
 
 # Box
@@ -64,9 +64,9 @@ BOX_MARGIN = 10
 
 # Footer
 FOOTER_TEXT = "monodcrush.fr"
-FOOTER_FONT_PATH = "flaskr/assets/Ubuntu-Regular.ttf"
-FOOTER_FONT_SIZE = 75
-FOOTER_BOTTOM_MARGIN = 40
+FOOTER_FONT_PATH = "flaskr/assets/Oxygen-Bold.ttf"
+FOOTER_FONT_SIZE = 60
+FOOTER_BOTTOM_MARGIN = 50
 FOOTER_COLOR = "#fff"
 
 # image metadata
@@ -120,3 +120,7 @@ def generate_pic(text: str) -> Image:
     # send to instagram
     client = login()
     client.photo_upload("tmp/test.jpg", f"Une idée de qui ca peut être ? Met le en commentaire !\n\n{' '.join(TAGS)}")
+
+
+if __name__ == "__main__":
+    generate_pic("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
