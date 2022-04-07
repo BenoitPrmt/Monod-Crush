@@ -115,12 +115,8 @@ def generate_pic(text: str) -> Image:
     text_y = IMAGE_SIZE[1] - text_height - FOOTER_BOTTOM_MARGIN
     d.text((text_x, text_y), FOOTER_TEXT, fill=FOOTER_COLOR, font=footer_font)
 
-    img.save('tmp/test.jpg')
+    img.save('tmp/test.jpg', quality=100)
 
     # send to instagram
     client = login()
     client.photo_upload("tmp/test.jpg", f"Une idée de qui ca peut être ? Met le en commentaire !\n\n{' '.join(TAGS)}")
-
-
-if __name__ == "__main__":
-    generate_pic("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
