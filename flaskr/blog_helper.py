@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from flask import abort, current_app, g
+from settings import SITE_ENGINE_API_USER, SITE_ENGINE_API_SECRET
 
 from flaskr.db import get_db
 import requests
@@ -30,8 +31,8 @@ def moderate_message_body(text: str) -> str:
         'mode': 'standard',
         'lang': 'fr',
         'opt_countries': 'us,gb,fr',
-        'api_user': '856965332',  # TODO : change this
-        'api_secret': '3xBURpFF2fznLme5ceVw'
+        'api_user': SITE_ENGINE_API_USER,
+        'api_secret': SITE_ENGINE_API_SECRET
     }
 
     rep = requests.post('https://api.sightengine.com/1.0/text/check.json', data=data).json()
