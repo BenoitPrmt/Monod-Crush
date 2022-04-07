@@ -6,7 +6,7 @@ function like(postId, btn) {
     xhr.onload = function() {
         if (xhr.status === 200) {
 
-            btn.querySelectorAll("svg").forEach(function(svg) {
+            btn.querySelectorAll(".like-button img").forEach(function(svg) {
                 svg.classList.toggle("is-hidden");
             });
 
@@ -26,19 +26,44 @@ function like(postId, btn) {
     xhr.send();
 }
 
+function insta(postId, btn) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "post/" + postId + "/insta", true);
+    xhr.setRequestHeader("crendentials", "include");
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+
+            btn.classLista.add("is-hidden");
+
+        } else if (xhr.status === 401) {
+            document.location.href = "/auth/login";
+        }
+
+    }
+    xhr.send();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const likeButtons = Array.prototype.slice.call(document.querySelectorAll('.like-button'), 0);
 
     if (likeButtons.length > 0) {
-
         likeButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-
                 const postId = btn.dataset.target;
-
                 like(postId, btn);
+            });
+        });
+    }
 
+    const instaButtons = Array.prototype.slice.call(document.querySelectorAll('.insta-button'), 0);
+
+    if (likeButtons.length > 0) {
+        instaButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const postId = btn.dataset.target;
+                insta(postId, btn);
             });
         });
     }
