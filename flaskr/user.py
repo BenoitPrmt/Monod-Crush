@@ -3,8 +3,9 @@ from datetime import date
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g, abort, \
     Response
 
-from flaskr.auth_helper import login_required, check_username
+from flaskr.auth_decorator import login_required
 from flaskr.db import get_db
+from flaskr.models import User, Post
 from flaskr.user_helper import check_email, check_firstname, check_bio, check_class_level, check_class_number, \
     check_social, check_website
 
@@ -15,23 +16,14 @@ bp = Blueprint("user", __name__, url_prefix="/user")
 def profile(username: str):
     """Show profile of a user"""
 
-    db = get_db()
-    user = db.execute(
-        "SELECT * FROM user WHERE username = ?", (username,)
-    ).fetchone()
+    user = User.get_user_by_name_or_404(username)
+    user_info = user.get_full_info()
 
-    if user is None:
-        return render_template("error/404_user_not_found.html", username=username)
+    current_app.logger.info(f"has viewed his profile ({user_info})")
 
-    posts = db.execute("""
-        SELECT p.id, p.body, p.status, p.anonymous, p.created, p.author_id, u.username
-        FROM post p JOIN user u ON p.author_id = u.id
-        WHERE p.author_id = ? AND p.anonymous = 0
-        ORDER BY p.created DESC
-        """, (user["id"],)
-                       ).fetchall()
+    posts = Post.get_posts_by_user(user.id)
 
-    return render_template("/user/profile.html", user=user, date=str(date.today()), posts=posts)
+    return render_template("/user/profile.html", user=user_info, today=date.today(), posts=posts)
 
 
 @bp.route('/<username>/edit')

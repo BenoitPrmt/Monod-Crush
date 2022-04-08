@@ -32,7 +32,8 @@
         <div class="navbar-end">
             <form class="navbar-item" method="get" action="{{ url_for('search.search_user')}}">
                 <div class="control has-icons-right">
-                    <input class="input " name="search_user" type="text" placeholder="Rechercher..." value="{{ request.args['search_user'] }}">
+                    <input class="input " name="search_user" type="text" placeholder="Rechercher..."
+                           value="{{ request.args['search_user'] }}">
                     <span class="icon is-small is-right">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path
                                 fill="#ddd"
@@ -46,11 +47,13 @@
                     {% if g.user %}
                     <a class="button is-link is-inverted"
                        href="{{ url_for('user.profile', username=g.user['username']) }}">
-                        {{ g.user['username'] }}
+                        {{ g.user.username }}
                     </a>
 
-                    {% if g.user['admin'] %}
+                    {% if g.user.accreditation == 3 %}
                     <a class="button is-link" href="{{ url_for('admin.panel') }}">Modération</a>
+                    {% elif g.user.accreditation == 2 %}
+                    <a class="button is-link" href="{{ url_for('moderator.panel') }}">Modération</a>
                     {% endif %}
 
                     <a class="button is-link is-light" href="{{ url_for('auth.logout') }}">Se déconnecter</a>

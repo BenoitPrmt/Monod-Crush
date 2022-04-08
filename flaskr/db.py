@@ -4,9 +4,6 @@ from datetime import date
 import click
 from flask import current_app, g, Flask
 from flask.cli import with_appcontext
-from werkzeug.security import generate_password_hash
-
-from flaskr.sql_helper import count_users, user_set
 
 
 def get_db() -> sqlite3.Connection:
@@ -19,9 +16,6 @@ def get_db() -> sqlite3.Connection:
             current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
         )
         g.db.row_factory = sqlite3.Row
-
-        # add a custom function to the database
-        g.db.create_function("count_users", 1, count_users)
 
     return g.db
 
@@ -55,26 +49,16 @@ def init_db_command() -> None:
 def populate_db() -> None:
     """Push fake data to the database."""
     from faker import Faker
+    from flaskr.models import User, Post
+    from random import randint
 
-    db = get_db()
-    db.execute("INSERT INTO user (username, password, dateOfBirth, admin) VALUES (?, ?, ?, ?)",
-               ("admin", generate_password_hash("admin"), date(2000, 1, 1), 1))
-
-    db.execute("INSERT INTO user (username, password, dateOfBirth) VALUES (?, ?, ?)",
-               ("user", generate_password_hash("user"), date(2000, 1, 1)))
+    User.create(username="admin", password="admin1", date_of_birth=date(2000, 1, 1))
+    User.create(username="user", password="user12", date_of_birth=date(2000, 1, 1))
 
     faker = Faker('fr_FR')
 
-    for user_id in range(2, 13):
-        profile = faker.simple_profile()
-
-        db.execute("INSERT INTO user (username, password, dateOfBirth, email) VALUES (?, ?, ?, ?)",
-                   (profile["username"], generate_password_hash(faker.password()),
-                    profile["birthdate"], profile["mail"]))
-
-        db.execute("INSERT INTO post (body, author_id) VALUES (?, ?)", (faker.sentence(), user_id))
-
-    db.commit()
+    for _ in range(10):
+        Post.create(faker.sentence(), 1, bool(randint(0, 1)))
 
 
 @click.command("populate-db")
@@ -85,6 +69,17 @@ def populate_db_command() -> None:
     click.echo("populated the database.")
 
 
+@click.command("set-admin")
+@click.argument("username")
+@with_appcontext
+def set_admin(username: str) -> None:
+    """Clear existing data and create new tables."""
+
+    db = get_db()
+    db.execute("UPDATE user SET accreditation = 3 WHERE username = ?", (username,))
+    db.commit()
+
+
 def init_app(app: Flask) -> None:
     """Register database functions with the Flask app. This is called by
     the application factory.
@@ -92,3 +87,4 @@ def init_app(app: Flask) -> None:
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
     app.cli.add_command(populate_db_command)
+    app.cli.add_command(set_admin)

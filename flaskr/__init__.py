@@ -43,11 +43,10 @@ def create_app(test_config: dict = None) -> Flask:
     db.init_app(app)
 
     # apply the blueprints to the app
-    from flaskr import auth, blog, admin, user, auth_helper, search
+    from flaskr import auth, blog, admin, user, search
 
     # register the blueprints
     app.register_blueprint(auth.bp)
-    app.register_blueprint(auth_helper.bp)
     app.register_blueprint(blog.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(user.bp)

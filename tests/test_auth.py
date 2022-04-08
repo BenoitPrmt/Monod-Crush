@@ -17,6 +17,7 @@ def test_register(client: FlaskClient, app: Flask):
     response = client.post("/auth/register",
                            data={"username": "username", "dateOfBirth": "2020-04-14", "password": "pa12OU!!45sds"})
 
+    response.data.decode()
     # test that successful registration redirects to the login page
     assert response.headers["Location"] in ("http://localhost/", "/")
 

@@ -7,7 +7,7 @@ def get_user_or_ip() -> str:
     Returns the user or the IP address of the client
     """
     if g.user is not None:
-        return f"{g.user['id']} ({g.user['username']})"
+        return f"{g.user.id} ({g.user.username})"
 
     # 'X-Real-IP' is the header name for the client IP address with NGINX reverse proxy
     return request.headers.get('X-Real-IP', request.remote_addr)

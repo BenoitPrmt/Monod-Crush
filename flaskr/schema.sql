@@ -16,7 +16,7 @@ CREATE TABLE user (
   date_of_birth DATE NOT NULL,
   password TEXT NOT NULL,
 --  last_tries TEXT, # TODO implement counter for failed login attempts
-  accreditation TEXT NOT NULL DEFAULT user, -- 0 = banned, 1 = user, 2 = moderator, 3 = admin
+  accreditation INTEGER NOT NULL DEFAULT user, -- 0 = banned, 1 = user, 2 = moderator, 3 = admin
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   -- optional fields for account info
@@ -47,7 +47,7 @@ CREATE TABLE post (
   message TEXT NOT NULL,
   user_id INTEGER,
   status TEXT DEFAULT visible, -- visible, hidden
-  anonymous BOOLEAN NOT NULL DEFAULT 1,
+  is_anonymous BOOLEAN NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   edited BOOLEAN NOT NULL DEFAULT 0,
   edited_at TIMESTAMP,
@@ -60,7 +60,7 @@ CREATE TABLE comment (
   message TEXT NOT NULL,
   post_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL,
-  anonymous BOOLEAN NOT NULL DEFAULT 1,
+  is_anonymous BOOLEAN NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
@@ -68,13 +68,17 @@ CREATE TABLE comment (
 );
 
 CREATE TABLE like (
-  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+
+
   post_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL,
 --  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (post_id) REFERENCES post (id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
+
+  PRIMARY KEY (user_id, post_id), -- composite key
+  UNIQUE (user_id, post_id) -- unique key
 );
 
 CREATE TABLE report (

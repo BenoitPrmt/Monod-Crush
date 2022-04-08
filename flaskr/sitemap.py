@@ -1,6 +1,7 @@
 from flask import current_app, Blueprint, request, render_template, Response
 
 from flaskr.db import get_db
+from flaskr.models import User
 
 bp = Blueprint("sitemap", __name__)
 
@@ -28,11 +29,10 @@ def sitemap() -> Response:
     dynamic_urls = set()
     exclude_users = ["admin"]
 
-    db = get_db()
-    users = db.execute("SELECT username FROM user").fetchall()
-    for user in users:
-        if user["username"] not in exclude_users:
-            dynamic_urls.add(host_url + "/user/" + user["username"])
+    usernames = User.get_all_username()
+    for username in usernames:
+        if username not in exclude_users:
+            dynamic_urls.add(host_url + "/user/" + username)
 
     xml_sitemap = render_template("sitemap/sitemap.xml", static_urls=static_urls, dynamic_urls=dynamic_urls, )
 
