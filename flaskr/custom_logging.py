@@ -1,6 +1,6 @@
 import logging
 from typing import List, Union
-
+from settings import DISCORD_WEBHOOK_URL, DISCORD_NOTIFY_USERS
 import requests
 
 logging_config_prod = {
@@ -41,8 +41,8 @@ logging_config_prod = {
         },
         'discord': {
             'class': 'flaskr.custom_logging.DiscordHandler',
-            "webhook_url": "https://discord.com/api/webhooks/955515354128461834/fPYM2kx0yK7u_CSdj5EcwG5e4NGp5_VtUr1UTkYBufQ_rMF5fTpiVVxPkBWSkRYb8DhI",
-            'notify_users': ["351456719294955538"],
+            "webhook_url": DISCORD_WEBHOOK_URL,
+            'notify_users': DISCORD_NOTIFY_USERS,
 
             'formatter': 'discord',
             'level': 'INFO',

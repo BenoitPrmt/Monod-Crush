@@ -134,16 +134,14 @@
             {% endif %}
         </div>
     </div>
-
-    <button class="button mt-2 is-danger like-button" type="button">
+    <a class="button mt-2 is-danger" href="{{ url_for('auth.login') }}">
         <span class="nb-likes mr-2 {{ 'is-hidden' if post.liked_by|length == 0 }}">{{ post.liked_by|length }}</span>
         <span class="icon-text is-small">
                 <img class="empty-heart"
                      src="{{ url_for('static', filename='icons/heart-outline-white.svg') }}"
                      height="24px" width="24px">
             </span>
-        <!-- TODO redirect to register/login -->
-    </button>
+    </a>
 </article>
 {% endfor %}
 {%- endmacro -%}

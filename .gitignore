@@ -13,3 +13,5 @@ build/
 *.swp
 *~
 *.log
+settings.py
+/tmp/

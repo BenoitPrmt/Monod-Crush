@@ -2,19 +2,69 @@
 
 {% block title %}Profil de {{user.username}}{% endblock %}
 
+{% block title_page %}{% endblock %}
+
 {% block content %}
 <section>
 
-    <div>
-        {% if user.first_name %}
-        <h1 class="title is-2">{{user.firstName}}</h1>
-        {% endif %}
+    <div class="is-flex">
+        <div>
+            {% if user.first_name %}
+            <h1 class="title is-2">{{user.firstName}}</h1>
+            {% endif %}
 
-        {% if user.accreditation > 1 %}
-        <h2 class="title is-3">👑 {{user.username}}</h2>
-        {% else %}
-        <h2 class="title is-3">{{user.username}}</h2>
-        {% endif %}
+            {% if user.accreditation > 1 %}
+            <h2 class="title is-3">👑 {{user.username}}</h2>
+            {% else %}
+            <h2 class="title is-3">{{user.username}}</h2>
+            {% endif %}
+        </div>
+        <div>
+            {% if g.user.accreditation == 3 %}
+            <div>
+                {% if user.accreditation == 0 %}
+                <form action="" method="post">
+                    <input class="button is-link is-light" type="submit" value="Débannir"
+                           onclick="return confirm('Etes vous sûr ?');">
+                </form>
+                {% elif user.accreditation == 1 %}
+                <form action="" method="post">
+                    <input class="button is-link is-light" type="submit" value="Ajouter Modérateur"
+                           onclick="return confirm('Etes vous sûr ?');">
+                </form>
+                <form action="" method="post">
+                    <input class="button is-link is-light" type="submit" value="Ajouter Administrateur"
+                           onclick="return confirm('Etes vous sûr ?');">
+                </form>
+                <form action="" method="post">
+                    <input class="button is-danger" type="submit" value="Bannir"
+                           onclick="return confirm('Etes vous sûr ?');">
+                </form>
+                {% elif user.accreditation == 2 %}
+                <a class="button is-danger is-light is-outlined my-2"
+                   href="{{ url_for('admin.remove_admin', username=user.username) }}">Supprimer Modérateur</a>
+                {% elif user.accreditation == 3 %}
+                <a class="button is-danger is-light is-outlined my-2"
+                   href="{{ url_for('admin.remove_admin', username=user.username) }}">Supprimer Administrateur</a>
+                {%endif%}
+
+                <form action="{{ url_for('user.delete', username=user.username) }}" method="post">
+                    <input class="button is-danger is-light" type="submit" value="Supprimer le compte"
+                           onclick="return confirm('Etes vous sûr ?');">
+                </form>
+            </div>
+
+            {% elif user.id == g.user.id %}
+            <div>
+                <a class="button my-2 is-success" href="{{ url_for('user.edit', username=user.username) }}">
+                    Editer mon profil</a>
+                <form action="{{ url_for('user.delete', username=user.username) }}" method="post">
+                    <input class="button is-danger is-light" type="submit" value="Supprimer mon compte"
+                           onclick="return confirm('Etes vous sûr ?');">
+                </form>
+            </div>
+            {% endif %}
+        </div>
     </div>
 
     <div>
@@ -39,52 +89,38 @@
         <h1 class="title is-5">Réseaux sociaux</h1>
 
         {% if user.instagram %}
-        <a href="https://instagram.com/{{user.instagram}}">@{{user.instagram}}</a><br>
+        <div class="is-flex my-3">
+            <img src="{{ url_for('static', filename='icons/instagram.svg') }}"
+                 height="24px" width="24px">
+            <a class="ml-2" href="https://instagram.com/{{user.instagram}}">@{{user.instagram}}</a>
+        </div>
         {% endif %}
 
         {% if user.twitter %}
-        <a href="https://twitter.com/{{user.twitter}}">@{{user.twitter}}</a><br>
+        <div class="is-flex my-3">
+            <img src="{{ url_for('static', filename='icons/twitter.svg') }}"
+                 height="24px" width="24px">
+            <a class="ml-2" href="https://twitter.com/{{user.twitter}}">@{{user.twitter}}</a></div>
         {% endif %}
 
         {% if user.github %}
-        <a href="https://github.com/{{user.github}}">@{{user.github}}</a><br>
+        <div class="is-flex my-3">
+            <img src="{{ url_for('static', filename='icons/github.svg') }}"
+                 height="24px" width="24px">
+            <a class="ml-2" href="https://github.com/{{user.github}}">@{{user.github}}</a>
+        </div>
         {% endif %}
 
         {% if user.website %}
-        <a href="{{user.website}}">Site internet</a><br>
-        {% endif %}
-
-        {% if not user.instagram and not user.twitter and not user.github and not user.website %}
-        <p>Aucun réseau social n'est renseigné !</p>
+        <div class="is-flex my-3">
+            <img src="{{ url_for('static', filename='icons/link.svg') }}"
+                 height="24px" width="24px">
+            <a class="ml-2" href="{{user.website}}">{{user.website}}</a>
+        </div>
         {% endif %}
     </div>
 
     {% from 'components/posts_list.html' import select_list_view %}
     {{ select_list_view(posts) }}
-
-    {% if user.id == g.user.id %}
-    <div>
-        <a class="button my-2 is-success" href="{{ url_for('user.edit', username=user.username) }}">
-            Editer mon profil</a>
-        <form action="{{ url_for('user.delete', username=user.username) }}" method="post">
-            <input class="button is-danger is-light" type="submit" value="Supprimer mon compte"
-                   onclick="return confirm('Etes vous sûr ?');">
-        </form>
-    </div>
-    {% endif %}
-
-    {% if g.user['admin'] and not user['admin'] and user.id != g.user['id'] %}
-    {% if user.admin == 0%}
-    <a class="button is-info is-light is-outlined my-2" href="{{ url_for('admin.add_admin', username=user.username) }}">Ajout
-        admin</a>
-    {% else %}
-    <a class="button is-danger is-light is-outlined my-2"
-       href="{{ url_for('admin.remove_admin', username=user.username) }}">Supprimer admin</a>
-    {%endif%}
-    <form action="{{ url_for('user.delete', username=user.username) }}" method="post">
-        <input class="button is-danger is-light my-2" type="submit" value="Supprimer ce compte"
-               onclick="return confirm('Etes vous sûr ?');">
-    </form>
-    {% endif %}
-    {% endblock %}
 </section>
+{% endblock content %}

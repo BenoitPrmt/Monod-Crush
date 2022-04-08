@@ -6,7 +6,7 @@ function like(postId, btn) {
     xhr.onload = function() {
         if (xhr.status === 200) {
 
-            btn.querySelectorAll("svg").forEach(function(svg) {
+            btn.querySelectorAll(".like-button img").forEach(function(svg) {
                 svg.classList.toggle("is-hidden");
             });
 

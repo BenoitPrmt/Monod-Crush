@@ -16,7 +16,7 @@ CREATE TABLE user (
   date_of_birth DATE NOT NULL,
   password TEXT NOT NULL,
 --  last_tries TEXT, # TODO implement counter for failed login attempts
-  accreditation INTEGER NOT NULL DEFAULT user, -- 0 = banned, 1 = user, 2 = moderator, 3 = admin
+  accreditation INTEGER NOT NULL DEFAULT 1, -- 0 = banned, 1 = user, 2 = moderator, 3 = admin
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   -- optional fields for account info
