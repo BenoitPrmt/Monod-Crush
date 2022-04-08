@@ -5,7 +5,7 @@
 Website is available at [monodcrush.fr](https://monodcrush.fr)<br>
 NSI project realized by [@BenoitObelia](https://github.com/BenoitObelia), [@JulesGrd](https://github.com/JulesGrd) and [@KillianTib](https://github.com/KillianTib)
 
-Project documentation : [PROJECT.md](PROJET.md)
+Project documentation : [PROJECT.md](PROJECT.md)
 
 ## 📥 Install
 
