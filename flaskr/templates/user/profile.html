@@ -2,9 +2,19 @@
 
 {% block title %}Profil de {{user.username}}{% endblock %}
 
+<<<<<<< Updated upstream
 {% block title_page %}{% endblock %}
+=======
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='scripts/bg-follow.js') }}"></script>
+{% endblock scripts %}
+>>>>>>> Stashed changes
 
 {% block content %}
+
+{{ super() }}
+
 <section>
 
     <div class="profile-top">
@@ -18,6 +28,22 @@
         <h2 class="title is-3">{{user.username}}</h2><br>
         {% endif %}
     </div>
+
+    <button class="button mt-2 is-danger follow-button" data-target="{{ user['id'] }}" type="button">
+        <span class="nb-follows mr-2 {{ 'is-hidden' if nb_follows == 0 }}">{{ nb_follows }}</span>
+        <span class="icon-text is-small">
+            <svg class="filled-heart {{ 'is-hidden' if g.user['id'] not in UserSet(user['followers'])  }}"
+                style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" />
+            </svg>
+            <svg class="empty-heart {{ 'is-hidden' if g.user['id'] in UserSet(user['followers']) }}"
+                style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M12.1 18.55L12 18.65L11.89 18.55C7.14 14.24 4 11.39 4 8.5C4 6.5 5.5 5 7.5 5C9.04 5 10.54 6 11.07 7.36H12.93C13.46 6 14.96 5 16.5 5C18.5 5 20 6.5 20 8.5C20 11.39 16.86 14.24 12.1 18.55M16.5 3C14.76 3 13.09 3.81 12 5.08C10.91 3.81 9.24 3 7.5 3C4.42 3 2 5.41 2 8.5C2 12.27 5.4 15.36 10.55 20.03L12 21.35L13.45 20.03C18.6 15.36 22 12.27 22 8.5C22 5.41 19.58 3 16.5 3Z" />
+            </svg>
+        </span>
+    </button>
 
     <div class="block">
 
@@ -121,6 +147,7 @@
     {% endif %}
 
     {% if g.user['admin'] and not user['admin'] and user.id != g.user['id'] %}
+<<<<<<< Updated upstream
     {% if user.admin == 0%}
     <a class="button is-info is-light is-outlined my-2" href="{{ url_for('admin.add_admin', username=user.username) }}">Ajout
         admin</a>
@@ -134,3 +161,21 @@
     </form>
     {% endif %}
     {% endblock %}
+=======
+        {% if user.admin == 0%}
+            <a class="button is-info is-light is-outlined my-2" href="{{ url_for('admin.add_admin', username=user.username) }}">Ajout admin</a>
+        {% else %}
+        <a class="button is-danger is-light is-outlined my-2" href="{{ url_for('admin.remove_admin', username=user.username) }}">Supprimer admin</a>
+        {%endif%}
+        <form action="{{ url_for('user.delete', username=user.username) }}" method="post">
+            <input class="button is-danger is-light my-2" type="submit" value="Supprimer ce compte"
+                   onclick="return confirm('Etes vous sûr ?');">
+        </form>
+
+        
+    {% endif %}
+
+
+
+{% endblock %}
+>>>>>>> Stashed changes

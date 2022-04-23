@@ -13,9 +13,6 @@ def check_email(email: str) -> Tuple[bool, str]:
     if re.search('@', email) is None or re.search('.', email) is None:
         return False, "Votre email doit contenir un @ et un ."
 
-    if not re.match(r'^[A-Za-z][A-Za-z0-9_-]+$', email):
-        return False, "Votre email doit commencer par une lettre"
-
     return True, ""
 
 

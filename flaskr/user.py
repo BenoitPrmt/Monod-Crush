@@ -1,12 +1,14 @@
 from datetime import date
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app, g, abort, \
-    Response
+    Response, jsonify
 
 from flaskr.auth_helper import login_required, check_username
 from flaskr.db import get_db
 from flaskr.user_helper import check_email, check_firstname, check_bio, check_class_level, check_class_number, \
     check_social, check_website
+
+from flaskr.sql_helper import UserSet, count_users
 
 bp = Blueprint("user", __name__, url_prefix="/user")
 
@@ -20,6 +22,8 @@ def profile(username: str):
         "SELECT * FROM user WHERE username = ?", (username,)
     ).fetchone()
 
+    nb_follows = count_users(user["followers"])
+
     if user is None:
         return render_template("error/404_user_not_found.html", username=username)
 
@@ -31,7 +35,27 @@ def profile(username: str):
         """, (user["id"],)
                        ).fetchall()
 
-    return render_template("/user/profile.html", user=user, date=str(date.today()), posts=posts)
+    return render_template("/user/profile.html", user=user, date=str(date.today()), posts=posts, UserSet=UserSet, nb_follows=nb_follows)
+
+@bp.route("/user/<int:user_id>/follow", methods=["POST"])
+@login_required
+def follow(user_id: int):
+    """Follow a user"""
+
+    db = get_db()
+    user = db.execute(
+        "SELECT * FROM user WHERE id = ?", (user_id,)
+    ).fetchone()
+
+    followers = UserSet(user["followers"])
+
+    followers.toggle(g.user["id"])
+    print(followers)
+
+    db.execute("UPDATE user SET followers = ? WHERE id = ?", (followers.join(), user_id,))
+    db.commit()
+
+    return jsonify({"followers": len(followers), "my": g.user["id"] in followers})
 
 
 @bp.route('/<username>/edit')

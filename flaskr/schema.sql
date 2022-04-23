@@ -20,6 +20,9 @@ CREATE TABLE user (
   firstName TEXT,
   bio TEXT,
 
+  followers TEXT,
+  following TEXT,
+
   class_number TEXT,
   class_level TEXT,
   speciality TEXT,

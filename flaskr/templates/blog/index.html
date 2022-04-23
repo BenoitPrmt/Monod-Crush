@@ -25,13 +25,18 @@
 
                 {% if post['anonymous'] %}
                 <p class="content is-small">
-                    posté par un utilisateur anonyme le {{ post['created'].strftime('%a %d %b %Y') }}
+                    Posté par un utilisateur anonyme le {{ post['created'].strftime('%d/%m/%Y') }}
                 </p>
                 {% else %}
                 <p class="content is-small">
+<<<<<<< Updated upstream
                     posté par
                     <a href="{{ url_for('user.profile', username=post['username']) }}">@{{ post['username'] }}</a> le {{
                     post['created'].strftime('%a %d %b %Y') }}
+=======
+                    Posté par
+                    <a href="{{ url_for('user.profile', username=post['username']) }}">@{{ post['username'] }}</a> le {{ post['created'].strftime('%d/%m/%Y') }}
+>>>>>>> Stashed changes
                 </p>
                 {% endif %}
             </div>
