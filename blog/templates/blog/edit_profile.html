@@ -19,7 +19,76 @@
 <form method="post" class="box">
     {% csrf_token %}
 
-    {{ form.as_p }}
+    <h2 class="title is-2">Informations générales</h2>
+
+    <div class="field">
+        <label class="label" for="{{ form.username.id_for_label }}">{{ form.username.label_tag }}</label>
+        <div class="control">
+            {% render_field form.username class+="input" placeholder=form.username.label %}
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="{{ form.first_name.id_for_label }}">{{ form.first_name.label_tag }}</label>
+        <div class="control">
+            {% render_field form.first_name class+="input" placeholder=form.first_name.label %}
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="{{ form.email.id_for_label }}">{{ form.email.label_tag }}</label>
+        <div class="control">
+            {% render_field form.email class+="input" placeholder=form.email.label %}
+        </div>
+        <p class="help is-info">{{ form.email.help_text }}</p>
+    </div>
+
+    <div class="field">
+        <label class="label" for="{{ form.bio.id_for_label }}">{{ form.bio.label_tag }}</label>
+        <div class="control">
+            {% render_field form.bio class+="textarea" placeholder=form.bio.label rows=5 cols="" %}
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="{{ form.study.id_for_label }}">{{ form.study.label_tag }}</label>
+        <div class="control">
+            {% render_field form.study class+="input" placeholder=form.study.label %}
+        </div>
+    </div>
+
+
+    <div class="mb-4 mt-6">
+        <h2 class="title is-2">Social</h2>
+        <h3 class="subtitle">Indiquez votre nom d'utilisateur (sans le @).</h3>
+    </div>
+
+    <div class="field">
+        <label class="label" for="{{ form.instagram.id_for_label }}">{{ form.instagram.label_tag }}</label>
+        <div class="control">
+            {% render_field form.instagram class+="input" placeholder=form.instagram.label %}
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="{{ form.twitter.id_for_label }}">{{ form.twitter.label_tag }}</label>
+        <div class="control">
+            {% render_field form.twitter class+="input" placeholder=form.twitter.label %}
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="{{ form.github.id_for_label }}">{{ form.github.label_tag }}</label>
+        <div class="control">
+            {% render_field form.github class+="input" placeholder=form.github.label %}
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="{{ form.website.id_for_label }}">{{ form.website.label_tag }}</label>
+        <div class="control">
+            {% render_field form.website class+="input" placeholder=form.website.label %}
+        </div>
+    </div>
 
     <div class="field is-grouped">
         <div class="control">
