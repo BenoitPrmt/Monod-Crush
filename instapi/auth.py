@@ -12,7 +12,7 @@ def login() -> Client:
         # create a new file and directory
         os.makedirs("tmp", exist_ok=True)
         cl.login(INSTA_USERNAME, INSTA_PASSWORD)
-        cl.dump_settings(Path('tmp/dump.json'))
+        cl.dump_settings(Path('tmp/cookies.json'))
     else:
         cl.load_settings(Path("tmp/cookies.json"))
         cl.login(INSTA_USERNAME, INSTA_PASSWORD)

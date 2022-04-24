@@ -14,4 +14,4 @@ build/
 *~
 *.log
 settings.py
-/tmp/
+tmp/

@@ -1,12 +1,9 @@
-import logging
 import textwrap
 import time
 from datetime import date
+from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
-
-log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 # TODO generate url to post dynamically on qr code
 # TODO auto change font size
@@ -14,6 +11,8 @@ logging.basicConfig(level=logging.INFO)
 
 
 # generate a new image
+from instapi.auth import login
+
 IMAGE_SIZE = (1080, 1080)
 BACKGROUND_COLOR = "#ff5266"
 
@@ -56,7 +55,7 @@ TAGS = ["#monodcrush", "#crush", "#lycee", "#monod", "#stjeandebraye", "#sjdb"]
 DESCRIPTION = f"Une idée de qui ca peut être ? Met le en commentaire !\n\n{' '.join(TAGS)}"
 
 
-def build_cache() -> None:
+def generate_pic(text: str) -> Image:
     img = Image.new('RGB', IMAGE_SIZE, color=BACKGROUND_COLOR)
 
     # paste qr code
@@ -71,30 +70,6 @@ def build_cache() -> None:
     text_x = (IMAGE_SIZE[0] - text_width) / 2
     text_y = IMAGE_SIZE[1] - text_height - FOOTER_BOTTOM_MARGIN
     d.text((text_x, text_y), FOOTER_TEXT, fill=FOOTER_COLOR, font=footer_font)
-
-    # store image
-    img.save("instapi/tmp/image_cache/post_instagram.png")
-
-
-def generate_pic(text: str, cache=False) -> Image:
-    if cache:
-        img = Image.open("instapi/tmp/image_cache/post_instagram.png")
-        d = ImageDraw.Draw(img)
-    else:
-        img = Image.new('RGB', IMAGE_SIZE, color=BACKGROUND_COLOR)
-
-        # paste qr code
-        qr_code = Image.open(LOGO_PATH).resize(LOGO_SIZE)
-        img.paste(qr_code, LOGO_MARGIN)
-
-        d = ImageDraw.Draw(img)
-
-        # center footer text
-        footer_font = ImageFont.truetype(FOOTER_FONT_PATH, FOOTER_FONT_SIZE)
-        text_width, text_height = d.textsize(FOOTER_TEXT, font=footer_font)
-        text_x = (IMAGE_SIZE[0] - text_width) / 2
-        text_y = IMAGE_SIZE[1] - text_height - FOOTER_BOTTOM_MARGIN
-        d.text((text_x, text_y), FOOTER_TEXT, fill=FOOTER_COLOR, font=footer_font)
 
     # date
     date_font = ImageFont.truetype(DATE_FONT_PATH, DATE_FONT_SIZE)
@@ -123,16 +98,11 @@ def generate_pic(text: str, cache=False) -> Image:
     img.save('tmp/test.jpg')
 
     # send to instagram
-    # client = login()
-    # client.photo_upload(Path("tmp/test.jpg"), DESCRIPTION)
+    client = login()
+    client.photo_upload(Path("tmp/test.jpg"), DESCRIPTION)
 
 
 if __name__ == '__main__':
-    build_cache()
     t = time.time()
-    generate_pic("sjgfqsfdb", cache=True)
-    print(time.time() - t)
-
-    t = time.time()
-    generate_pic("sjgfqsfdb", cache=False)
+    generate_pic("test")
     print(time.time() - t)
