@@ -15,7 +15,7 @@ def test_index(client: FlaskClient, auth: AuthActions):
 
     auth.login()
     response = client.get("/")
-    assert b"Log Out" in response.data
+    assert "Se déconnecter".encode() in response.data
     assert b"user" in response.data
 
     assert b"test body" in response.data

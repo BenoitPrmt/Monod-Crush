@@ -3,10 +3,11 @@ from typing import Union
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for, Response, current_app, abort, \
     jsonify
 
-from flaskr.auth_helper import login_required
+from flaskr.auth_helper import login_required, admin_only
 from flaskr.blog_helper import get_post, check_message_body, moderate_message_body
 from flaskr.db import get_db
 from flaskr.sql_helper import UserSet
+from flaskr.insta_content_generator import generate_pic
 
 bp = Blueprint("blog", __name__)
 
@@ -43,6 +44,23 @@ def like(post_id: int):
     db.commit()
 
     return jsonify({"likes": len(likes), "my": g.user["id"] in likes})
+
+
+@bp.route("/post/<int:post_id>/insta", methods=["POST"])
+@admin_only
+def insta(post_id: int):
+    """ Like a post. """
+    post = get_post(post_id, check_author=False)
+
+    try:
+        generate_pic(post["body"])
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify({"error": str(e)}), 500
+
+    current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - instagram post {post_id}")
+
+    return "OK", 201
 
 
 @bp.route("/post/new", methods=("GET", "POST"))
@@ -139,7 +157,7 @@ def report(post_id: int) -> Response:
         flash("Post signalé")
         current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - reported post {post_id}")
 
-        if len(reports) >= 1:
+        if len(reports) >= 3:
             db.execute("UPDATE post SET status = 'hidden' WHERE id = ?", (post_id,))
             current_app.logger.info(f"post {post_id} is now hidden")
         db.commit()
@@ -160,3 +178,9 @@ def delete(post_id: int) -> Response:
     current_app.logger.info(f"{g.user['id']} ({g.user['username']}) - deleted post {post_id}")
 
     return redirect(url_for("blog.index"))
+
+
+@bp.route("/post/latest")
+def latest() -> Response:
+    """Return the latest posts."""
+    return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
