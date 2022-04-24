@@ -1,0 +1,71 @@
+{% load static %}
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="{% url 'blog:index' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Monod Crush logo">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="{% url 'blog:index' %}">Home</a>
+            <a class="navbar-item" href="{% url 'instamap:index' %}">Insta Map</a>
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <span class="navbar-link">Plus</span>
+
+                <div class="navbar-dropdown">
+<!--                    <a class="navbar-item" href="{% url 'blog:index' %}">À propos</a>-->
+                    <a class="navbar-item" href="{% url 'about:contact' %}">Contact</a>
+                    <hr class="navbar-divider">
+                    <a class="navbar-item" href="{% url 'about:suggestions' %}">Suggestions</a>
+                    <a class="navbar-item" href="{% url 'about:suggestions' %}">Signaler un bug</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar-end">
+            <form class="navbar-item" method="get" action="{% url 'blog:search' %}">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" name="q" type="text" placeholder="Rechercher...">
+                    </div>
+                    <div class="control">
+                        <button class="button">
+                            <img class="empty-heart" src="{% static 'icons/search.svg' %}"
+                                 height="18px" width="18px">
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="navbar-item">
+                <div class="buttons">
+
+                    {% if user.is_authenticated %}
+                    <a class="button is-link is-inverted" href="{% url 'blog:user-profile' username=user.username %}">
+                        {{ user.username }}
+                    </a>
+
+                    {% if user.is_staff %}
+                    <a class="button is-link" href="{% url 'admin:index' %}"> Staff </a>
+                    {% endif %}
+
+                    <a class="button is-link is-light" href="{% url 'auth:logout' %}"> Se déconnecter </a>
+                    {% else %}
+                    <a class="button is-link" href="{% url 'auth:register' %}"> Créer un compte</a>
+                    <a class="button is-link is-light" href="{% url 'auth:login' %}"> Se connecter </a>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+

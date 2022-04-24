@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+
+{% block title %}Nouveau post{% endblock %}
+{% block h1 %}Nouveau post{% endblock %}
+
+
+{% block content %}
+
+{% if form.errors %}
+<article class="message is-danger">
+    <div class="message-body">
+        {% for key, value in form.errors.items %}
+        {{ value.as_text }}<br>
+        {% endfor %}
+    </div>
+</article>
+{% endif %}
+
+<form method="post" class="box">
+    {% csrf_token %}
+
+    <div class="field">
+        <div class="control">
+            {% render_field form.text class+="textarea" placeholder=form.text.label rows=5 cols="" autofocus="" %}
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="control">
+            <label class="checkbox">
+                {% render_field form.is_anonymous %}
+                {{ form.is_anonymous.label }}
+            </label>
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <div class="control">
+            <button type="submit" class="button is-link">Créer</button>
+        </div>
+        <div class="control">
+            <a href="{% url 'blog:index' %}" class="button is-link is-light">Annuler</a>
+        </div>
+    </div>
+</form>
+{% endblock %}

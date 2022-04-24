@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <!-- Required meta tags and config for phone -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Monod Crush, à la recherche de rencontre, tu es au bon endroit.">
+
+    <!-- css -->
+    <link rel="stylesheet" href="{% static 'styles/bulma.min.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+
+    <!-- icons -->
+    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+
+    <!-- scripts -->
+    <script src="{% static 'scripts/nav-bar.js' %}" defer></script>
+
+    <!-- title -->
+    <title>{% block full_title %}{% block title %}{% endblock %} - MonodCrush{% endblock %}</title>
+
+    {% block head %} {% endblock head %}
+</head>
+
+{% block body %}
+<body class="is-flex is-flex-direction-column">
+
+{% block header %}
+{% include "header.html"%}
+{% endblock header %}
+
+{% block page %}
+<section class="section is-flex-grow-1">
+    <div class="container is-max-desktop">
+
+        <h1 class="title">{% block h1 %}{% endblock %}</h1>
+
+        {% block notif %}
+        {% include 'notifications.html' %}
+        {% endblock notif %}
+
+        {% block content %} {% endblock content %}
+
+    </div>
+</section>
+{% endblock page %}
+
+{% block footer %}
+{% include "footer.html"%}
+{% endblock footer %}
+
+</body>
+{% endblock body %}
+
+</html>

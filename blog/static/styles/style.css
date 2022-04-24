@@ -1,0 +1,16 @@
+body {
+    min-height: 100vh;
+}
+
+body section {
+    background-color:#eee;
+}
+
+.down-arrow{
+    vertical-align:middle;
+    width:1rem;
+}
+
+.text-break p {
+    overflow-wrap: break-word;
+}

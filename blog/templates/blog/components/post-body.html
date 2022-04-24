@@ -1,0 +1,14 @@
+{% load humanize %}
+
+<div class="content">
+    <div class="mt-2 text-break">{{ post.text|linebreaks }}</div>
+    <p class="content is-small">
+        posté par
+        {% if post.is_anonymous %}
+        un utilisateur anonyme
+        {% else %}
+        <a href="{{ post.author.username }}">@{{ post.author.username }}</a>
+        {% endif %}
+        {{ post.created_at|naturaltime }}
+    </p>
+</div>
