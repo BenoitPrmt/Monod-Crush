@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+
+{% block title %} Edition de votre profil {% endblock %}
+
+{% block content %}
+
+{% if form.errors %}
+<article class="message is-danger">
+    <div class="message-body">
+        {% for key, value in form.errors.items %}
+        {{ value.as_text }}<br>
+        {% endfor %}
+    </div>
+</article>
+{% endif %}
+
+<form method="post" class="box">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <div class="field is-grouped">
+        <div class="control">
+            <button type="submit" class="button is-link">Sauvegarder</button>
+        </div>
+        <div class="control">
+            <a href="{% url 'blog:user-profile' username=request.user.username %}" class="button is-link is-light">Annuler</a>
+        </div>
+    </div>
+</form>
+{% endblock %}

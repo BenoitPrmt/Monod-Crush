@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<script src="{% static 'scripts/htmx.min.js' %}" defer></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<!--TODO add local-->
+{% endblock %}
+
+{% block full_title %} MonodCrush {% endblock %}
+
+{% block h1 %}Posts{% endblock %}
+
+{% block content %}
+<div>
+    <a class="button is-success is-medium" href="{% url 'blog:post-new' %}">New</a>
+
+    {% include 'blog/partials/post-list.html' %}
+
+    {% if posts|length == 0 %}
+        <h3 class="title is-4 my-6">Il n'y pas encore de post soyez le premier à en poster un</h3>
+    {% endif %}
+
+</div>
+{% endblock %}
