@@ -1,0 +1,14 @@
+{% load humanize %}
+
+<div class="my-4">
+    <p class="is-size-7">
+        posté par
+        {% if comment.is_anonymous %}
+        un utilisateur anonyme
+        {% else %}
+        <a href="{{ comment.author.username }}">@{{ comment.author.username }}</a>
+        {% endif %}
+        {{ comment.created_at|naturaltime }}
+    </p>
+    <div class="text-break">{{ comment.text|linebreaks }}</div>
+</div>

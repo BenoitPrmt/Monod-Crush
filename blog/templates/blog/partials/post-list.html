@@ -1,0 +1,9 @@
+{% for post in posts %}
+<article class="my-5">
+    <div class="card px-4 py-4">
+        {% include 'blog/components/post-body.html' %}
+        {% include 'blog/partials/post-comments-area.html' %}
+    </div>
+    {% include 'blog/components/post-like-button.html' %}
+</article>
+{% endfor %}
