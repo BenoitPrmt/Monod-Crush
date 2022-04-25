@@ -38,7 +38,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     bio = models.TextField("biographie", max_length=500, blank=True)
     email = models.EmailField("adresse mail", blank=True,
                               help_text="L'adresse mail permet de récupérer son compte en cas de perte de mot de passe."
-                                        " Elle n'est pas publier sur votre profil.")
+                                        " Elle n'est pas publiée sur votre profil.")
 
     study = models.CharField("études (classe)", max_length=100, blank=True)
     instagram = models.CharField("instagram", max_length=100, validators=[instagram_validator], blank=True)
