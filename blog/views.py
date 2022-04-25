@@ -66,7 +66,7 @@ class PostDeleteView(PostMixin, LoginRequiredMixin, SingleObjectMixin, DeletionM
 
     def get_object(self, queryset=None) -> Post:
         post = super().get_object()
-        if post.author == self.request.user or self.request.user.has_perm('blog.other_change_post'):
+        if post.author == self.request.user or self.request.user.has_perm('blog.delete_other_users_posts'):
             return post
         raise PermissionDenied
 
