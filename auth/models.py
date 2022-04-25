@@ -38,7 +38,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     bio = models.TextField("biographie", max_length=500, blank=True)
     email = models.EmailField("adresse mail", blank=True,
                               help_text="L'adresse mail permet de récupérer son compte en cas de perte de mot de passe."
-                              )
+                                        " Elle n'est pas publier sur votre profil.")
 
     study = models.CharField("études (classe)", max_length=100, blank=True)
     instagram = models.CharField("instagram", max_length=100, validators=[instagram_validator], blank=True)
@@ -47,48 +47,56 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     website = models.URLField("site web", blank=True)
 
     is_staff = models.BooleanField(
+
             "membre du staff",
             default=False,
             help_text="Permet de définir si l'utilisateur peut se connecter à l'administration.",
     )
-    is_active = models.BooleanField(
-            "actif",
-            default=True,
-            help_text="Permet de définir si l'utilisateur peut se connecter."
-                      " Désactivez-le pour pour bannir un utilisateur ou désactiver un compte sans le supprimer.",
-    )
-    date_joined = models.DateTimeField("date d'inscription", auto_now_add=True)
 
-    objects = UserManager()
 
-    EMAIL_FIELD = "email"
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["date_of_birth"]
+is_active = models.BooleanField(
+        "actif",
+        default=True,
+        help_text="Permet de définir si l'utilisateur peut se connecter."
+                  " Désactivez-le pour pour bannir un utilisateur ou désactiver un compte sans le supprimer.",
+)
+date_joined = models.DateTimeField("date d'inscription", auto_now_add=True)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(Lower("username"), name="unique_username"),
-        ]
+objects = UserManager()
 
-        verbose_name = "utilisateur"
-        verbose_name_plural = "utilisateurs"
+EMAIL_FIELD = "email"
+USERNAME_FIELD = "username"
+REQUIRED_FIELDS = ["date_of_birth"]
 
-    def validate_unique(self, exclude: iter = None) -> None:
-        """ Validate that the lower username is unique."""
-        username_check = CustomUser.objects.filter(username__iexact=self.username)
-        if username_check.exists() and username_check.first() != self:
-            raise ValidationError("Ce nom d'utilisateur est déjà utilisé.", code="unique_username")
-        super().validate_unique(exclude)
 
-    def clean(self) -> None:
-        super().clean()
-        self.email = self.__class__.objects.normalize_email(self.email)
+class Meta:
+    constraints = [
+        models.UniqueConstraint(Lower("username"), name="unique_username"),
+    ]
 
-    def email_user(self, subject: Any, message: Any, from_email: Any = None, **kwargs: Any) -> int:
-        """ Sends an email to this User."""
-        return send_mail(subject, message, from_email, [self.email], **kwargs)
+    verbose_name = "utilisateur"
+    verbose_name_plural = "utilisateurs"
 
-    @property
-    def is_birthday(self) -> bool:
-        """ Return True if the user is a birthday."""
-        return self.date_of_birth.month == date.today().month and self.date_of_birth.day == date.today().day
+
+def validate_unique(self, exclude: iter = None) -> None:
+    """ Validate that the lower username is unique."""
+    username_check = CustomUser.objects.filter(username__iexact=self.username)
+    if username_check.exists() and username_check.first() != self:
+        raise ValidationError("Ce nom d'utilisateur est déjà utilisé.", code="unique_username")
+    super().validate_unique(exclude)
+
+
+def clean(self) -> None:
+    super().clean()
+    self.email = self.__class__.objects.normalize_email(self.email)
+
+
+def email_user(self, subject: Any, message: Any, from_email: Any = None, **kwargs: Any) -> int:
+    """ Sends an email to this User."""
+    return send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+@property
+def is_birthday(self) -> bool:
+    """ Return True if the user is a birthday."""
+    return self.date_of_birth.month == date.today().month and self.date_of_birth.day == date.today().day
