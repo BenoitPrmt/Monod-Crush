@@ -13,8 +13,8 @@
         </div>
         <div>
             {% if profile == user %}
-            <a class="button is-link" href="{% url 'blog:edit-profile' username=profile.username %}">Edit Profile</a>
-            <form action="{% url 'blog:delete-profile' username=profile.username %}" method="post">
+            <a class="button is-success is-light is-outlined my-2" href="{% url 'blog:edit-profile' username=profile.username %}">Edit Profile</a>
+            <form class="my2" action="{% url 'blog:delete-profile' username=profile.username %}" method="post">
                 {% csrf_token %}
                 <button class="button is-danger is-light" type="submit"
                         onclick="return confirm('Etes vous sûr ?');">Supprimer le compte
