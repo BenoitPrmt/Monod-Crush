@@ -47,56 +47,49 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     website = models.URLField("site web", blank=True)
 
     is_staff = models.BooleanField(
-
             "membre du staff",
             default=False,
             help_text="Permet de définir si l'utilisateur peut se connecter à l'administration.",
     )
 
+    is_active = models.BooleanField(
+            "actif",
+            default=True,
+            help_text="Permet de définir si l'utilisateur peut se connecter."
+                      " Désactivez-le pour pour bannir un utilisateur ou désactiver un compte sans le supprimer.",
+    )
+    date_joined = models.DateTimeField("date d'inscription", auto_now_add=True)
 
-is_active = models.BooleanField(
-        "actif",
-        default=True,
-        help_text="Permet de définir si l'utilisateur peut se connecter."
-                  " Désactivez-le pour pour bannir un utilisateur ou désactiver un compte sans le supprimer.",
-)
-date_joined = models.DateTimeField("date d'inscription", auto_now_add=True)
+    objects = UserManager()
 
-objects = UserManager()
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["date_of_birth"]
 
-EMAIL_FIELD = "email"
-USERNAME_FIELD = "username"
-REQUIRED_FIELDS = ["date_of_birth"]
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(Lower("username"), name="unique_username"),
+        ]
 
+        verbose_name = "utilisateur"
+        verbose_name_plural = "utilisateurs"
 
-class Meta:
-    constraints = [
-        models.UniqueConstraint(Lower("username"), name="unique_username"),
-    ]
+    def validate_unique(self, exclude: iter = None) -> None:
+        """ Validate that the lower username is unique."""
+        username_check = CustomUser.objects.filter(username__iexact=self.username)
+        if username_check.exists() and username_check.first() != self:
+            raise ValidationError("Ce nom d'utilisateur est déjà utilisé.", code="unique_username")
+        super().validate_unique(exclude)
 
-    verbose_name = "utilisateur"
-    verbose_name_plural = "utilisateurs"
+    def clean(self) -> None:
+        super().clean()
+        self.email = self.__class__.objects.normalize_email(self.email)
 
+    def email_user(self, subject: Any, message: Any, from_email: Any = None, **kwargs: Any) -> int:
+        """ Sends an email to this User."""
+        return send_mail(subject, message, from_email, [self.email], **kwargs)
 
-def validate_unique(self, exclude: iter = None) -> None:
-    """ Validate that the lower username is unique."""
-    username_check = CustomUser.objects.filter(username__iexact=self.username)
-    if username_check.exists() and username_check.first() != self:
-        raise ValidationError("Ce nom d'utilisateur est déjà utilisé.", code="unique_username")
-    super().validate_unique(exclude)
-
-
-def clean(self) -> None:
-    super().clean()
-    self.email = self.__class__.objects.normalize_email(self.email)
-
-
-def email_user(self, subject: Any, message: Any, from_email: Any = None, **kwargs: Any) -> int:
-    """ Sends an email to this User."""
-    return send_mail(subject, message, from_email, [self.email], **kwargs)
-
-
-@property
-def is_birthday(self) -> bool:
-    """ Return True if the user is a birthday."""
-    return self.date_of_birth.month == date.today().month and self.date_of_birth.day == date.today().day
+    @property
+    def is_birthday(self) -> bool:
+        """ Return True if the user is a birthday."""
+        return self.date_of_birth.month == date.today().month and self.date_of_birth.day == date.today().day
