@@ -10,7 +10,7 @@
 
     <div x-show="open" @click.outside="open = false">
         {% if user.is_authenticated %}
-        <form class="my-2" hx-post="{% url 'blog:post-comment' post_id=post.id %}"
+        <form class="my-2" hx-post="{% url 'blog:comment-post' post_id=post.id %}"
               hx-target="#comments-post-{{ post.id }}" hx-swap="outerHTML">
 
             <div class="field has-addons">

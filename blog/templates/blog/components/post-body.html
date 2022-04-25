@@ -1,14 +1,28 @@
 {% load humanize %}
+<div class="is-flex is-justify-content-space-between">
+    <div class="content">
+        <div class="my-2 text-break">{{ post.text|linebreaks }}</div>
+        <p class="content is-small">
+            posté par
+            {% if post.is_anonymous %}
+            un utilisateur anonyme
+            {% else %}
+            <a href="{% url 'blog:profile' username=post.author.username %}">@{{ post.author.username }}</a>
+            {% endif %}
+            {{ post.created_at|naturaltime }}
+        </p>
+    </div>
 
-<div class="content">
-    <div class="mt-2 text-break">{{ post.text|linebreaks }}</div>
-    <p class="content is-small">
-        posté par
-        {% if post.is_anonymous %}
-        un utilisateur anonyme
-        {% else %}
-        <a href="{% url 'blog:user-profile' username=post.author.username %}">@{{ post.author.username }}</a>
-        {% endif %}
-        {{ post.created_at|naturaltime }}
-    </p>
+    {% if user.is_authenticated %}
+    {% if post.author == user or perms.blog.edit_other_users_posts %}
+    <div class="is-flex is-justify-content-end">
+        <a href="{% url 'blog:edit-post' post_id=post.id %}" class="button is-small is-primary">
+            <span class="icon is-small">
+                <i class="fas fa-pencil-alt"></i>
+            </span>
+            <span>Modifier</span>
+        </a>
+    </div>
+    {% endif %}
+    {% endif %}
 </div>

@@ -9,7 +9,7 @@ app_name = 'auth'
 urlpatterns = [
     path("login", LoginView.as_view(template_name="auth/login.html"), name="login"),
     path("register", RegisterView.as_view(), name="register"),
-    path("logout", LogoutView.as_view(), name="logout"),
+    path("logout", LogoutView.as_view(next_page="/"), name="logout"),
     path("password-change", PasswordChangeView.as_view(), name="password_change"),
     path("password-change/done", PasswordChangeDoneView.as_view(), name="password_change_done"),
     path("password-reset", PasswordResetView.as_view(), name="password_reset"),

@@ -1,18 +1,26 @@
 import logging
 
-from auth.models import CustomUser
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import *
+from django.core.exceptions import PermissionDenied
+from django.db.models import QuerySet, Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
+from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import DeletionMixin
 
-from .models import Post, Comment, Like
+from auth.models import CustomUser
+from .models import Comment, Post
 
 log = logging.getLogger(__name__)
+
+
+class PostMixin:
+    model = Post
+    slug_url_kwarg = 'post_id'
+    slug_field = 'id'
 
 
 class PostListView(ListView):
@@ -30,41 +38,6 @@ class PostListView(ListView):
         return posts
 
 
-# comment view login required for post but  not for get
-class CommentView(View):
-    """ login required for post"""
-
-    def post(self, request: HttpRequest, post_id: int) -> HttpResponse:
-        if not request.user.is_authenticated:
-            return HttpResponse('login required', status=401)
-
-        post = get_object_or_404(Post, id=post_id)
-        comment = request.POST['comment']
-
-        Comment.objects.create(post=post, author=request.user, text=comment, is_anonymous=True)
-
-        comments = post.comments.order_by('-created_at')
-        return render(request, 'blog/partials/rep.html', {'comments': comments, 'post': post})
-
-    def get(self, request: HttpRequest, post_id: int) -> HttpResponse:
-        post = Post.objects.get(id=post_id)
-        post.comments.order_by('-created_at')
-
-        comments = post.comments.order_by('-created_at')
-        return render(request, 'blog/partials/rep.html', {'comments': comments, 'post': post})
-
-
-# class PartialPostCommentDetail(DetailView):
-#     model = Post
-#     template_name = 'blog/partial_post_comment.html'
-#     context_object_name = 'post'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['comments'] = self.object.comment_set.all()
-#         return context
-
-
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['text', "is_anonymous"]
@@ -76,77 +49,123 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostEditView(LoginRequiredMixin, UpdateView):
-    model = Post
+class PostEditView(PostMixin, LoginRequiredMixin, UpdateView):
     fields = ['text']
+    template_name = 'blog/edit_post.html'
+    success_url = '/'
+
+    def get_object(self, queryset=None) -> Post:
+        post = super().get_object()
+        if post.author == self.request.user or self.request.user.has_perm('blog.edit_other_users_posts'):
+            return post
+        raise PermissionDenied
 
 
-class PostView(LoginRequiredMixin, DeletionMixin, View):
-    model = Post
-
-
-class UserProfileView(DetailView):
-    model = CustomUser
-    template_name = 'blog/profile.html'
-    context_object_name = 'profile'
-    slug_url_kwarg = 'username'
-    slug_field = 'username'
-
-    def get_object(self, queryset=None) -> CustomUser:
-        return get_object_or_404(CustomUser, username=self.kwargs['username'])
-
-
-class UserEditProfileView(LoginRequiredMixin, UpdateView):
-    model = CustomUser
-    fields = ['username', 'first_name', 'bio', "study", 'email', 'instagram', 'twitter', 'github', 'website']
-    template_name = 'blog/edit_profile.html'
-    slug_url_kwarg = 'username'
-    slug_field = 'username'
-
-    def get_object(self, queryset=None) -> CustomUser:
-        return get_object_or_404(CustomUser, username=self.kwargs['username'])
-
-    def get_success_url(self) -> HttpResponseRedirect:
-        """ Redirect to new user profile page if user is editing his own username """
-        return reverse('blog:user-profile', kwargs={'username': self.object.username})
-
-
-class UserDeleteProfileView(LoginRequiredMixin, DeletionMixin, View):
-    model = CustomUser
-    slug_url_kwarg = 'username'
-    slug_field = 'username'
+class PostDeleteView(PostMixin, LoginRequiredMixin, SingleObjectMixin, DeletionMixin, View):
     success_url = reverse_lazy('blog:index')
 
-    # def get_object(self, queryset=None) -> CustomUser:
-    #     return get_object_or_404(CustomUser, username=self.kwargs['username'])
+    def get_object(self, queryset=None) -> Post:
+        post = super().get_object()
+        if post.author == self.request.user or self.request.user.has_perm('blog.other_change_post'):
+            return post
+        raise PermissionDenied
 
 
-class SearchView(ListView):
+# TODO maybe use SingleObjectTemplateResponseMixin
+class PostCommentView(PostMixin, SingleObjectMixin, View):
+    """ login required for post """
+
+    def post(self, request: HttpRequest, post_id) -> HttpResponse:
+        if not request.user.is_authenticated:
+            return HttpResponse(status=401)
+
+        post = super().get_object()
+        comment = request.POST['comment']
+
+        Comment.objects.create(post=post, author=request.user, text=comment, is_anonymous=True)
+
+        comments = post.comments.order_by('-created_at')
+        return render(request, 'blog/partials/rep.html', {'comments': comments, 'post': post})
+
+    def get(self, request: HttpRequest, post_id) -> HttpResponse:
+        post = super().get_object()
+        comments = post.comments.order_by('-created_at')
+        return render(request, 'blog/partials/rep.html', {'comments': comments, 'post': post})
+
+
+# TODO Delete comment
+# TODO remove post_id
+class PostLikeView(PostMixin, LoginRequiredMixin, SingleObjectMixin, View):
+    def post(self, request: HttpRequest, post_id) -> HttpResponse:
+        post = super().get_object()
+
+        if post.likes.filter(user=request.user).exists():
+            post.likes.filter(user=request.user).delete()
+            log.info(f"User {request.user} unliked post {post}")
+            post.liked = False
+            return render(request, 'blog/components/post-like-button.html', {'post': post})
+
+        else:
+            post.likes.create(user=request.user)
+            log.info(f"User {request.user} liked post {post}")
+            post.liked = True
+            return render(request, 'blog/components/post-like-button.html', {'post': post})
+
+
+class CustomUserMixin:
+    model = CustomUser
+    slug_url_kwarg = 'username'
+    slug_field = 'username'
+
+
+class ProfileView(CustomUserMixin, DetailView):
+    template_name = 'blog/profile.html'
+    context_object_name = 'profile'
+
+
+class ProfileEditView(CustomUserMixin, LoginRequiredMixin, UpdateView):
+    fields = ['username', 'first_name', 'bio', "study", 'email', 'instagram', 'twitter', 'github', 'website']
+    template_name = 'blog/edit_profile.html'
+    success_url = reverse_lazy('blog:profile', kwargs={'username': 'username'})
+
+    def get_object(self, queryset=None) -> CustomUser:
+        user = super().get_object()
+        if user == self.request.user or self.request.user.has_perm('blog.edit_other_profile'):
+            return user
+        raise PermissionDenied
+
+
+class ProfileDeleteView(CustomUserMixin, LoginRequiredMixin, SingleObjectMixin, DeletionMixin, View):
+    """" Delete user profile check if user is deleting his own profile """
+    success_url = reverse_lazy('blog:index')
+
+    def get_object(self, queryset=None) -> CustomUser:
+        user = super().get_object()
+        if user == self.request.user or self.request.user.has_perm('blog.delete_user'):
+            return user
+        raise PermissionDenied
+
+
+class ProfileStarView(CustomUserMixin, LoginRequiredMixin, SingleObjectMixin, View):
+    def post(self, request: HttpRequest) -> HttpResponse:
+        user = super().get_object()
+        return HttpResponse(status=200)
+        # if user.stars.filter(user=request.user).exists():
+        #     user.stars.filter(user=request.user).delete()
+        #     log.info(f"User {request.user} unstarred user {user}")
+        #     return HttpResponse(status=200)
+        # else:
+        #     user.stars.create(user=request.user)
+        #     log.info(f"User {request.user} starred user {user}")
+        #     return HttpResponse(status=200)
+
+
+class ProfilSearchView(ListView):
     model = CustomUser
     template_name = "blog/search_results.html"
     context_object_name = "users"
 
     def get_queryset(self) -> QuerySet[CustomUser]:
         query = self.request.GET.get("q", "")
-        user_list = CustomUser.objects.filter(
-                Q(username__icontains=query) | Q(first_name__icontains=query)
-        )
-        return user_list
-
-
-class LikeView(LoginRequiredMixin, View):
-    def post(self, request: HttpRequest, post_id: int) -> HttpResponse:
-        post = get_object_or_404(Post, id=post_id)
-
-        if not post.likes.filter(user=request.user).exists():
-            Like.objects.create(user=request.user, post=post)
-            log.info(f"User {request.user} liked post {post}")
-            post.liked = True
-
-            return render(request, 'blog/components/post-like-button.html', {'post': post})
-        else:
-            post.likes.filter(user=request.user.id).delete()
-            log.info(f"User {request.user} unliked post {post}")
-
-            post.liked = False
-            return render(request, 'blog/components/post-like-button.html', {'post': post})
+        users = CustomUser.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query))
+        return users

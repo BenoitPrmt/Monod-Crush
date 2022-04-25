@@ -95,7 +95,7 @@
             <button type="submit" class="button is-link">Sauvegarder</button>
         </div>
         <div class="control">
-            <a href="{% url 'blog:user-profile' username=request.user.username %}" class="button is-link is-light">Annuler</a>
+            <a href="{% url 'blog:profile' username=request.user.username %}" class="button is-link is-light">Annuler</a>
         </div>
     </div>
 </form>
