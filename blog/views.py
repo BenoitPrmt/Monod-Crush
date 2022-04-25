@@ -126,13 +126,17 @@ class ProfileView(CustomUserMixin, DetailView):
 class ProfileEditView(CustomUserMixin, LoginRequiredMixin, UpdateView):
     fields = ['username', 'first_name', 'bio', "study", 'email', 'instagram', 'twitter', 'github', 'website']
     template_name = 'blog/edit_profile.html'
-    success_url = reverse_lazy('blog:profile', kwargs={'username': 'username'})
 
     def get_object(self, queryset=None) -> CustomUser:
         user = super().get_object()
         if user == self.request.user or self.request.user.has_perm('blog.edit_other_profile'):
             return user
         raise PermissionDenied
+
+    def get_success_url(self) -> str:
+        # redirect with new username
+        return reverse_lazy('blog:profile', kwargs={'username': self.object.username})
+    # TODO replace with reverse_lazy by reverse
 
 
 class ProfileDeleteView(CustomUserMixin, LoginRequiredMixin, SingleObjectMixin, DeletionMixin, View):
