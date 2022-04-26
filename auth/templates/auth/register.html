@@ -23,14 +23,14 @@
     <div class="field">
         <label class="label" for="{{ form.username.id_for_label }}">{{ form.username.label_tag }}</label>
         <div class="control">
-            {% render_field form.username class+="input" placeholder=form.username.label%}
+            {% render_field form.username class+="input" placeholder=form.username.label %}
         </div>
     </div>
 
     <div class="field">
         <label class="label" for="{{ form.date_of_birth.id_for_label}}">{{ form.date_of_birth.label_tag }}</label>
         <div class="control">
-            {% render_field form.date_of_birth class+="input" type="date" placeholder="jj/mm/aaaa"%}
+            {% render_field form.date_of_birth class+="input" type="date" placeholder="jj/mm/aaaa" %}
         </div>
         <p class="help is-danger">{{ form.username.errors }}</p>
     </div>
@@ -38,14 +38,14 @@
     <div class="field">
         <label class="label" for="{{ form.password1.id_for_label}}">{{ form.password1.label_tag }}</label>
         <div class="control">
-            {% render_field form.password1 class+="input" placeholder=form.password1.label%}
+            {% render_field form.password1 class+="input" placeholder=form.password1.label %}
         </div>
     </div>
 
     <div class="field">
         <label class="label" for="{{ form.password2.id_for_label}}">{{ form.password2.label_tag }}</label>
         <div class="control">
-            {% render_field form.password2 class+="input" placeholder=form.password2.label%}
+            {% render_field form.password2 class+="input" placeholder=form.password2.label %}
         </div>
     </div>
 
