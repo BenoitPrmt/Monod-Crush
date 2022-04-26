@@ -1,4 +1,4 @@
-{% load humanize %}
+{% load datetimeformat %}
 
 <div class="my-4">
     <p class="is-size-7">
@@ -8,7 +8,7 @@
         {% else %}
         <a href="{% url 'blog:profile' username=post.author.username %}">@{{ comment.author.username }}</a>
         {% endif %}
-        {{ comment.created_at|naturaltime }}
+        {{ comment.created_at|naturaltimeordate }}
     </p>
     <div class="text-break">{{ comment.text|linebreaks }}</div>
 </div>

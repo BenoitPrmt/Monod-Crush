@@ -1,4 +1,5 @@
-{% load humanize %}
+{% load datetimeformat %}
+
 <div class="is-flex is-justify-content-space-between">
     <div class="content">
         <div class="my-2 text-break">{{ post.text|linebreaks }}</div>
@@ -9,7 +10,7 @@
             {% else %}
             <a href="{% url 'blog:profile' username=post.author.username %}">@{{ post.author.username }}</a>
             {% endif %}
-            {{ post.created_at|naturaltime }}
+            {{ post.created_at|naturaltimeordate }}
         </p>
     </div>
 
