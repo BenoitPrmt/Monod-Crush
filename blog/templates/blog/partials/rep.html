@@ -2,7 +2,7 @@
 
 <div id="comments-post-{{ post.id }}"
      x-data="{ open: false }" x-init="setTimeout(() => open = true, 10)"
-     hx-headers='{" X-CSRFToken": "{{ csrf_token }}"}'>
+     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
     <p class="is-clickable is-inline-block" @click="open = !open">
         <span class="nb-of-comment">{{ post.nb_of_comments }} commentaire{% if post.nb_of_comments > 1 %}s{% endif %}</span>
