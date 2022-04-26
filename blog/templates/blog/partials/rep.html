@@ -1,14 +1,15 @@
 {% load static %}
 
-<div id="comments-post-{{ post.id }}" x-data="{ open: true }"
-     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<div id="comments-post-{{ post.id }}"
+     x-data="{ open: false }" x-init="setTimeout(() => open = true, 10)"
+     hx-headers='{" X-CSRFToken": "{{ csrf_token }}"}'>
 
     <p class="is-clickable is-inline-block" @click="open = !open">
         <span class="nb-of-comment">{{ post.nb_of_comments }} commentaire{% if post.nb_of_comments > 1 %}s{% endif %}</span>
         <img src="{% static 'icons/down-arrow.svg' %}" alt="down-arrow" class="down-arrow">
     </p>
 
-    <div x-show="open" @click.outside="open = false">
+    <div x-show="open" x-collapse>
         {% if user.is_authenticated %}
         <form class="my-2" hx-post="{% url 'blog:comment-post' post_id=post.id %}"
               hx-target="#comments-post-{{ post.id }}" hx-swap="outerHTML">
