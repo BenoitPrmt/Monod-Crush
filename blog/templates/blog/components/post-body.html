@@ -16,7 +16,7 @@
 
     {% if user.is_authenticated %}
     {% if post.author == user or perms.blog.edit_other_users_posts %}
-    <div class="is-flex is-justify-content-end">
+    <div>
         <a href="{% url 'blog:edit-post' post_id=post.id %}" class="button is-small is-primary">
             <span class="icon is-small">
                 <i class="fas fa-pencil-alt"></i>
