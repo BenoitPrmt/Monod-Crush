@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet, Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
@@ -12,7 +12,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import DeletionMixin
 
 from auth.models import CustomUser
-from .models import Comment, Post
+from .models import Comment, Post, PostReport, Like
 
 log = logging.getLogger(__name__)
 
@@ -200,3 +200,27 @@ class ProfilSearchView(ListView):
         query = self.request.GET.get("q", "")
         users = CustomUser.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query))
         return users
+
+
+class ModerationView(LoginRequiredMixin, View):
+    """ moderation panel with statistics """
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        if not request.user.is_superuser:
+            raise PermissionDenied
+
+        nb_posts = Post.objects.all().count()
+        nb_users = CustomUser.objects.all().count()
+        nb_comments = Comment.objects.all().count()
+        nb_reports = PostReport.objects.all().count()
+        nb_likes = Like.objects.all().count()
+
+        context = {
+            'nb_posts': nb_posts,
+            'nb_users': nb_users,
+            'nb_comments': nb_comments,
+            'nb_reports': nb_reports,
+            'nb_likes': nb_likes,
+        }
+
+        return render(request, 'blog/moderation.html', context)

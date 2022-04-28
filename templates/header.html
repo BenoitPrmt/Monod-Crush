@@ -54,6 +54,7 @@
 
                     {% if user.is_staff %}
                     <a class="button is-link" href="{% url 'admin:index' %}"> Staff </a>
+                    <a class="button is-link" href="{% url 'blog:moderation' %}"> Mod </a>
                     {% endif %}
 
                     <form action="{% url 'auth:logout' %}" method="post">

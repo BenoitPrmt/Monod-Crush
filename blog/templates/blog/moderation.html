@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel administrateur{% endblock %}
+{% block h1 %}Statistiques du site{% endblock %}
+
+{% block content %}
+<div>
+    <nav class="level">
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="is-size-4">👤 Utilisateurs</p>
+                <p class="title">{{nb_users}}</p>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="is-size-4">📮 Posts</p>
+                <p class="title">{{nb_posts}}</p>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="is-size-4">💬 Commentaires</p>
+                <p class="title">{{nb_comments}}</p>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="is-size-4">💗 Likes</p>
+                <p class="title">{{ nb_likes }}</p>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="is-size-4">🚨 Signalements</p>
+                <p class="title">{{ nb_reports }}</p>
+            </div>
+        </div>
+    </nav>
+</div>
+{% endblock %}
