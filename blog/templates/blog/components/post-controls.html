@@ -3,13 +3,13 @@
     <div class="dropdown is-right"
          :class="show ? 'is-active' : ''" @click.outside="show = false" x-data="{ show : false }">
         <div class="dropdown-trigger">
-            <button @click="show =! show" class="button">
+            <button @click="show =! show" class="button" aria-haspopup="true" aria-controls="dropdown-menu">
                 <span class="icon is-small">
                     <i class="fas fa-ellipsis-v"></i>
                 </span>
             </button>
         </div>
-        <div class="dropdown-menu" role="menu">
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
                 {% if post.author == user or user.is_superuser%}
                 <a class="dropdown-item has-text-link" href="{% url 'blog:edit-post' post_id=post.id %}">

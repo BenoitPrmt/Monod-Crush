@@ -21,7 +21,6 @@
                 <span class="navbar-link">Plus</span>
 
                 <div class="navbar-dropdown">
-                    <!--                    <a class="navbar-item" href="{% url 'blog:index' %}">À propos</a>-->
                     <a class="navbar-item" href="{% url 'about:contact' %}">Contact</a>
                     <hr class="navbar-divider">
                     <a class="navbar-item" href="{% url 'about:suggestions' %}">Suggestions</a>
@@ -37,9 +36,9 @@
                         <input class="input" name="q" type="text" placeholder="Rechercher...">
                     </div>
                     <div class="control">
-                        <button class="button">
+                        <button class="button" type="submit" aria-label="Rechercher">
                             <img class="empty-heart" src="{% static 'icons/search.svg' %}"
-                                 height="18px" width="18px">
+                                 height="18px" width="18px" alt="Rechercher">
                         </button>
                     </div>
                 </div>
