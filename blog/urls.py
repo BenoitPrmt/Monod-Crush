@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import PostCreateView, PostEditView, PostListView, PostDeleteView, PostCommentView, PostLikeView, \
     ProfileView, ProfileEditView, ProfileDeleteView, ProfilSearchView, \
-    ProfileStarView
+    ProfileStarView, PostReportView, PostHideView
 
 
 app_name = 'blog'
@@ -15,6 +15,8 @@ urlpatterns = [
     path('post/<int:post_id>/delete', PostDeleteView.as_view(), name='delete-post'),
     path('post/<int:post_id>/comment', PostCommentView.as_view(), name='comment-post'),
     path('post/<int:post_id>/like', PostLikeView.as_view(), name='like-post'),
+    path('post/<int:post_id>/report', PostReportView.as_view(), name='report-post'),
+    path('post/<int:post_id>/hide', PostHideView.as_view(), name='hide-post'),
 
     path('user/<str:username>', ProfileView.as_view(), name='profile'),
     path('user/<str:username>/edit', ProfileEditView.as_view(), name='edit-profile'),

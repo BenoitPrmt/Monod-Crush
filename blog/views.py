@@ -56,7 +56,7 @@ class PostEditView(PostMixin, LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None) -> Post:
         post = super().get_object()
-        if post.author == self.request.user or self.request.user.has_perm('blog.edit_other_users_posts'):
+        if post.author == self.request.user or self.request.user.has_perm('blog.edit_post'):
             return post
         raise PermissionDenied
 
@@ -66,7 +66,7 @@ class PostDeleteView(PostMixin, LoginRequiredMixin, SingleObjectMixin, DeletionM
 
     def get_object(self, queryset=None) -> Post:
         post = super().get_object()
-        if post.author == self.request.user or self.request.user.has_perm('blog.delete_other_users_posts'):
+        if post.author == self.request.user or self.request.user.has_perm('blog.edit_post'):
             return post
         raise PermissionDenied
 
@@ -110,6 +110,33 @@ class PostLikeView(PostMixin, LoginRequiredMixin, SingleObjectMixin, View):
             log.info(f"User {request.user} liked post {post}")
             post.liked = True
             return render(request, 'blog/components/post-like-button.html', {'post': post})
+
+
+class PostReportView(PostMixin, LoginRequiredMixin, SingleObjectMixin, View):
+    def post(self, request: HttpRequest, post_id) -> HttpResponse:
+        post = super().get_object()
+
+        if not post.reports.filter(user=request.user).exists():
+            post.reports.create(user=request.user)
+            log.info(f"User {request.user} reported post {post}")
+            return HttpResponse(status=201)
+
+        # TODO notify user
+        log.info(f"User {request.user} already reported post {post}")
+        return HttpResponse(status=400)
+
+
+class PostHideView(PostMixin, LoginRequiredMixin, SingleObjectMixin, View):
+    def post(self, request: HttpRequest, post_id) -> HttpResponse:
+        post = super().get_object()
+
+        if request.user.has_perm('blog.hide_post'):
+            post.status = Post.HIDDEN
+            post.save()
+            log.info(f"User {request.user} hid post {post}")
+            return HttpResponse(status=201)
+
+        raise PermissionDenied
 
 
 class CustomUserMixin:
