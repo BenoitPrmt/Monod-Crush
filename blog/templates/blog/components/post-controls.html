@@ -20,7 +20,7 @@
                 </a>
                 <a class="dropdown-item has-text-danger"
                    hx-post="{% url 'blog:delete-post' post_id=post.id %}"
-                   hx-swap="delete" hx-target="#post-{{ post.id }}"
+                   hx-swap="delete swap:1s" hx-target="#post-{{ post.id }}"
                    hx-confirm="Êtes-vous sûr de vouloir supprimer ce post ?"
                    href="#">
                     <span class="icon is-small">
@@ -33,7 +33,7 @@
                 {% if user.is_superuser %}
                 <a class="dropdown-item"
                    hx-post="{% url 'blog:hide-post' post_id=post.id %}"
-                   hx-swap="delete" hx-target="#post-{{ post.id }}"
+                   hx-swap="delete swap:1s" hx-target="#post-{{ post.id }}"
                    hx-confirm="Êtes-vous sûr de vouloir masquer ce post ?"
                    href="#">
                     <span class="icon is-small">

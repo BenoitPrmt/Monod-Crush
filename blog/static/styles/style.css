@@ -10,3 +10,8 @@ body section {
 .text-break p {
     overflow-wrap: break-word;
 }
+
+.fade-out.htmx-swapping {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
