@@ -1,7 +1,5 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.forms import ModelForm
-from django.http import HttpResponseRedirect, HttpRequest
-from django.views import View
 from django.views.generic import FormView
 
 from .forms import CustomUserCreationForm
