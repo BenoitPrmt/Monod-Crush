@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Manager
 
 from auth.models import CustomUser
 
@@ -34,8 +34,9 @@ class Post(models.Model):
     is_anonymous = models.BooleanField("post anonyme", default=True)
 
     likes: QuerySet["Like"]
-    reports: QuerySet["Report"]
+    reports: QuerySet["PostReport"]
     comments: QuerySet["Comment"]
+    objects: Manager
 
     class Meta:
         verbose_name = "post"
@@ -91,6 +92,8 @@ class Comment(models.Model):
     created_at = models.DateTimeField("date de creation", auto_now_add=True)
     is_anonymous = models.BooleanField("commentaire anonyme", default=True)
 
+    objects: Manager
+
     class Meta:
         verbose_name = "commentaire"
         verbose_name_plural = "commentaires"
@@ -122,6 +125,8 @@ class PostReport(models.Model):
     user: CustomUser = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                          related_name="reports", verbose_name="auteur du signalement")
     created_at = models.DateTimeField("date du signalement", auto_now_add=True)
+
+    objects: Manager
 
     class Meta:
         constraints = [
@@ -165,6 +170,8 @@ class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              related_name="likes", verbose_name="utilisateur aimant")
     created_at = models.DateTimeField("date", auto_now_add=True)
+
+    objects: Manager
 
     class Meta:
         constraints = [
