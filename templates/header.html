@@ -1,26 +1,30 @@
 {% load static %}
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation"
+     x-data="{ menuOpen: false }" @click.outside="menuOpen = false">
     <div class="navbar-brand">
         <a class="navbar-item" href="{% url 'blog:index' %}">
             <img src="{% static 'images/logo.png' %}" alt="Monod Crush logo">
         </a>
 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+           @click="menuOpen = !menuOpen" :class="{ 'is-active': menuOpen }">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
         </a>
     </div>
 
-    <div class="navbar-menu">
+    <div class="navbar-menu" :class="{ 'is-active': menuOpen }">
         <div class="navbar-start">
             <a class="navbar-item" href="{% url 'blog:index' %}">Home</a>
             <a class="navbar-item" href="{% url 'instamap:index' %}">Insta Map</a>
 
-            <div class="navbar-item has-dropdown is-hoverable">
-                <span class="navbar-link">Plus</span>
+            <div class="navbar-item has-dropdown" :class="{ 'is-active': dropOpen }" x-data="{ dropOpen: false }"
+                 @mouseover="if(window.innerWidth > 1025) {dropOpen = true}" @mouseleave="dropOpen = false">
 
-                <div class="navbar-dropdown">
+                <span class="navbar-link" @click="if(window.innerWidth < 1025) {dropOpen = !dropOpen}">Plus</span>
+
+                <div class="navbar-dropdown" :class="{ 'is-hidden': !dropOpen }">
                     <a class="navbar-item" href="{% url 'about:contact' %}">Contact</a>
                     <hr class="navbar-divider">
                     <a class="navbar-item" href="{% url 'about:suggestions' %}">Suggestions</a>

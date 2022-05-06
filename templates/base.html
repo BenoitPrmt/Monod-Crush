@@ -21,7 +21,9 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
 
     <!-- scripts -->
-    <script src="{% static 'scripts/nav-bar.js' %}" defer></script>
+    {% block scripts %}
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {% endblock scripts %}
 
     <!-- title -->
     <title>{% block full_title %}{% block title %}{% endblock %} - MonodCrush{% endblock %}</title>

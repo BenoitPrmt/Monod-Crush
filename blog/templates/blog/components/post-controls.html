@@ -3,7 +3,8 @@
     <div class="dropdown is-right"
          :class="show ? 'is-active' : ''" @click.outside="show = false" x-data="{ show : false }">
         <div class="dropdown-trigger">
-            <button @click="show =! show" class="button" aria-haspopup="true" aria-controls="dropdown-menu" aria-label="dropdown button">
+            <button @click="show =! show" class="button" aria-haspopup="true" aria-controls="dropdown-menu"
+                    aria-label="dropdown button">
                 <span class="icon is-small">
                     <i class="fas fa-ellipsis-v"></i>
                 </span>
