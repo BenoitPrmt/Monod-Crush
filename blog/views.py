@@ -17,6 +17,10 @@ from .models import Comment, Post, PostReport, Like
 log = logging.getLogger(__name__)
 
 
+def test(request: HttpRequest) -> HttpResponse:
+    return render(request, 'blog/test.html')
+
+
 class PostMixin:
     model = Post
     slug_url_kwarg = 'post_id'
