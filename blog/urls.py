@@ -4,6 +4,7 @@ from .views import PostCreateView, PostEditView, PostListView, PostDeleteView, P
     ProfileView, ProfileEditView, ProfileDeleteView, ProfilSearchView, \
     ProfileStarView, PostReportView, PostHideView, ModerationView
 
+from .views import test
 
 app_name = 'blog'
 
