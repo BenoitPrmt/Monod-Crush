@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login
-from django.forms import Form, ModelForm
+from django.forms import ModelForm
 from django.views.generic import FormView
 
 from .forms import CustomUserCreationForm
@@ -13,6 +13,7 @@ class RegisterView(FormView):
     def form_valid(self, form: ModelForm):
         """Security check complete. Log the user in."""
         user = form.save()
+
         # log the user in
         user = authenticate(username=user.username, password=form.cleaned_data['password1'])
         login(self.request, user)

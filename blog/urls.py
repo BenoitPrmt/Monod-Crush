@@ -1,23 +1,35 @@
 from django.urls import path
 
-from .views import PostCreateView, PostEditView, PostView, PostListView, CommentView, UserProfileView, SearchView, \
-    UserEditProfileView, UserDeleteProfileView, LikeView
+from .views import PostCreateView, PostEditView, PostListView, PostDeleteView, PostCommentView, PostLikeView, \
+    ProfileView, ProfileEditView, ProfileDeleteView, ProfilSearchView, \
+    ProfileStarView, PostReportView, PostHideView, ModerationView
+
+from .views import test
 
 app_name = 'blog'
 
 urlpatterns = [
     path('', PostListView.as_view(), name='index'),
 
-    path('post/new', PostCreateView.as_view(), name='post-new'),
-    path('post/<int:post_id>/edit', PostEditView.as_view(), name='post-edit'),
-    path('post/<int:post_id>/', PostView.as_view(), name='post'),
+    path('post/new', PostCreateView.as_view(), name='new-post'),
+    path('post/<int:post_id>/edit', PostEditView.as_view(), name='edit-post'),
+    path('post/<int:post_id>/delete', PostDeleteView.as_view(), name='delete-post'),
+    path('post/<int:post_id>/comment', PostCommentView.as_view(), name='comment-post'),
+    path('post/<int:post_id>/like', PostLikeView.as_view(), name='like-post'),
+    path('post/<int:post_id>/report', PostReportView.as_view(), name='report-post'),
+    path('post/<int:post_id>/hide', PostHideView.as_view(), name='hide-post'),
 
-    path('post/<int:post_id>/comment', CommentView.as_view(), name='post-comment'),
-    path('post/<int:post_id>/like', LikeView.as_view(), name='like-post'),
+    path('user/<str:username>', ProfileView.as_view(), name='profile'),
+    path('user/<str:username>/edit', ProfileEditView.as_view(), name='edit-profile'),
+    path('user/<str:username>/delete', ProfileDeleteView.as_view(), name='delete-profile'),
+    path('user/<str:username>/star', ProfileStarView.as_view(), name='start-profile'),
+    path("search", ProfilSearchView.as_view(), name="search"),
 
-    path('user/<str:username>', UserProfileView.as_view(), name='user-profile'),
-    path('user/<str:username>/edit', UserEditProfileView.as_view(), name='edit-profile'),
-    path('user/<str:username>/delete', UserDeleteProfileView.as_view(), name='delete-profile'),
+    path('comment/<int:comment_id>/delete', PostCommentView.as_view(), name='delete-comment'),
+    path('comment/<int:comment_id>/like', PostLikeView.as_view(), name='like-comment'),
+    path('comment/<int:comment_id>/report', PostReportView.as_view(), name='report-comment'),
+    path('comment/<int:comment_id>/hide', PostHideView.as_view(), name='hide-comment'),
 
-    path("search", SearchView.as_view(), name="search"),
+    path('moderation', ModerationView.as_view(), name='moderation'),
+
 ]

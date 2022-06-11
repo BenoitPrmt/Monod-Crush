@@ -30,68 +30,31 @@ Install dependencies
 pip install -r requirements.txt
 ```
 
-or for development
-```bash
-pip install -r requirements-dev.txt
-```
-
 ## 🧰 Usage
 
 ## For development
 *don't forget to activate the virtual environment if you have it installed*
 
-### 1) setup environment variables
-
-Linux :
-```bash
-export FLASK_APP=flaskr
-export FLASK_ENV=development
-```
-
-Windows (CMD) :
-```cmd
-set FLASK_APP=flaskr
-set FLASK_ENV=development
-```
-
-Windows (PowerShell) :
-```powershell
-$env:FLASK_APP="flaskr"
-$env:FLASK_ENV="development"
-```
-
-### 2) Setup database
+### 1) Setup database
 
 ```bash
-flask init-db
+python manage.py migrate
 ```
 
-You can populate the database with some data with the following command
-```bash
-flask populate-db
-```
-
-### 3) Run the server
+### 2) Run the server
 
 Local :
 ```bash
-flask run
+python manage.py runserver
 ```
+Then open http://localhost:5000/ in your browser
+
+---
 LAN (/!\ Do not use it in a production deployment) :
 ```bash
-flask run --host=0.0.0.0
+python manage.py runserver 0.0.0.0:5000
 ```
-
-Then open http://localhost:5000/
-
-## ⚒️ Test
-
-Run with coverage report
-```bash
-coverage run -m pytest
-coverage report
-coverage html  # open htmlcov/index.html in a browser
-```
+Then open http://<your_ip>:5000/ in your browser
 
 ## ✅ For production
 

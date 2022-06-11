@@ -14,7 +14,7 @@
 
     {% for user in users %}
     <article class="card my-4 px-4 py-4">
-        <p><a href="{% url 'blog:user-profile' username=user.username %}"> @{{ user.username }} </a></p>
+        <p><a href="{% url 'blog:profile' username=user.username %}"> @{{ user.username }} </a></p>
         <p>{{ user.first_name }}</p>
     </article>
     {% endfor %}

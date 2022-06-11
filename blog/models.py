@@ -1,9 +1,13 @@
+import logging
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Manager
 
 from auth.models import CustomUser
+
+log = logging.getLogger(__name__)
 
 
 class Post(models.Model):
@@ -30,20 +34,22 @@ class Post(models.Model):
     is_anonymous = models.BooleanField("post anonyme", default=True)
 
     likes: QuerySet["Like"]
-    reports: QuerySet["Report"]
+    reports: QuerySet["PostReport"]
     comments: QuerySet["Comment"]
+    objects: Manager
 
     class Meta:
         verbose_name = "post"
         verbose_name_plural = "posts"
 
         permissions = (
-            ('edit_other_users_posts', 'Can edit other users\' posts'),
-            ('delete_other_users_posts', 'Can delete other users\' posts'),
-            ('hide_unhide_posts', 'Can hide/unhide posts'),
-            ('view_hidden_posts', 'Can view hidden posts'),
-            ('show_author_name_when_anonymous', 'Can show author name when anonymous'),
+            ('hide_posts', "Peut masquer des posts (sans voir l'auteur)"),
+            ('edit_posts', "Peut modifier/supprimer des posts (sans voir l'auteur)"),
+
+            ("view_posts_details", "Peut voir les détails des posts (dont l'auteur) (doit faire partie du staff)"),
         )
+
+        default_permissions = ()
 
     @property
     def nb_of_likes(self) -> int:
@@ -86,6 +92,8 @@ class Comment(models.Model):
     created_at = models.DateTimeField("date de creation", auto_now_add=True)
     is_anonymous = models.BooleanField("commentaire anonyme", default=True)
 
+    objects: Manager
+
     class Meta:
         verbose_name = "commentaire"
         verbose_name_plural = "commentaires"
@@ -118,6 +126,8 @@ class PostReport(models.Model):
                                          related_name="reports", verbose_name="auteur du signalement")
     created_at = models.DateTimeField("date du signalement", auto_now_add=True)
 
+    objects: Manager
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['post', 'user'], name='unique_report_post_user'),
@@ -145,10 +155,11 @@ class PostReport(models.Model):
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         """ Override save method to prevent more than 3 reports per post """
         super().save(force_insert, force_update, using, update_fields)
-        reports = PostReport.objects.filter(post=self.post)
-        if reports >= self.MAX_REPORT_COUNT:
-            self.post.status = self.post.HIDDEN
+
+        if self.post.reports.count() >= PostReport.MAX_REPORT_COUNT:
+            self.post.status = Post.HIDDEN
             self.post.save()
+            log.info(f"Post {self.post.id} has been hidden because it has been reported too many times")
 
     def __repr__(self) -> str:
         return f'{self.post} - {self.user.username}'
@@ -159,6 +170,8 @@ class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              related_name="likes", verbose_name="utilisateur aimant")
     created_at = models.DateTimeField("date", auto_now_add=True)
+
+    objects: Manager
 
     class Meta:
         constraints = [

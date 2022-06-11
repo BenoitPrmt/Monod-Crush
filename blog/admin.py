@@ -68,12 +68,24 @@ class PostAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     @admin.action(description='Rendre les posts selections visibles')
-    def make_published(request, queryset):
+    def make_published(self, request, queryset):
         queryset.update(status=Post.NORMAl)
 
     @admin.action(description='Masquer les posts selections')
-    def make_hidden(request, queryset):
+    def make_hidden(self, request, queryset):
         queryset.update(status=Post.HIDDEN)
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.has_perm('blog.view_post')
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.has_perm('blog.edit_post')
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.has_perm('blog.edit_post')
+
+    def has_add_permission(self, request):
+        return request.user.has_perm('blog.view_post')
 
 
 admin.site.register(Post, PostAdmin)
