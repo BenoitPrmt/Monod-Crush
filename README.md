@@ -58,4 +58,4 @@ Then open http://<your_ip>:5000/ in your browser
 
 ## ✅ For production
 
-use gunicorn with a reverse proxy server like Nginx
+Use gunicorn with a reverse proxy server like Nginx

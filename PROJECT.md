@@ -53,5 +53,5 @@ Le site n'est pas terminé à 100%, les fonctionnalités suivantes sont prévues
 
 ### Répartition
 - **Jules** : Création de la base de données (init-db, populate-db), création, édition, suppression des posts (blog), création du schéma de la base de données (schema.sql), système de signalement des posts (Python, HTML), système de likes (Python, HTML)
-- **Benoît** : Système de connection et d'inscription (HTML), système de profil et d'édition du profil (HTML, Python et SQL), statistiques du panel admin (HTML, Python et SQL) + intégralité du fichier user.py, fichier user_helper, fonctions de vérification des données (Python)
+- **Benoît** : Système de connexion et d'inscription (HTML), système de profil et d'édition du profil (HTML, Python et SQL), statistiques du panel admin (HTML, Python et SQL) + intégralité du fichier user.py, fichier user_helper, fonctions de vérification des données (Python)
 - **Killian** : Gestion des erreurs (HTML et Python), création du logo (CSS), barre de recherche (Python, HTML), système de likes (Python, HTML)
