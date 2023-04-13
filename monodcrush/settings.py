@@ -15,17 +15,39 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-LOGGING = {
+LLOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        }
+    },
     'handlers': {
         'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            "propagate": False,
         },
+        'blog': {
+            'level': 'INFO',
+            'handlers': ['console'],
+            "propagate": False,
+        }, 'about': {
+            'level': 'INFO',
+            'handlers': ['console'],
+            "propagate": False,
+        }
     },
     'root': {
+        'level': 'INFO',
         'handlers': ['console'],
-        'level': 'DEBUG',
     },
 }
 
@@ -43,13 +65,9 @@ ALLOWED_HOSTS = ["dev.monodcrush.fr", "monodcrush.fr", "localhost", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
-    'auth.apps.AuthConfig',
+    'authentication.apps.AuthenticationConfig',
     'blog.apps.BlogConfig',
-    'instamap.apps.InstamapConfig',
     'about.apps.AboutConfig',
-
-    'django.contrib.humanize',
-
     'widget_tweaks',
 
     'django.contrib.admin',
@@ -58,6 +76,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -105,8 +124,8 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'Cauth.CustomUser'
-LOGIN_URL = '/auth/login'
+AUTH_USER_MODEL = 'authentication.CustomUser'
+LOGIN_URL = '/authentication/login'
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -150,8 +169,3 @@ STATIC_ROOT = BASE_DIR / "collected_static"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'auth.hasher.Hasher',
-]
