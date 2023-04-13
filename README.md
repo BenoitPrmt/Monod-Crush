@@ -1,4 +1,4 @@
-[![Python package](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml/badge.svg)](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml)
+[![Python package](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/django.yml/badge.svg)](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml)
 
 # ♥️ Monod Crush
 
