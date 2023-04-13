@@ -2,7 +2,8 @@
 
 # ♥️ Monod Crush
 
-Website is available at [monodcrush.fr](https://monodcrush.fr)<br>
+Website is available at [monodcrush.fr](https://monodcrush.fr)
+
 NSI project realized by [@BenoitPrmt](https://github.com/BenoitPrmt), [@JulesGrd](https://github.com/JulesGrd) and [@KillianTib](https://github.com/KillianTib)
 
 
