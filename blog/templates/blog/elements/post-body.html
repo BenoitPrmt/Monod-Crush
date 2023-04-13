@@ -5,11 +5,11 @@
     <p class="content is-small">
         posté par
         {% if post.is_anonymous %}
-        un utilisateur anonyme
+            un utilisateur anonyme
         {% else %}
-        <a href="{% url 'blog:profile' username=post.author.username %}">
-            <strong class="has-text-dark">@{{ post.author.username }}</strong>
-        </a>
+            <a href="{% url 'blog:profile' username=post.author.username %}">
+                <strong class="has-text-dark">@{{ post.author.username }}</strong>
+            </a>
         {% endif %}
         {{ post.created_at|naturaltimeordate }}
     </p>

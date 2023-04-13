@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Statistiques du site{% endblock %}
+{% block h1 %}Statistiques du site{% endblock %}
+
+{% block content %}
+    <div>
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="is-size-4">👤 Utilisateurs</p>
+                    <p class="title">{{ nb_users }}</p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="is-size-4">📮 Posts</p>
+                    <p class="title">{{ nb_posts }}</p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="is-size-4">💬 Commentaires</p>
+                    <p class="title">{{ nb_comments }}</p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="is-size-4">💗 Likes</p>
+                    <p class="title">{{ nb_likes }}</p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="is-size-4">🚨 Signalements</p>
+                    <p class="title">{{ nb_reports }}</p>
+                </div>
+            </div>
+        </nav>
+
+        <h2 class="title is-2">Graphiques</h2>
+
+
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <div>
+            <canvas id="myChart2"></canvas>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            const ctx = document.getElementById('myChart');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ post_stat.labels|safe }},
+                    datasets: [{
+                        label: 'Evolution des posts',
+                        data: {{ post_stat.data|safe }},
+                    }]
+                },
+            });
+
+            const ctx2 = document.getElementById('myChart2');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: {{ user_stat.labels|safe }},
+                    datasets: [{
+                        label: 'Evolution des utilisateurs',
+                        data: {{ user_stat.data|safe }},
+                    }]
+                },
+            });
+        </script>
+
+
+    </div>
+{% endblock %}
