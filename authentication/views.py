@@ -1,16 +1,15 @@
 from django.contrib.auth import authenticate, login
-from django.forms import ModelForm
 from django.views.generic import FormView
 
 from .forms import CustomUserCreationForm
 
 
 class RegisterView(FormView):
-    template_name = 'auth/register.html'
+    template_name = 'authentication/register.html'
     form_class = CustomUserCreationForm
     success_url = "/"
 
-    def form_valid(self, form: ModelForm):
+    def form_valid(self, form: CustomUserCreationForm):
         """Security check complete. Log the user in."""
         user = form.save()
 

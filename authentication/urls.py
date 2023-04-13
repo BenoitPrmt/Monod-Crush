@@ -4,10 +4,10 @@ from django.urls import path
 
 from .views import RegisterView
 
-app_name = 'auth'
+# app_name = 'authentication'
 
 urlpatterns = [
-    path("login", LoginView.as_view(template_name="auth/login.html"), name="login"),
+    path("login", LoginView.as_view(template_name="authentication/login.html"), name="login"),
     path("register", RegisterView.as_view(), name="register"),
     path("logout", LogoutView.as_view(next_page="/"), name="logout"),
     path("password-change", PasswordChangeView.as_view(), name="password_change"),

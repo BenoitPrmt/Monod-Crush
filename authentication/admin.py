@@ -10,7 +10,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
+    # that reference specific fields on authentication.User.
     list_display = ('username', 'first_name', 'is_active', 'is_staff')
     list_filter = ("is_staff", "is_superuser", "is_active", "groups")
     search_fields = ('username', "email", "first_name")
@@ -47,4 +47,4 @@ class CustomUserAdmin(UserAdmin):
 # Now register the new UserAdmin...
 admin.site.register(CustomUser, CustomUserAdmin)
 
-admin.site.login_template = 'auth/login.html'
+admin.site.login_template = 'authentication/login.html'
