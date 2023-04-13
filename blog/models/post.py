@@ -8,22 +8,17 @@ log = logging.getLogger(__name__)
 
 
 class Post(models.Model):
-    NORMAl = 'N'
-    AWAITING_VERIFICATION = 'A'
-    HIDDEN = 'H'
+    class PostStatus(models.TextChoices):
+        NORMAL = 'N', 'Normal'
+        AWAITING_VERIFICATION = 'A', 'En attente de vérification'
+        HIDDEN = 'H', 'Masqué'
 
-    STATUS_CHOICES = (
-        (NORMAl, 'Normal'),
-        (AWAITING_VERIFICATION, 'En attente de vérification'),
-        (HIDDEN, 'Masqué'),
-    )
+    VISIBLE_STATUSES = [PostStatus.NORMAL]
 
-    VISIBLE_STATUSES = (NORMAl,)
-
-    text = models.TextField("contenu du post", max_length=500)
+    text = models.TextField("contenu du post", max_length=500, help_text="Contenu du post")
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts', verbose_name='Auteur')
-    status = models.CharField("état", max_length=1, choices=STATUS_CHOICES, default=NORMAl)
-    is_anonymous = models.BooleanField("post anonyme", default=True)
+    status = models.CharField("état", choices=PostStatus.choices, default=PostStatus.NORMAL, max_length=1)
+    is_anonymous = models.BooleanField("post anonyme", default=True, help_text="Indique si le post est anonyme ou non")
     updated_at = models.DateTimeField("dernière modification", auto_now=True)
     created_at = models.DateTimeField("date de création", auto_now_add=True)
 
@@ -76,4 +71,4 @@ class Post(models.Model):
             return self.text
 
     def __str__(self) -> str:
-        return f"{self.author.username} - {self.created_at.strftime('%d/%m/%Y %H:%M')}"
+        return f"{self.id} - {self.author.username} - {self.created_at.strftime('%d/%m/%Y %H:%M')}"

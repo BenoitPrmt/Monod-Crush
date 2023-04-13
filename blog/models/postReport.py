@@ -52,10 +52,10 @@ class PostReport(models.Model):
         """ Override save method to prevent more than 3 reports per post """
         super().save(**kwargs)
 
-        self.post.status = Post.AWAITING_VERIFICATION
+        self.post.status = Post.PostStatus.AWAITING_VERIFICATION
 
         if self.post.nb_of_reports >= self.REPORTS_CRITICAL_THRESHOLD:
-            self.post.status = Post.HIDDEN
+            self.post.status = Post.PostStatus.HIDDEN
             log.info(f"Post {self.post.id} has been hidden (reported {self.post.nb_of_reports} times.)")
 
         self.post.save()
