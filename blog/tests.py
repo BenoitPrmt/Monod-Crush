@@ -83,14 +83,14 @@ class PostIndexViewTests(TestCase):
         If posts exist, they are displayed.
         """
         user = create_user()
-        p1 = Post.objects.create(author=user, text='test')
-        p2 = Post.objects.create(author=user, text='test')
+        p1 = Post.objects.create(author=user, text='test1')
+        p2 = Post.objects.create(author=user, text='test1')
         response = self.client.get(reverse('blog:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, p1.text)
         self.assertContains(response, p2.text)
         self.assertNotContains(response, "Il n'y pas encore de post soyez le premier à en poster un")
-        self.assertQuerysetEqual(response.context['posts'], [p1, p2])
+        self.assertQuerysetEqual(response.context['object_list'], [p1, p2])
 
     def test_post_list_anonymous(self) -> None:
         """
