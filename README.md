@@ -1,9 +1,10 @@
-[![Python package](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml/badge.svg)](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml)
+[![Python package](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/django.yml/badge.svg)](https://github.com/BenoitObelia/Monod-Crush/actions/workflows/test.yml)
 
 # ♥️ Monod Crush
 
-Website is available at [monodcrush.fr](https://monodcrush.fr)<br>
-NSI project realized by [@BenoitObelia](https://github.com/BenoitObelia), [@JulesGrd](https://github.com/JulesGrd) and [@KillianTib](https://github.com/KillianTib)
+Website is available at [monodcrush.fr](https://monodcrush.fr)
+
+NSI project realized by [@BenoitPrmt](https://github.com/BenoitPrmt), [@JulesGrd](https://github.com/JulesGrd) and [@KillianTib](https://github.com/KillianTib)
 
 
 Project documentation : [PROJECT.md](./PROJECT.md)

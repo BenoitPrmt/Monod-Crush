@@ -1,0 +1,13 @@
+{% load datetimeformat %}
+
+<div class="my-4">
+    <p class="is-size-7">
+        {% if comment.is_anonymous %}
+            utilisateur anonyme
+        {% else %}
+            <a href="{% url 'blog:profile' username=comment.author.username %}">@{{ comment.author.username }}</a>
+        {% endif %}
+        {{ comment.created_at|naturaltimeordate }}
+    </p>
+    <div class="text-break">{{ comment.text|linebreaks }}</div>
+</div>

@@ -1,6 +1,9 @@
 from django.contrib import admin
 
-from .models import Post, Comment, PostReport, Like
+from .models.comment import Comment
+from .models.like import Like
+from .models.post import Post
+from .models.postReport import PostReport
 
 
 class ReportersInline(admin.TabularInline):
@@ -8,7 +11,6 @@ class ReportersInline(admin.TabularInline):
     readonly_fields = ("user", 'created_at')
     extra = 0
     max_num = 0
-    verbose_name = "Signalement"
 
 
 class CommentsInline(admin.TabularInline):
@@ -17,7 +19,6 @@ class CommentsInline(admin.TabularInline):
     fields = ("text", "author", 'created_at')
     extra = 0
     max_num = 0
-    verbose_name = "Commentaire"
 
 
 class LikesInline(admin.TabularInline):
@@ -25,7 +26,6 @@ class LikesInline(admin.TabularInline):
     readonly_fields = ("user", 'created_at')
     extra = 0
     max_num = 0
-    verbose_name = "Like"
 
 
 class PostAdmin(admin.ModelAdmin):

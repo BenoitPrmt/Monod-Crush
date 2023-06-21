@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} Recherche {% endblock %}
+{% block h1 %} Recherche {% if request.GET.q %} "{{ request.GET.q }}" {% endif %}{% endblock %}
+
+{% block content %}
+    <div>
+        {% if users|length == 0 %}
+            <p>Aucun résultat trouvé.</p>
+            <p class="mt-5">J'ai traversé les ~ondes~ pour chercher cet utilisateur, mais je ne l'ai pas trouvé... 😕</p>
+        {% else %}
+            <p>{{ users|length }} résultat{{ users|length|pluralize }} trouvé{{ users|length|pluralize }}.</p>
+        {% endif %}
+
+        {% for user in users %}
+            <article class="card my-4 px-4 py-4">
+                <p><a href="{% url 'blog:profile' username=user.username %}"> @{{ user.username }} </a></p>
+                <p>{{ user.first_name }}</p>
+            </article>
+        {% endfor %}
+
+    </div>
+{% endblock %}
