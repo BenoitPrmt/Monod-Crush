@@ -1,4 +1,4 @@
-django==4.2.7
+django==5.0.1
 django-widget-tweaks==1.4.12
 Pillow==10.0.1
 requests==2.31.0
